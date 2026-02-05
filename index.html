@@ -149,7 +149,7 @@
 </div>
 
 <script>
-    const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit";
+    const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit"; 
 
     const auditJson = {
     "languages": {
@@ -228,7 +228,7 @@
                 { "title": "الائتمان والامتثال", "qs": [{ "q": "الحد الائتماني مقبول؟", "h": "تحقق من قيمة الطلب مقابل الرصيد المتاح." }, { "q": "الوثائق تم التحقق منها؟", "h": "هل شهادات التسجيل الضريبي فعالة؟" }, { "q": "تم الفحص المسبق؟", "h": "يجب أن يكون التخليص الائتماني مؤرخًا قبل الطلب." }] }, 
                 { "title": "الاقتباس والمواصفات الفنية", "qs": [{ "q": "تطابق المزيج؟", "h": "هل تتطابق القوة/الهبوط في العرض مع الطلب الفني؟" }, { "q": "معدلات الخدمات الإضافية؟", "h": "هل تم تسعير أوقات الانتظار والحمولات الجزئية؟" }, { "q": "فرصة ECOPact؟", "h": "هل تم تقديم بديل مستدام/منخفض الكربون؟" }] },
                 { "title": "مراجعة العقد", "qs": [{ "q": "تطابق سعر؟", "h": "النظام مع أمر الشراء." }, { "q": "الرسوم؟", "h": "رسوم بيئية." }, { "q": "جهات اتصال؟", "h": "رقم موبايل." }] },
-                { "title": "دقة الإدخال", "qs": [{ "q": "تطابق التاريخ؟", "h": "ERP مع تاريخ الشراء." }, { "q": "منطق المصنع؟", "h": "المصنع الأمثل." }, { "q": "الموافقات؟", "h": "الموافقة السعرية." }] },
+                { "title": "دقة إدخال الطلب", "qs": [{ "q": "تطابق التاريخ؟", "h": "ERP مع تاريخ الشراء." }, { "q": "منطق المصنع؟", "h": "المصنع الأمثل." }, { "q": "الموافقات؟", "h": "الموافقة السعرية." }] },
                 { "title": "حجز المواعيد", "qs": [{ "q": "القدرة؟", "h": "توفر المصنع." }, { "q": "الأصول؟", "h": "حجز المضخات." }, { "q": "فواصل صب؟", "h": "فترات زمنية." }] },
                 { "title": "تحديثات استباقية", "qs": [{ "q": "تنبيه التأخير؟", "h": "إبلاغ العميل." }, { "q": "سجل CRM؟", "h": "سجل التواصل." }, { "q": "تنبيه الإرسال؟", "h": "تم الإرسال." }] },
                 { "title": "وثيقة التسليم (POD)", "qs": [{ "q": "وضوح القراءة؟", "h": "POD واضح." }, { "q": "توقيع الرسوم؟", "h": "توقيع إضافي." }, { "q": "24 ساعة؟", "h": "أرسل للعميل." }] },
@@ -347,7 +347,15 @@
                         <div id="help-${idx}-${qIdx}" class="help-text">${localQ.h}</div>
                     </td>
                     <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" onclick="updateLogic(${idx}, ${qIdx}, 'Pass')" ${state.auditData[idx].answers[qIdx] === 'Pass' ? 'checked' : ''}></td>
-                    <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" onclick="updateLogic(${idx}, ${qIdx}, 'Fail')" ${state.auditData[idx].answers[qIdx] === 'Fail' ? 'checked' : ''}></td>
+                    <td style="text-align:center">
+                        <input type="radio" name="q_${idx}_${qIdx}" onclick="updateLogic(${idx}, ${qIdx}, 'Fail')" ${state.auditData[idx].answers[qIdx] === 'Fail' ? 'checked' : ''}>
+                        ${state.auditData[idx].answers[qIdx] === 'Fail' ? `
+                            <div style="margin-top:5px;">
+                                <label style="font-size:9px; display:block;">FOLLOW-UP DATE</label>
+                                <input type="date" id="date_${idx}_${qIdx}" class="form-input" style="padding:4px; font-size:10px;">
+                            </div>
+                        ` : ''}
+                    </td>
                 </tr>`;
             }).join('');
 
@@ -418,6 +426,7 @@
             serial: state.auditSerial,
             role: document.getElementById('auditRole').value,
             userEmail: state.userEmail,
+            userName: state.userName,
             orderNumber: document.getElementById('orderNumber').value,
             auditee: document.getElementById('auditeeName').value,
             participants: document.getElementById('participants').value,
@@ -426,7 +435,8 @@
                 section.answers.map((ans, qIdx) => ({
                     section: auditJson.languages['en'].sections[sIdx].title,
                     q: auditJson.languages['en'].sections[sIdx].qs[qIdx].q,
-                    res: ans
+                    res: ans,
+                    followUpDate: ans === 'Fail' ? document.getElementById(`date_${sIdx}_${qIdx}`)?.value : null
                 }))
             )
         };
