@@ -63,10 +63,16 @@
 
         .checklist-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
         .checklist-table th { background: #f8fafc; padding: 12px; text-align: center; font-size: 10px; text-transform: uppercase; color: #64748b; border-bottom: 1px solid var(--border); }
-        .checklist-table td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+        .checklist-table td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; position: relative; }
         
         .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: #e2e6eb; border-radius: 50%; font-size: 12px; font-weight: bold; cursor: help; margin-left: 8px; color: #1d4370; }
         .help-text { display: none; font-size: 12px; color: #555; font-style: italic; margin-top: 8px; background: #f0f7ff; padding: 10px; border-radius: 8px; border-left: 4px solid var(--holcim-blue); line-height: 1.4; }
+
+        /* Sleek Remediation Widget Styles */
+        .remediation-box { margin-top: 8px; background: #fff5f5; border: 1px solid var(--danger); padding: 8px; border-radius: 8px; text-align: left; animation: slideIn 0.3s ease; }
+        .remediation-label { font-size: 9px; font-weight: 800; color: var(--danger); display: block; margin-bottom: 4px; }
+        .remediation-inputs { display: flex; gap: 4px; }
+        .remediation-input { flex: 1; font-size: 10px; padding: 4px; border: 1px solid var(--border); border-radius: 4px; }
 
         .upload-zone { margin-top: 15px; border: 2px dashed var(--border); border-radius: 12px; padding: 20px; text-align: center; color: #666; cursor: pointer; background: white; transition: 0.3s; }
         .upload-zone.required-error { border-color: var(--danger); background: #fff5f5; border-width: 3px; animation: shake 0.5s; }
@@ -77,6 +83,7 @@
         .btn-outline { border: 2px solid var(--holcim-blue); color: var(--holcim-blue); background: white; }
         .btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
+        @keyframes slideIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
@@ -149,7 +156,7 @@
 </div>
 
 <script>
-    const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit"; 
+    const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit";
 
     const auditJson = {
     "languages": {
@@ -170,7 +177,7 @@
             ]
         },
         "fr": {
-            "portalTitle": "Portail d'Audit Interne Global", "lblOrder": "Référence de Commande", "lblSerial": "N° de Série:", "lblAuditee": "Propriétaire", "lblParticipants": "Participants", "artifactReq": "Preuve pour ÉCHEC", "next": "Étape Suivante", "back": "Retour", "finalize": "Finaliser", "btnDraft": "Brouillon", "pending": "En attente", "pass": "Réussi", "fail": "Échec", "requirement": "Exigence",
+            "portalTitle": "Portail d'Audit Interne Global", "lblOrder": "Référence", "lblSerial": "N° de Série:", "lblAuditee": "Propriétaire", "lblParticipants": "Participants", "artifactReq": "Preuve pour ÉCHEC", "next": "Étape Suivante", "back": "Retour", "finalize": "Finaliser", "btnDraft": "Brouillon", "pending": "En attente", "pass": "Réussi", "fail": "Échec", "requirement": "Exigence",
             "sections": [
                 { "title": "Gestion", "qs": [{ "q": "SLA respecté?", "h": "Temps de réponse." }, { "q": "Contraintes?", "h": "Accès site." }, { "q": "BU?", "h": "Bonne unité?" }] },
                 { "title": "Crédit", "qs": [{ "q": "Limite OK?", "h": "Marge de crédit." }, { "q": "Docs?", "h": "Certificats." }, { "q": "Check?", "h": "Validation." }] },
@@ -180,23 +187,23 @@
                 { "title": "Créneau", "qs": [{ "q": "Capacité?", "h": "Flotte." }, { "q": "Actifs?", "h": "Pompes." }, { "q": "Tampons?", "h": "Fenêtres." }] },
                 { "title": "Mises à jour", "qs": [{ "q": "Retard?", "h": "Informé." }, { "q": "CRM?", "h": "Communication." }, { "q": "Dispatch?", "h": "Notification." }] },
                 { "title": "POD", "qs": [{ "q": "Lisibilité?", "h": "POD clair." }, { "q": "Initiales?", "h": "Frais." }, { "q": "Dist. 24h?", "h": "24h." }] },
-                { "title": "Finances", "qs": [{ "q": "3-Way?", "h": "Alignement." }, { "q": "E-mail?", "h": "Boîte mail." }, { "q": "TVA?", "h": "Fiscale." }] },
-                { "title": "Recouvrement", "qs": [{ "q": "NCR?", "h": "Saisi." }, { "q": "Suivi?", "h": "Appel." }, { "q": "Cause?", "h": "Prévention." }] },
+                { "title": "Finances", "qs": [{ "q": "3-Way match?", "h": "Alignement." }, { "q": "E-mail?", "h": "Boîte mail." }, { "q": "TVA?", "h": "Fiscale." }] },
+                { "title": "Recouvrement", "qs": [{ "q": "NCR enregistré?", "h": "Litige saisi." }, { "q": "Suivi?", "h": "Journal d'appel." }, { "q": "Cause?", "h": "Prévention." }] },
                 { "title": "Qualité", "qs": [{ "q": "Standards voix?", "h": "Ton." }, { "q": "Email?", "h": "Signature." }, { "q": "Continuité?", "h": "Historique." }] }
             ]
         },
         "es": {
-            "portalTitle": "Portal de Auditoría Interna Global", "lblOrder": "Referencia de Pedido", "lblSerial": "N. Serial:", "lblAuditee": "Dueño", "lblParticipants": "Participantes", "artifactReq": "Prueba para FALLO", "next": "Siguiente", "back": "Atrás", "finalize": "Finalizar", "btnDraft": "Borrador", "pending": "Pendiente", "pass": "Pasa", "fail": "Fallo", "requirement": "Requisito",
+            "portalTitle": "Portal de Auditoría Interna Global", "lblOrder": "Referencia", "lblSerial": "N. Serial:", "lblAuditee": "Dueño", "lblParticipants": "Participantes", "artifactReq": "Prueba para FALLO", "next": "Siguiente", "back": "Atrás", "finalize": "Finalizar", "btnDraft": "Borrador", "pending": "Pendiente", "pass": "Pasa", "fail": "Fallo", "requirement": "Requisito",
             "sections": [
                 { "title": "Gestión", "qs": [{ "q": "SLA cumplido?", "h": "Respuesta." }, { "q": "Restricc?", "h": "Acceso." }, { "q": "BU?", "h": "Unidad?" }] },
                 { "title": "Crédito", "qs": [{ "q": "Límite?", "h": "Crédito." }, { "q": "Docs?", "h": "Activos." }, { "q": "Check?", "h": "Sello." }] },
                 { "title": "Cotización", "qs": [{ "q": "Mezcla?", "h": "MPa." }, { "q": "Tarifas?", "h": "Espera." }, { "q": "ECOPact?", "h": "Sostenible." }] },
                 { "title": "Contrato", "qs": [{ "q": "Precio?", "h": "Sist vs OC." }, { "q": "Recargos?", "h": "Envi." }, { "q": "Contactos?", "h": "Móvil." }] },
-                { "title": "Pedido", "qs": [{ "q": "Fecha?", "h": "ERP vs OC." }, { "q": "Planta?", "h": "Opt." }, { "q": "Approb?", "h": "Approbados." }] },
+                { "title": "Pedido", "qs": [{ "q": "Fecha?", "h": "ERP vs OC." }, { "q": "Planta?", "h": "Opt." }, { "q": "Approb?", "h": "Aprobados." }] },
                 { "title": "Cupos", "qs": [{ "q": "Capacidad?", "h": "Flota." }, { "q": "Assets?", "h": "Bombas." }, { "q": "Márgenes?", "h": "Entregas." }] },
                 { "title": "Actualiza", "qs": [{ "q": "Alerta?", "h": "Avisado." }, { "q": "CRM?", "h": "Registro." }, { "q": "Despacho?", "h": "Enviada." }] },
                 { "title": "POD", "qs": [{ "q": "Legible?", "h": "POD claro." }, { "q": "Initiales?", "h": "Firmados." }, { "q": "24h?", "h": "24h." }] },
-                { "title": "Finanzas", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "IVA?", "h": "IVA local." }] },
+                { "title": "Finanzas", "qs": [{ "q": "3-Way Match?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "IVA?", "h": "IVA local." }] },
                 { "title": "Recupera", "qs": [{ "q": "NCR?", "h": "Disputa." }, { "q": "Follow-up?", "h": "Log." }, { "q": "Raíz?", "h": "Acción." }] },
                 { "title": "Calidad", "qs": [{ "q": "Voz?", "h": "Tono." }, { "q": "Email?", "h": "Firma." }, { "q": "Continuité?", "h": "CRM." }] }
             ]
@@ -209,33 +216,33 @@
                 { "title": "Technik", "qs": [{ "q": "Mix?", "h": "MPa." }, { "q": "Tarife?", "h": "Warten." }, { "q": "ECOPact?", "h": "Nachhaltig?" }] },
                 { "title": "Vertrag", "qs": [{ "q": "Preis?", "h": "System vs PO." }, { "q": "Zuschläge?", "h": "Umwelt." }, { "q": "Kontakte?", "h": "Handy." }] },
                 { "title": "Erfassung", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Werk?", "h": "Opt." }, { "q": "Freigab?", "h": "Genehm." }] },
-                { "title": "Slot", "qs": [{ "q": "Capazität?", "h": "Flotte." }, { "q": "Assets?", "h": "Pumpen." }, { "q": "Puffer?", "h": "Fenster." }] },
+                { "title": "Slot", "qs": [{ "q": "Kapazität?", "h": "Flotte." }, { "q": "Assets?", "h": "Pumpen." }, { "q": "Puffer?", "h": "Fenster." }] },
                 { "title": "Updates", "qs": [{ "q": "Verspätung?", "h": "Kunde." }, { "q": "CRM?", "h": "Dokumentiert." }, { "q": "Dispatch?", "h": "Versand." }] },
                 { "title": "POD", "qs": [{ "q": "Lesbar?", "h": "POD klar." }, { "q": "Handzeich?", "h": "Visiert." }, { "q": "24h Dist?", "h": "24h." }] },
-                { "title": "Finanzen", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Steuern?", "h": "MwSt." }] },
+                { "title": "Finanzen", "qs": [{ "q": "3-Way Match?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Steuern?", "h": "MwSt." }] },
                 { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Reklam." }, { "q": "Follow-up?", "h": "Anrufe." }, { "q": "Ursache?", "h": "Prävention." }] },
                 { "title": "Qualität", "qs": [{ "q": "Stimme?", "h": "Tonfall." }, { "q": "Email?", "h": "Signatur." }, { "q": "CRM?", "h": "Verlauf." }] }
             ]
         },
-        "bn": {
-            "portalTitle": "অডিট পোর্টাল", "lblOrder": "অর্ডার", "lblSerial": "নং:", "lblAuditee": "মালিক", "lblParticipants": "অংশগ্রহণকারী", "artifactReq": "প্রমাণ", "next": "পরবর্তী", "back": "পিছনে", "finalize": "সম্পন্ন", "btnDraft": "খসড়া", "pending": "অপেক্ষা", "pass": "পাস", "fail": "ব্যর্থ", "requirement": "প্রয়োজন",
-            "sections": [{ "title": "ইনকোয়ারি", "qs": [{ "q": "SLA?", "h": "রেসপন্স।" }, { "q": "সীমাবদ্ধতা?", "h": "সাইট।" }, { "q": "BU?", "h": "ইউনিট?" }] }, { "title": "ক্রেডিট", "qs": [{ "q": "লিমিট?", "h": "ভ্যালু।" }, { "q": "ডকুমেন্ট?", "h": "সার্টিফিকেট।" }, { "q": "চেক?", "h": "টাইম।" }] }, { "title": "উদ্ধৃতি", "qs": [{ "q": "মিক্স?", "h": "MPa।" }, { "q": "রেট?", "h": "অপেক্ষা।" }, { "q": "ECOPact?", "h": "বিকল্প?" }] }, { "title": "চুক্তি", "qs": [{ "q": "দাম?", "h": "PO।" }, { "q": "চার্জ?", "h": "পরিবেশ।" }, { "q": "যোগাযোগ?", "h": "মোবাইল।" }] }, { "title": "এন্ট্রি", "qs": [{ "q": "তারিখ?", "h": "ERP।" }, { "q": "প্ল্যান্ট?", "h": "সেরা।" }, { "q": "অনুমোদন?", "h": "ম্যানেজার।" }] }, { "title": "স্লট", "qs": [{ "q": "ক্ষমতা?", "h": "বহর।" }, { "q": "অ্যাসেট?", "h": "পাম্প।" }, { "q": "বাফার?", "h": "উইন্ডো।" }] }, { "title": "আপডেট", "qs": [{ "q": "দেরি?", "h": "জানানো।" }, { "q": "CRM?", "h": "লগ।" }, { "q": "ডিসপ্যাচ?", "h": "অ্যালার্ট।" }] }, { "title": "POD", "qs": [{ "q": "স্পষ্টতা?", "h": "পরিষ্কার।" }, { "q": "স্বাক্ষর?", "h": "চার্জ।" }, { "q": "24h?", "h": "পাঠানো।" }] }, { "title": "আর্থিক", "qs": [{ "q": "3-Way?", "h": "মিল।" }, { "q": "ইমেল?", "h": "AP।" }, { "q": "ট্যাক্স?", "h": "ভ্যাট।" }] }, { "title": "রিকভারি", "qs": [{ "q": "NCR?", "h": "সিস্টেম।" }, { "q": "ফলো-আপ?", "h": "কল।" }, { "q": "কারণ?", "h": "প্রতিরোধ।" }] }, { "title": "গুণমান", "qs": [{ "q": "কণ্ঠস্বর?", "h": "টোন।" }, { "q": "ইমেল?", "h": "স্বাক্ষর।" }, { "q": "CRM?", "h": "ইতিহাস।" }] }]
-        },
         "ar": {
             "portalTitle": "بوابة التدقيق الداخلي العالمية", "lblOrder": "مرجع الطلب", "lblSerial": "الرقم التسلسلي للتدقيق:", "lblAuditee": "مسؤول العملية", "lblParticipants": "المشاركون في التدقيق (فصل بفاصلة)", "artifactReq": "الأدلة المطلوبة للفشل", "next": "المرحلة التالية", "back": "رجوع", "finalize": "إنهاء التدقيق", "btnDraft": "حفظ كمسودة", "pending": "قيد الانتظار", "pass": "ناجح", "fail": "فاشل", "requirement": "المتطلب",
             "sections": [
-                { "title": "إدارة الاستفسارات", "qs": [{ "q": "هل تم الالتزام بـ SLA (4 ساعات)؟", "h": "تحقق من وقت الاستجابة مقابل وقت الاستلام." }, { "q": "هل تم تسجيل القيود؟", "h": "تحقق من قيود دخول الموقع أو المركبات." }, { "q": "تصنيف وحدة العمل؟", "h": "هل تم توجيه الاستفسار إلى وحدة العمل الصحيحة؟" }] }, 
-                { "title": "الائتمان والامتثال", "qs": [{ "q": "الحد الائتماني مقبول؟", "h": "تحقق من قيمة الطلب مقابل الرصيد المتاح." }, { "q": "الوثائق تم التحقق منها؟", "h": "هل شهادات التسجيل الضريبي فعالة؟" }, { "q": "تم الفحص المسبق؟", "h": "يجب أن يكون التخليص الائتماني مؤرخًا قبل الطلب." }] }, 
-                { "title": "الاقتباس والمواصفات الفنية", "qs": [{ "q": "تطابق المزيج؟", "h": "هل تتطابق القوة/الهبوط في العرض مع الطلب الفني؟" }, { "q": "معدلات الخدمات الإضافية؟", "h": "هل تم تسعير أوقات الانتظار والحمولات الجزئية؟" }, { "q": "فرصة ECOPact؟", "h": "هل تم تقديم بديل مستدام/منخفض الكربون؟" }] },
-                { "title": "مراجعة العقد", "qs": [{ "q": "تطابق سعر؟", "h": "النظام مع أمر الشراء." }, { "q": "الرسوم؟", "h": "رسوم بيئية." }, { "q": "جهات اتصال؟", "h": "رقم موبايل." }] },
+                { "title": "إدارة الاستفسارات", "qs": [{ "q": "هل تم الالتزام بـ SLA؟", "h": "تحقق من وقت الاستجابة." }, { "q": "هل تم تسجيل القيود؟", "h": "تحقق من قيود الموقع." }, { "q": "تصنيف وحدة العمل؟", "h": "هل التوجيه صحيح؟" }] }, 
+                { "title": "الائتمان والامتثال", "qs": [{ "q": "الحد الائتماني؟", "h": "تحقق من الرصيد المتاح." }, { "q": "الوثائق؟", "h": "هل الشهادات فعالة؟" }, { "q": "تم الفحص؟", "h": "التخليص قبل الطلب." }] }, 
+                { "title": "الاقتباس والمواصفات", "qs": [{ "q": "تطابق المزيج؟", "h": "MPa/الهبوط." }, { "q": "معدلات الخدمات؟", "h": "تسعير أوقات الانتظار." }, { "q": "فرصة ECOPact؟", "h": "بديل مستدام؟" }] },
+                { "title": "مراجعة العقد", "qs": [{ "q": "تطابق سعر؟", "h": "تطابق السعر مع أمر الشراء." }, { "q": "الرسوم؟", "h": "رسوم بيئية." }, { "q": "جهات اتصال؟", "h": "موبايل صالح." }] },
                 { "title": "دقة إدخال الطلب", "qs": [{ "q": "تطابق التاريخ؟", "h": "ERP مع تاريخ الشراء." }, { "q": "منطق المصنع؟", "h": "المصنع الأمثل." }, { "q": "الموافقات؟", "h": "الموافقة السعرية." }] },
-                { "title": "حجز المواعيد", "qs": [{ "q": "القدرة؟", "h": "توفر المصنع." }, { "q": "الأصول؟", "h": "حجز المضخات." }, { "q": "فواصل صب؟", "h": "فترات زمنية." }] },
-                { "title": "تحديثات استباقية", "qs": [{ "q": "تنبيه التأخير؟", "h": "إبلاغ العميل." }, { "q": "سجل CRM؟", "h": "سجل التواصل." }, { "q": "تنبيه الإرسال؟", "h": "تم الإرسال." }] },
-                { "title": "وثيقة التسليم (POD)", "qs": [{ "q": "وضوح القراءة؟", "h": "POD واضح." }, { "q": "توقيع الرسوم؟", "h": "توقيع إضافي." }, { "q": "24 ساعة؟", "h": "أرسل للعميل." }] },
-                { "title": "النهائي المالي", "qs": [{ "q": "مطابقة؟", "h": "عرض وطلب شراء." }, { "q": "دقة الإيميل؟", "h": "صندوق AP." }, { "q": "الضرائب؟", "h": "الضريبة المحلية." }] },
-                { "title": "استعادة الخدمة", "qs": [{ "q": "تسجيل NCR؟", "h": "تسجيل النزاع." }, { "q": "المتابعة؟", "h": "سجل مكالمات." }, { "q": "السبب الجذري؟", "h": "منع التكرار." }] },
-                { "title": "جودة الاتصال (QA)", "qs": [{ "q": "معايير الصوت؟", "h": "النبرة." }, { "q": "معايير البريد؟", "h": "التوقيع." }, { "q": "استمرارية؟", "h": "سجل التفاعل." }] }
+                { "title": "حجز المواعيد", "qs": [{ "q": "التحقق من القدرة؟", "h": "توفر المصنع والأسطول." }, { "q": "تزامن الأصول؟", "h": "حجز المضخات بشكل صحيح." }, { "q": "فواصل الصب؟", "h": "فترات زمنية." }] },
+                { "title": "تحديثات استباقية", "qs": [{ "q": "تنبيه التأخير؟", "h": "إبلاغ العميل عند التأخير." }, { "q": "سجل CRM؟", "h": "سجل التواصل مع الموقع." }, { "q": "تنبيه الإرسال؟", "h": "تلقى الموقع تنبيهًا؟" }] },
+                { "title": "وثيقة التسليم (POD)", "qs": [{ "q": "وضوح القراءة؟", "h": "POD واضح ومعتمد." }, { "q": "توقيع الرسوم؟", "h": "توقيع الرسوم الإضافية." }, { "q": "توزيع 24 ساعة؟", "h": "أرسل للعميل خلال 24 ساعة." }] },
+                { "title": "النهائي المالي", "qs": [{ "q": "مطابقة ثلاثية؟", "h": "عرض وأمر شراء وفاتورة." }, { "q": "دقة الإيميل؟", "h": "صندوق الحسابات الصحيح." }, { "q": "المعاملة الضريبية؟", "h": "الالتزام بالضريبة المحلية." }] },
+                { "title": "استعادة الخدمة", "qs": [{ "q": "تسجيل NCR؟", "h": "تسجيل النزاع في النظام." }, { "q": "سجل المتابعة؟", "h": "سجل مكالمات المتابعة." }, { "q": "إجراء السبب الجذري؟", "h": "إجراء لمنع التكرار." }] },
+                { "title": "جودة الاتصال (QA)", "qs": [{ "q": "معايير الصوت؟", "h": "النبرة والتحية." }, { "q": "معايير البريد؟", "h": "العلامة والتوقيع." }, { "q": "استمرارية القناة؟", "h": "تاريخ التفاعل عبر CRM." }] }
             ]
+        },
+        "bn": {
+            "portalTitle": "অডিট পোর্টাল", "lblOrder": "অর্ডার", "lblSerial": "নং:", "lblAuditee": "মালিক", "lblParticipants": "অংশগ্রহণকারী", "artifactReq": "ব্যর্থতার প্রমাণ", "next": "পরবর্তী", "back": "পিছনে", "finalize": "সম্পন্ন", "btnDraft": "খসড়া", "pending": "অপেক্ষা", "pass": "পাস", "fail": "ব্যর্থ", "requirement": "প্রয়োজন",
+            "sections": [{ "title": "ইনকোয়ারি", "qs": [{ "q": "SLA?", "h": "রেসপন্স।" }, { "q": "সীমাবদ্ধতা?", "h": "সাইট।" }, { "q": "BU?", "h": "ইউনিট?" }] }, { "title": "ক্রেডিট", "qs": [{ "q": "লিমিট?", "h": "ভ্যালু।" }, { "q": "ডকুমেন্ট?", "h": "সার্টিফিকেট।" }, { "q": "চেক?", "h": "টাইম।" }] }, { "title": "উদ্ধৃতি", "qs": [{ "q": "মিক্স?", "h": "MPa।" }, { "q": "রেট?", "h": "অপেক্ষা।" }, { "q": "ECOPact?", "h": "বিকল্প?" }] }, { "title": "চুক্তি", "qs": [{ "q": "দাম?", "h": "PO।" }, { "q": "চার্জ?", "h": "পরিবেশ।" }, { "q": "যোগাযোগ?", "h": "মোবাইল।" }] }, { "title": "এন্ট্রি", "qs": [{ "q": "তারিখ?", "h": "ERP।" }, { "q": "প্ল্যান্ট?", "h": "সেরা।" }, { "q": "অনুমোদন?", "h": "ম্যানেজার।" }] }, { "title": "স্লট", "qs": [{ "q": "ক্ষমতা?", "h": "বহর।" }, { "q": "অ্যাসেট?", "h": "পাম্প।" }, { "q": "বাফার?", "h": "উইন্ডো।" }] }, { "title": "আপডেট", "qs": [{ "q": "দেরি?", "h": "জানানো।" }, { "q": "CRM?", "h": "লগ।" }, { "q": "ডিসপ্যাচ?", "h": "অ্যালার্ট।" }] }, { "title": "POD", "qs": [{ "q": "স্পষ্টতা?", "h": "পরিষ্কার।" }, { "q": "স্বাক্ষর?", "h": "চার্জ।" }, { "q": "24h?", "h": "পাঠানো।" }] }, { "title": "আর্থিক", "qs": [{ "q": "3-Way Match?", "h": "মিল।" }, { "q": "ইমেল?", "h": "AP সঠিক।" }, { "q": "ট্যাক্স?", "h": "ভ্যাট।" }] }, { "title": "রিকভারি", "qs": [{ "q": "NCR?", "h": "সিস্টেম।" }, { "q": "ফলো-আপ?", "h": "কল।" }, { "q": "কারণ?", "h": "প্রতিরোধ।" }] }, { "title": "গুণমান", "qs": [{ "q": "কণ্ঠস্বর?", "h": "টোন।" }, { "q": "ইমেল?", "h": "স্বাক্ষর।" }, { "q": "CRM?", "h": "ইতিহাস।" }] }]
         }
     },
     "markets": [
@@ -350,9 +357,12 @@
                     <td style="text-align:center">
                         <input type="radio" name="q_${idx}_${qIdx}" onclick="updateLogic(${idx}, ${qIdx}, 'Fail')" ${state.auditData[idx].answers[qIdx] === 'Fail' ? 'checked' : ''}>
                         ${state.auditData[idx].answers[qIdx] === 'Fail' ? `
-                            <div style="margin-top:5px;">
-                                <label style="font-size:9px; display:block;">FOLLOW-UP DATE</label>
-                                <input type="date" id="date_${idx}_${qIdx}" class="form-input" style="padding:4px; font-size:10px;">
+                            <div class="remediation-box animated fadeIn">
+                                <label class="remediation-label">SCHEDULE CLOSING AUDIT</label>
+                                <div class="remediation-inputs">
+                                    <input type="date" id="date_${idx}_${qIdx}" class="remediation-input">
+                                    <input type="time" id="time_${idx}_${qIdx}" class="remediation-input">
+                                </div>
                             </div>
                         ` : ''}
                     </td>
@@ -436,7 +446,8 @@
                     section: auditJson.languages['en'].sections[sIdx].title,
                     q: auditJson.languages['en'].sections[sIdx].qs[qIdx].q,
                     res: ans,
-                    followUpDate: ans === 'Fail' ? document.getElementById(`date_${sIdx}_${qIdx}`)?.value : null
+                    closingAuditDate: ans === 'Fail' ? document.getElementById(`date_${sIdx}_${qIdx}`)?.value : null,
+                    closingAuditTime: ans === 'Fail' ? document.getElementById(`time_${sIdx}_${qIdx}`)?.value : null
                 }))
             )
         };
