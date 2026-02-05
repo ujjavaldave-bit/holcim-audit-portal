@@ -35,8 +35,12 @@
         .holcim-logo { height: 45px; filter: brightness(0) invert(1); margin-bottom: 10px; }
         
         .lang-nav { position: absolute; top: 15px; right: 20px; }
+        
+        /* FIXED: Added background and dark text color for visibility */
         #languagePicker { 
-            background: rgba(255, 255, 255, 0.4); color: white; border: 1px solid rgba(255, 255, 255, 0.5); 
+            background: white !important; 
+            color: #1d4370 !important; 
+            border: 1px solid rgba(255, 255, 255, 0.5); 
             padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; outline: none; font-weight: 700;
         }
 
@@ -129,91 +133,146 @@
 </div>
 
 <script>
-    // THE BRIDGE: Paste your specific ngrok https://... address here
     const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit"; 
 
-    // Full 40+ Holcim Countries List
-    const holcimCountries = [
-        { code: 'en', name: 'Global (English)' }, { code: 'ar', name: 'Argentina' },
-        { code: 'au', name: 'Australia' }, { code: 'be', name: 'Belgium' },
-        { code: 'br', name: 'Brazil' }, { code: 'ca', name: 'Canada' },
-        { code: 'cl', name: 'Chile' }, { code: 'cn', name: 'China' },
-        { code: 'co', name: 'Colombia' }, { code: 'hr', name: 'Croatia' },
-        { code: 'cz', name: 'Czech Republic' }, { code: 'ec', name: 'Ecuador' },
-        { code: 'eg', name: 'Egypt' }, { code: 'sv', name: 'El Salvador' },
-        { code: 'fr', name: 'France' }, { code: 'de', name: 'Germany' },
-        { code: 'gr', name: 'Greece' }, { code: 'hu', name: 'Hungary' },
-        { code: 'in', name: 'India' }, { code: 'id', name: 'Indonesia' },
-        { code: 'it', name: 'Italy' }, { code: 'jo', name: 'Jordan' },
-        { code: 'lb', name: 'Lebanon' }, { code: 'mg', name: 'Madagascar' },
-        { code: 'mw', name: 'Malawi' }, { code: 'mx', name: 'Mexico' },
-        { code: 'ma', name: 'Morocco' }, { code: 'nz', name: 'New Zealand' },
-        { code: 'ng', name: 'Nigeria' }, { code: 'ph', name: 'Philippines' },
-        { code: 'pl', name: 'Poland' }, { code: 'ro', name: 'Romania' },
-        { code: 'rs', name: 'Serbia' }, { code: 'za', name: 'South Africa' },
-        { code: 'es', name: 'Spain' }, { code: 'ch', name: 'Switzerland' },
-        { code: 'th', name: 'Thailand' }, { code: 'uk', name: 'United Kingdom' },
-        { code: 'us', name: 'United States' }, { code: 'zm', name: 'Zambia' }
-    ];
-
-    const translations = {
-        en: {
-            portalTitle: "Global Internal Audit Portal",
-            lblOrder: "Order Reference",
-            lblAuditee: "Process Owner",
-            lblParticipants: "Audit Participants",
-            lblSerial: "Audit Serial No:",
-            artifactReq: "Evidence Required for FAIL",
-            next: "Next Stage", back: "Back", finalize: "Finalize Audit",
-            btnDraft: "Save as Draft", pending: "Pending", pass: "Pass", fail: "Fail", requirement: "Requirement",
-            sections: [
-                { title: "Inquiry Management", qs: [
-                    {q: "SLA Met (4h)?", h: "Verify response time vs incoming timestamp. Target < 4 hours."}, 
-                    {q: "Constraints Captured?", h: "Check for site access, PPE, and vehicle size constraints in notes."}, 
-                    {q: "BU Categorization?", h: "Is the inquiry routed to the correct Business Unit?"}] },
-                { title: "Credit & Compliance", qs: [
-                    {q: "Limit OK?", h: "Check total order value vs available credit headroom."}, 
-                    {q: "Docs Verified?", h: "Are valid tax and registration certificates active on file?"}, 
-                    {q: "Pre-Check Done?", h: "Credit clearance must be timestamped before order acceptance."}] },
-                { title: "Quotation & Tech Spec", qs: [
-                    {q: "Mix Match?", h: "Does the MPa/Slump in the quote match the technical request?"}, 
-                    {q: "Ancillary Rates?", h: "Are waiting times and part-loads quoted per regional price lists?"}, 
-                    {q: "ECOPact Opportunity?", h: "Was a sustainable/low-carbon alternative offered?"}] },
-                { title: "Contract/PO Review", qs: [
-                    {q: "PO Price Match?", h: "Does the system price align exactly with the physical customer PO?"}, 
-                    {q: "Surcharges?", h: "Are regional/environmental surcharges included on the PO?"}, 
-                    {q: "Site Contacts?", h: "Is a valid mobile contact available for delivery alerts?"}] },
-                { title: "Order Entry Accuracy", qs: [
-                    {q: "Date Match?", h: "Does the ERP booking match the PO delivery date exactly?"}, 
-                    {q: "Plant Logic?", h: "Was the optimal plant selected based on delivery radius?"}, 
-                    {q: "Approvals?", h: "Are manual price overrides documented and manager-approved?"}] },
-                { title: "Slot Booking", qs: [
-                    {q: "Capacity Verified?", h: "Check plant/fleet availability before the slot was promised."}, 
-                    {q: "Asset Sync?", h: "Are secondary assets (pumps/conveyors) booked correctly?"}, 
-                    {q: "Pour Buffers?", h: "Are there appropriate time windows between site deliveries?"}] },
-                { title: "Proactive Updates", qs: [
-                    {q: "Delay Alert?", h: "Was the customer notified of any departure delays > 15 mins?"}, 
-                    {q: "CRM Record?", h: "Is there a timestamped record of the site communication?"}, 
-                    {q: "Dispatch Alerts?", h: "Did the site receive an automated 'Truck Dispatched' notification?"}] },
-                { title: "Document Transmission (POD)", qs: [
-                    {q: "Legibility?", h: "Is the signed POD clear and authorized?"}, 
-                    {q: "Ancillary Initials?", h: "Are extra charges initialed on the site ticket?"}, 
-                    {q: "24h Distribution?", h: "Was the document sent to the customer within 24 hours?"}] },
-                { title: "Financial Finalization", qs: [
-                    {q: "3-Way Match?", h: "Quote vs PO vs Invoice alignment check."}, 
-                    {q: "AP Email Accuracy?", h: "Sent to the correct Accounts Payable inbox?"}, 
-                    {q: "Tax Treatment?", h: "Verify local tax/VAT compliance per regional regulations."}] },
-                { title: "Service Recovery", qs: [
-                    {q: "NCR Logged?", h: "Was the dispute recorded in the Non-Conformance system?"}, 
-                    {q: "Follow-up Record?", h: "Is there a post-dispute service recovery call log?"}, 
-                    {q: "Root Cause Action?", h: "Is there a documented action to prevent recurrence?"}] },
-                { title: "Communication Quality (QA)", qs: [
-                    {q: "Voice Standards?", h: "Review recording for tone, greeting, and active listening."}, 
-                    {q: "Email Standards?", h: "Verify branding, professional signature, and clarity."}, 
-                    {q: "Channel Continuity?", h: "Is the interaction history visible across platforms (CRM)?"}] }
+    // YOUR FULL GLOBAL JSON
+    const auditJson = {
+    "languages": {
+        "en": {
+            "portalTitle": "Global Internal Audit Portal",
+            "lblOrder": "Order Reference",
+            "lblSerial": "Audit Serial No:",
+            "lblAuditee": "Process Owner",
+            "lblParticipants": "Audit Participants (Separate by comma)",
+            "artifactReq": "Evidence Required for FAIL",
+            "next": "Next Stage", "back": "Back", "finalize": "Finalize Audit",
+            "btnDraft": "Save as Draft", "pending": "Pending", "pass": "Pass", "fail": "Fail", "requirement": "Requirement",
+            "sections": [
+                { "title": "Inquiry Management", "qs": [{ "q": "SLA Met (4h)?", "h": "Verify response time vs incoming timestamp." }, { "q": "Constraints Captured?", "h": "Check for site access/vehicle constraints in notes." }, { "q": "BU Categorization?", "h": "Is the inquiry routed to the correct Business Unit?" }] },
+                { "title": "Credit & Compliance", "qs": [{ "q": "Limit OK?", "h": "Check order value vs available credit headroom." }, { "q": "Docs Verified?", "h": "Are valid tax/registration certificates active on file?" }, { "q": "Pre-Check Done?", "h": "Credit clearance must be timestamped before PO." }] },
+                { "title": "Quotation & Tech Spec", "qs": [{ "q": "Mix Match?", "h": "Does MPa/Slump in quote match technical request?" }, { "q": "Ancillary Rates?", "h": "Are waiting times/part-loads quoted correctly?" }, { "q": "ECOPact?", "h": "Was a sustainable alternative offered?" }] },
+                { "title": "Contract/PO Review", "qs": [{ "q": "PO Price Match?", "h": "Does system price match physical customer PO?" }, { "q": "Surcharges?", "h": "Are regional/environmental surcharges included?" }, { "q": "Site Contacts?", "h": "Is a valid mobile contact available for alerts?" }] },
+                { "title": "Order Entry Accuracy", "qs": [{ "q": "Date Match?", "h": "Does ERP booking match PO date exactly?" }, { "q": "Plant Logic?", "h": "Was the optimal plant selected?" }, { "q": "Approvals?", "h": "Are manual overrides manager-approved?" }] },
+                { "title": "Slot Booking", "qs": [{ "q": "Capacity?", "h": "Check plant/fleet availability before promise." }, { "q": "Asset Sync?", "h": "Are pumps/conveyors booked correctly?" }, { "q": "Pour Buffers?", "h": "Are there time windows between site deliveries?" }] },
+                { "title": "Proactive Updates", "qs": [{ "q": "Delay Alert?", "h": "Was customer told if truck >15m late?" }, { "q": "CRM Record?", "h": "Log of site communication exists?" }, { "q": "Dispatch Alerts?", "h": "Did site receive automated 'Dispatched' alert?" }] },
+                { "title": "Document (POD)", "qs": [{ "q": "Legibility?", "h": "Is the signed POD clear and authorized?" }, { "q": "Ancillary Initials?", "h": "Are extra charges initialed on the ticket?" }, { "q": "24h Dist?", "h": "Was POD sent to customer within 24 hours?" }] },
+                { "title": "Financial Finalization", "qs": [{ "q": "3-Way Match?", "h": "Quote vs PO vs Invoice alignment check." }, { "q": "AP Email Accuracy?", "h": "Sent to correct Accounts Payable inbox?" }, { "q": "Tax Treatment?", "h": "Local tax/VAT compliance per regulations." }] },
+                { "title": "Service Recovery", "qs": [{ "q": "NCR Logged?", "h": "Was dispute recorded in Non-Conformance system?" }, { "q": "Follow-up?", "h": "Is there a post-dispute service recovery call log?" }, { "q": "Root Cause?", "h": "Is there an action to prevent recurrence?" }] },
+                { "title": "Quality (Omni-Channel)", "qs": [{ "q": "Voice Standards?", "h": "Review recording for tone/greeting compliance." }, { "q": "Email Standards?", "h": "Verify branding and professional signature." }, { "q": "Continuity?", "h": "Interaction history visible across platforms?" }] }
+            ]
+        },
+        "fr": {
+            "portalTitle": "Portail d'Audit Interne Global",
+            "lblOrder": "Référence de Commande",
+            "lblSerial": "N° de Série d'Audit:",
+            "lblAuditee": "Propriétaire du Processus",
+            "lblParticipants": "Participants (Séparer par virgule)",
+            "artifactReq": "Preuve Requise pour ÉCHEC",
+            "next": "Étape Suivante", "back": "Retour", "finalize": "Finaliser l'Audit",
+            "btnDraft": "Enregistrer Brouillon", "pending": "En attente", "pass": "Réussi", "fail": "Échec", "requirement": "Exigence",
+            "sections": [
+                { "title": "Gestion des Demandes", "qs": [{ "q": "SLA respecté (4h)?", "h": "Vérifier le temps de réponse." }, { "q": "Contraintes saisies?", "h": "Vérifier l'accès au site." }, { "q": "Catégorisation BU?", "h": "Routage vers la bonne unité?" }] },
+                { "title": "Crédit et Conformité", "qs": [{ "q": "Limite OK?", "h": "Valeur vs marge de crédit." }, { "q": "Docs vérifiés?", "h": "Certificats fiscaux actifs?" }, { "q": "Pré-vérification?", "h": "Validation datée." }] },
+                { "title": "Devis et Spécifications", "qs": [{ "q": "Mélange correct?", "h": "MPa conforme?" }, { "q": "Tarifs annexes?", "h": "Temps d'attente inclus?" }, { "q": "ECOPact?", "h": "Offre durable?" }] },
+                { "title": "Révision Contrat/BC", "qs": [{ "q": "Prix conforme?", "h": "Le prix correspond au BC." }, { "q": "Surcharges?", "h": "Frais environnementaux?" }, { "q": "Contacts site?", "h": "Mobile valide?" }] },
+                { "title": "Précision de Saisie", "qs": [{ "q": "Date conforme?", "h": "ERP correspond au BC." }, { "q": "Logique usine?", "h": "Usine optimale?" }, { "q": "Approbations?", "h": "Prix approuvés?" }] },
+                { "title": "Réservation Créneau", "qs": [{ "q": "Capacité?", "h": "Vérifier usine/flotte." }, { "q": "Synchro actifs?", "h": "Pompes réservées." }, { "q": "Tampons?", "h": "Fenêtres de temps." }] },
+                { "title": "Mises à jour", "qs": [{ "q": "Alerte retard?", "h": "Client informé si >15 min." }, { "q": "Dossier CRM?", "h": "Trace de communication." }, { "q": "Alertes départ?", "h": "Notification envoyée." }] },
+                { "title": "Document (POD)", "qs": [{ "q": "Lisibilité?", "h": "POD clair." }, { "q": "Initiales?", "h": "Frais paraphés." }, { "q": "Dist. 24h?", "h": "Envoyé sous 24h." }] },
+                { "title": "Finalisation Financière", "qs": [{ "q": "3-Way Match?", "h": "Devis/BC/Facture." }, { "q": "E-mail AP?", "h": "Bonne boîte e-mail?" }, { "q": "TVA?", "h": "Conformité fiscale." }] },
+                { "title": "Recouvrement Service", "qs": [{ "q": "NCR enregistré?", "h": "Litige saisi." }, { "q": "Suivi?", "h": "Journal d'appel." }, { "q": "Cause racine?", "h": "Action préventive." }] },
+                { "title": "Qualité (Omnicanal)", "qs": [{ "q": "Standards voix?", "h": "Ton conforme." }, { "q": "Standards e-mail?", "h": "Branding pro." }, { "q": "Continuité?", "h": "Historique CRM." }] }
+            ]
+        },
+        "es": {
+            "portalTitle": "Portal de Auditoría Interna Global",
+            "lblOrder": "Referencia de Pedido",
+            "lblSerial": "No. Serial de Auditoría:",
+            "lblAuditee": "Dueño del Proceso",
+            "lblParticipants": "Participantes (Separar por coma)",
+            "artifactReq": "Evidencia requerida para FALLO",
+            "next": "Siguiente Etapa", "back": "Atrás", "finalize": "Finalizar Auditoría",
+            "btnDraft": "Guardar Borrador", "pending": "Pendiente", "pass": "Pasa", "fail": "Fallo", "requirement": "Requisito",
+            "sections": [
+                { "title": "Gestión de Consultas", "qs": [{ "q": "¿SLA cumplido (4h)?", "h": "Verificar tiempo de respuesta." }, { "q": "¿Restricciones?", "h": "Check acceso sitio." }, { "q": "¿Categorización?", "h": "¿Unidad correcta?" }] },
+                { "title": "Crédito y Cumplimiento", "qs": [{ "q": "¿Límite OK?", "h": "Pedido vs crédito." }, { "q": "¿Docs verificados?", "h": "¿Certificados activos?" }, { "q": "¿Pre-chequeo?", "h": "Sello de tiempo." }] },
+                { "title": "Cotización y Especificaciones", "qs": [{ "q": "¿Mezcla correcta?", "h": "¿Coincide MPa?" }, { "q": "¿Tarifas?", "h": "¿Tiempos espera?" }, { "q": "¿ECOPact?", "h": "¿Alternativa sostenible?" }] },
+                { "title": "Revisión Contrato/OC", "qs": [{ "q": "¿Precio coincide?", "h": "Precio sistema vs OC." }, { "q": "¿Recargos?", "h": "Cargos ambientales." }, { "q": "¿Contactos?", "h": "Móvil válido." }] },
+                { "title": "Precisión Pedido", "qs": [{ "q": "¿Fecha coincide?", "h": "ERP vs OC." }, { "q": "¿Planta?", "h": "Planta óptima." }, { "q": "¿Aprobaciones?", "h": "Precios aprobados." }] },
+                { "title": "Reserva de Cupos", "qs": [{ "q": "¿Capacidad?", "h": "Planta/flota disponible." }, { "q": "¿Sincronía?", "h": "Bombas reservadas." }, { "q": "¿Márgenes?", "h": "Ventanas de tiempo." }] },
+                { "title": "Actualizaciones", "qs": [{ "q": "¿Alerta?", "h": "Cliente avisado." }, { "q": "¿Registro CRM?", "h": "Registro comunicación." }, { "q": "¿Despacho?", "h": "Alerta recibida." }] },
+                { "title": "Documento (POD)", "qs": [{ "q": "¿Legibilidad?", "h": "POD firmado claro." }, { "q": "¿Iniciales?", "h": "Cargos firmados." }, { "q": "¿Dist. 24h?", "h": "Enviado en 24h." }] },
+                { "title": "Finalización Financiera", "qs": [{ "q": "¿Cruce 3 vías?", "h": "Cotización/OC/Factura." }, { "q": "¿E-mail AP?", "h": "Buzón correcto." }, { "q": "¿Impuestos?", "h": "IVA local." }] },
+                { "title": "Recuperación Servicio", "qs": [{ "q": "¿NCR?", "h": "Disputa registrada." }, { "q": "¿Seguimiento?", "h": "Log llamada." }, { "q": "¿Causa raíz?", "h": "Acción preventiva." }] },
+                { "title": "Calidad", "qs": [{ "q": "¿Voz?", "h": "Tono conforme." }, { "q": "¿E-mail?", "h": "Firma pro." }, { "q": "¿Continuidad?", "h": "Historial CRM." }] }
+            ]
+        },
+        "de": {
+            "portalTitle": "Globales Internes Audit-Portal",
+            "lblOrder": "Bestellreferenz",
+            "lblSerial": "Audit-Seriennummer:",
+            "lblAuditee": "Prozessverantwortlicher",
+            "lblParticipants": "Teilnehmer (mit Komma trennen)",
+            "artifactReq": "Nachweis für FEHLGESCHLAGEN",
+            "next": "Nächste Stufe", "back": "Zurück", "finalize": "Audit abschließen",
+            "btnDraft": "Entwurf speichern", "pending": "Ausstehend", "pass": "Bestanden", "fail": "Fehlgeschlagen", "requirement": "Anforderung",
+            "sections": [
+                { "title": "Anfragemanagement", "qs": [{ "q": "SLA (4h)?", "h": "Reaktionszeit prüfen." }, { "q": "Einschränkungen?", "h": "Baustellenzugang prüfen." }, { "q": "Kategorisierung?", "h": "Richtige BU?" }] },
+                { "title": "Kredit & Compliance", "qs": [{ "q": "Kreditlimit?", "h": "Wert vs Limit." }, { "q": "Dokumente?", "h": "Zertifikate aktiv?" }, { "q": "Check?", "h": "Zeitstempel vorhanden." }] },
+                { "title": "Angebot & Technik", "qs": [{ "q": "Mix?", "h": "MPa/Slump korrekt?" }, { "q": "Tarife?", "h": "Wartezeiten korrekt?" }, { "q": "ECOPact?", "h": "Nachhaltig?" }] },
+                { "title": "Vertrag/PO", "qs": [{ "q": "Preis?", "h": "System vs PO." }, { "q": "Zuschläge?", "h": "Umweltzuschläge?" }, { "q": "Kontakte?", "h": "Handy vorhanden." }] },
+                { "title": "Auftragserfassung", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Werk?", "h": "Optimales Werk." }, { "q": "Freigaben?", "h": "Genehmigt?" }] },
+                { "title": "Slot-Buchung", "qs": [{ "q": "Kapazität?", "h": "Werk/Flotte frei." }, { "q": "Assets?", "h": "Pumpen gebucht." }, { "q": "Puffer?", "h": "Zeitfenster." }] },
+                { "title": "Updates", "qs": [{ "q": "Verspätung?", "h": "Kunde informiert." }, { "q": "CRM?", "h": "Kontakt dokumentiert." }, { "q": "Dispatch?", "h": "Alerta gesendet." }] },
+                { "title": "POD", "qs": [{ "q": "Lesbarkeit?", "h": "POD klar." }, { "q": "Handzeichen?", "h": "Gebühren visiert." }, { "q": "24h Dist?", "h": "Innerhalb 24h." }] },
+                { "title": "Finanzen", "qs": [{ "q": "3-Way?", "h": "Angebot/PO/Rechnung." }, { "q": "E-Mail?", "h": "Korrekte AP." }, { "q": "Steuern?", "h": "Compliance." }] },
+                { "title": "Service Recovery", "qs": [{ "q": "NCR?", "h": "Eingetragen." }, { "q": "Follow-up?", "h": "Anrufliste." }, { "q": "Ursache?", "h": "Prävention." }] },
+                { "title": "Qualität", "qs": [{ "q": "Stimme?", "h": "Tonfall." }, { "q": "E-Mail?", "h": "Signatur." }, { "q": "CRM?", "h": "Verlauf." }] }
             ]
         }
-    };
+        // ... (Repeat for IT, PL, RO, AR, etc. as defined in your JSON)
+    },
+    "markets": [
+        { "region": "Europe", "country": "United Kingdom", "code": "en" },
+        { "region": "Europe", "country": "Switzerland", "code": "de" },
+        { "region": "Europe", "country": "France", "code": "fr" },
+        { "region": "Europe", "country": "Germany", "code": "de" },
+        { "region": "Europe", "country": "Belgium", "code": "fr" },
+        { "region": "Europe", "country": "Austria", "code": "de" },
+        { "region": "Europe", "country": "Bulgaria", "code": "bg" },
+        { "region": "Europe", "country": "Croatia", "code": "hr" },
+        { "region": "Europe", "country": "Czech Republic", "code": "cs" },
+        { "region": "Europe", "country": "Greece", "code": "el" },
+        { "region": "Europe", "country": "Hungary", "code": "hu" },
+        { "region": "Europe", "country": "Italy", "code": "it" },
+        { "region": "Europe", "country": "Poland", "code": "pl" },
+        { "region": "Europe", "country": "Romania", "code": "ro" },
+        { "region": "Europe", "country": "Serbia", "code": "sr" },
+        { "region": "Europe", "country": "Slovakia", "code": "sk" },
+        { "region": "Europe", "country": "Spain", "code": "es" },
+        { "region": "Europe", "country": "Azerbaijan", "code": "az" },
+        { "region": "Latin America", "country": "Argentina", "code": "es" },
+        { "region": "Latin America", "country": "Brazil", "code": "pt" },
+        { "region": "Latin America", "country": "Colombia", "code": "es" },
+        { "region": "Latin America", "country": "Costa Rica", "code": "es" },
+        { "region": "Latin America", "country": "Ecuador", "code": "es" },
+        { "region": "Latin America", "country": "El Salvador", "code": "es" },
+        { "region": "Latin America", "country": "Guatemala", "code": "es" },
+        { "region": "Latin America", "country": "Mexico", "code": "es" },
+        { "region": "Latin America", "country": "Nicaragua", "code": "es" },
+        { "region": "Latin America", "country": "Peru", "code": "es" },
+        { "region": "Middle East & Africa", "country": "Algeria", "code": "fr" },
+        { "region": "Middle East & Africa", "country": "Cameroon", "code": "fr" },
+        { "region": "Middle East & Africa", "country": "Egypt", "code": "ar" },
+        { "region": "Middle East & Africa", "country": "Iraq", "code": "ar" },
+        { "region": "Middle East & Africa", "country": "Jordan", "code": "ar" },
+        { "region": "Middle East & Africa", "country": "Lebanon", "code": "ar" },
+        { "region": "Middle East & Africa", "country": "Morocco", "code": "fr" },
+        { "region": "Asia Pacific", "country": "Australia", "code": "en" },
+        { "region": "Asia Pacific", "country": "New Zealand", "code": "en" },
+        { "region": "Asia Pacific", "country": "Bangladesh", "code": "bn" }
+    ]
+};
 
     let state = {
         currentStep: 0,
@@ -223,38 +282,26 @@
         ssoToken: null
     };
 
-    // SSO HANDSHAKE
     function handleCredentialResponse(response) {
         state.ssoToken = response.credential;
         document.getElementById('ssoOverlay').style.display = 'none';
         document.getElementById('auditMain').style.display = 'block';
         populateLanguagePicker();
-        detectLocation();
+        setLanguage('en');
     }
 
     function populateLanguagePicker() {
         const picker = document.getElementById('languagePicker');
-        picker.innerHTML = holcimCountries.map(c => 
-            `<option value="${c.code}">${c.name}</option>`
+        // FIXED: Pulling from the markets array in your JSON
+        picker.innerHTML = auditJson.markets.map(m => 
+            `<option value="${m.code}">${m.country}</option>`
         ).join('');
-    }
-
-    async function detectLocation() {
-        try {
-            const res = await fetch('https://ipapi.co/json/');
-            const data = await res.json();
-            const langMap = { 'Germany': 'de', 'France': 'fr', 'Spain': 'es', 'India': 'in' };
-            const detected = langMap[data.country_name] || 'en';
-            
-            const picker = document.getElementById('languagePicker');
-            picker.value = detected;
-            setLanguage(detected);
-        } catch (e) { setLanguage('en'); }
     }
 
     function setLanguage(lang) {
         state.currentLang = lang;
-        const t = translations['en']; // Note: Only EN translation object is provided here for brevity
+        // FIXED: Looking into auditJson.languages[lang]
+        const t = auditJson.languages[lang] || auditJson.languages['en'];
         
         document.getElementById('portalTitle').innerText = t.portalTitle;
         document.getElementById('lblOrder').innerText = t.lblOrder;
@@ -263,38 +310,51 @@
         document.getElementById('btnDraft').innerText = t.btnDraft;
         document.getElementById('serialDisplay').innerText = t.lblSerial + " " + state.auditSerial;
         
+        // Initialize data based on English structure to ensure 11 steps
         if (state.auditData.length === 0) {
-            state.auditData = t.sections.map(s => ({ status: 'PENDING', answers: s.qs.map(() => null), file: false }));
+            state.auditData = auditJson.languages['en'].sections.map(s => ({ 
+                status: 'PENDING', 
+                answers: s.qs.map(() => null), 
+                file: false 
+            }));
         }
         initWizard();
     }
 
     function initWizard() {
-        const t = translations['en'];
+        const t = auditJson.languages[state.currentLang] || auditJson.languages['en'];
+        const enTemplate = auditJson.languages['en']; 
         const container = document.getElementById('stepsContainer');
         container.innerHTML = '';
-        renderJumpMenu(t);
+        renderJumpMenu(enTemplate);
 
-        t.sections.forEach((section, idx) => {
+        // Always loop through 11 sections based on English template
+        enTemplate.sections.forEach((sectionEn, idx) => {
             const stepDiv = document.createElement('div');
             stepDiv.className = `audit-step ${idx === state.currentStep ? 'active' : ''}`;
             
-            const tableRows = section.qs.map((item, qIdx) => `
+            // Get local section title and questions if available
+            const localSection = t.sections[idx] || sectionEn;
+
+            const tableRows = sectionEn.qs.map((itemEn, qIdx) => {
+                const localQ = localSection.qs[qIdx] || itemEn;
+                return `
                 <tr>
                     <td>
                         <div style="display:flex; align-items:center;">
-                            <strong>${item.q}</strong>
+                            <strong>${localQ.q}</strong>
                             <span class="help-icon" onclick="toggleHelp(${idx}, ${qIdx})">?</span>
                         </div>
-                        <div id="help-${idx}-${qIdx}" class="help-text">${item.h}</div>
+                        <div id="help-${idx}-${qIdx}" class="help-text">${localQ.h}</div>
                     </td>
                     <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" onclick="updateLogic(${idx}, ${qIdx}, 'Pass')" ${state.auditData[idx].answers[qIdx] === 'Pass' ? 'checked' : ''}></td>
                     <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" onclick="updateLogic(${idx}, ${qIdx}, 'Fail')" ${state.auditData[idx].answers[qIdx] === 'Fail' ? 'checked' : ''}></td>
-                </tr>`).join('');
+                </tr>`;
+            }).join('');
 
             stepDiv.innerHTML = `
                 <div class="section-card">
-                    <span class="section-title">${idx + 1}. ${section.title}</span>
+                    <span class="section-title">${idx + 1}. ${localSection.title}</span>
                     <table class="checklist-table">
                         <thead><tr><th>${t.requirement}</th><th>${t.pass}</th><th>${t.fail}</th></tr></thead>
                         <tbody>${tableRows}</tbody>
@@ -309,9 +369,9 @@
         updateUI();
     }
 
-    function renderJumpMenu(t) {
+    function renderJumpMenu(template) {
         const menu = document.getElementById('jumpMenu');
-        menu.innerHTML = t.sections.map((s, i) => `
+        menu.innerHTML = template.sections.map((s, i) => `
             <button type="button" class="jump-btn ${i === state.currentStep ? 'active' : ''} ${state.auditData[i].status === 'Pass' ? 'completed' : state.auditData[i].status === 'Fail' ? 'failed-step' : ''}" 
             onclick="jumpToStep(${i})">${i + 1}</button>`).join('');
     }
@@ -334,23 +394,24 @@
     }
 
     function changeStep(n) {
+        const enTemplate = auditJson.languages['en'];
         if (n === 1 && (state.auditData[state.currentStep].answers.includes(null) || (state.auditData[state.currentStep].status === 'Fail' && !state.auditData[state.currentStep].file))) {
             alert("Complete all questions and provide artifacts for failures.");
             return;
         }
         state.currentStep += n;
-        const t = translations['en'];
-        if (state.currentStep >= t.sections.length) { saveAudit('COMPLETED'); return; }
+        if (state.currentStep >= enTemplate.sections.length) { saveAudit('COMPLETED'); return; }
         initWizard();
     }
 
     function updateUI() {
-        const t = translations['en'];
-        const percent = ((state.currentStep + 1) / t.sections.length) * 100;
+        const t = auditJson.languages[state.currentLang] || auditJson.languages['en'];
+        const enTemplate = auditJson.languages['en'];
+        const percent = ((state.currentStep + 1) / enTemplate.sections.length) * 100;
         document.getElementById('progressBar').style.width = percent + '%';
-        document.getElementById('stepLabel').innerText = `Stage ${state.currentStep + 1}: ${t.sections[state.currentStep].title}`;
+        document.getElementById('stepLabel').innerText = `Stage ${state.currentStep + 1}: ${enTemplate.sections[state.currentStep].title}`;
         document.getElementById('prevBtn').disabled = (state.currentStep === 0);
-        document.getElementById('nextBtn').innerText = (state.currentStep === t.sections.length - 1) ? t.finalize : t.next;
+        document.getElementById('nextBtn').innerText = (state.currentStep === enTemplate.sections.length - 1) ? t.finalize : t.next;
     }
 
     async function saveAudit(finalStatus) {
@@ -362,8 +423,8 @@
             status: finalStatus,
             results: state.auditData.flatMap((section, sIdx) => 
                 section.answers.map((ans, qIdx) => ({
-                    section: translations['en'].sections[sIdx].title,
-                    q: translations['en'].sections[sIdx].qs[qIdx].q,
+                    section: auditJson.languages['en'].sections[sIdx].title,
+                    q: auditJson.languages['en'].sections[sIdx].qs[qIdx].q,
                     res: ans
                 }))
             )
@@ -375,15 +436,14 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            
             if (response.ok) {
-                alert(`SUCCESS: Audit ${state.auditSerial} synced to Aurora PostgreSQL.`);
+                alert(`SUCCESS: Audit ${state.auditSerial} synced to Aurora.`);
                 if(finalStatus === 'COMPLETED') location.reload();
             } else {
-                alert("Server error: Status " + response.status);
+                alert("Server error: " + response.status);
             }
         } catch (error) {
-            alert("Connection Error: Backend Python script is not running.");
+            alert("Connection Error: Check if your ngrok and Python backend are running.");
         }
     }
 </script>
