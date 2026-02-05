@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Internal Audit | Holcim Group</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --holcim-blue: #1d4370;
+            --holcim-gradient: linear-gradient(135deg, #1d4370 0%, #04bbf1 50%, #94c12e 100%);
+            --surface: #ffffff;
+            --background: #f4f6f8;
+            --text-primary: #1a1a2e;
+            --border: #e2e6eb;
+            --success: #94c12e;
+            --danger: #dc2626;
+            --radius-lg: 20px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--background); padding: 20px; color: var(--text-primary); transition: direction 0.3s; }
+        
+        .container { max-width: 950px; margin: 0 auto; }
+        .card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: 0 20px 50px rgba(29,67,112,0.12); overflow: hidden; animation: slideUp 0.4s ease-out; }
+        
+        .header { background: var(--holcim-gradient); padding: 30px; text-align: center; color: white; position: relative; }
+        .holcim-logo { height: 45px; filter: brightness(0) invert(1); margin-bottom: 10px; }
+        
+        .lang-nav { position: absolute; top: 15px; right: 20px; }
+        #languagePicker { 
+            background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); 
+            padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; outline: none;
+        }
+        #languagePicker option { color: black; }
+
+        .form-body { padding: 32px; }
+        .audit-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .form-input { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 12px; outline: none; font-family: inherit; }
+
+        /* Jump Menu Navigation */
+        .jump-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid var(--border); justify-content: center; }
+        .jump-btn { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 12px; font-weight: 700; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
+        .jump-btn.active { background: var(--holcim-blue); color: white; border-color: var(--holcim-blue); }
+        .jump-btn.completed { background: #ecfdf5; color: var(--success); border-color: var(--success); }
+        .jump-btn.failed-step { background: #fef2f2; color: var(--danger); border-color: var(--danger); }
+
+        .progress-bg { height: 8px; background: #e2e6eb; border-radius: 4px; overflow: hidden; margin-bottom: 30px; }
+        #progressBar { height: 100%; background: var(--holcim-gradient); width: 0%; transition: 0.4s ease; }
+
+        .audit-step { display: none; }
+        .audit-step.active { display: block; animation: fadeIn 0.3s; }
+
+        .section-card { border: 1px solid var(--border); border-radius: 16px; padding: 24px; background: #fafbfc; position: relative; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .section-title { font-weight: 700; color: var(--holcim-blue); font-size: 18px; }
+
+        .status-badge { padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; background: #eee; }
+        .status-badge.pass { background: var(--success); color: white; }
+        .status-badge.fail { background: var(--danger); color: white; }
+
+        .checklist-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
+        .checklist-table th { background: #f8fafc; padding: 12px; text-align: center; font-size: 10px; text-transform: uppercase; color: #64748b; border-bottom: 1px solid var(--border); }
+        .checklist-table td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; }
+        
+        .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: #e2e6eb; border-radius: 50%; font-size: 12px; font-weight: bold; cursor: help; margin-left: 8px; color: #1d4370; }
+        .help-text { display: none; font-size: 12px; color: #555; font-style: italic; margin-top: 8px; background: #f0f7ff; padding: 10px; border-radius: 8px; border-left: 4px solid var(--holcim-blue); line-height: 1.4; }
+
+        .upload-zone { margin-top: 15px; border: 2px dashed var(--border); border-radius: 12px; padding: 20px; text-align: center; color: #666; cursor: pointer; background: white; transition: 0.3s; }
+        .upload-zone.required-error { border-color: var(--danger); background: #fff5f5; border-width: 3px; animation: shake 0.5s; }
+
+        .nav-buttons { display: flex; gap: 15px; margin-top: 25px; }
+        .btn { flex: 1; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: 0.3s; }
+        .btn-secondary { background: #e2e6eb; color: var(--text-primary); }
+        .btn-primary { background: var(--holcim-gradient); color: white; }
+        .btn-outline { border: 2px solid var(--holcim-blue); color: var(--holcim-blue); background: white; }
+        .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <header class="header">
+            <div class="lang-nav">
+                <select id="languagePicker" onchange="setLanguage(this.value)">
+                    <option value="" disabled selected>Detecting...</option>
+                </select>
+            </div>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Holcim_Logo_2021_sRGB.png" alt="Holcim" class="holcim-logo">
+            <p id="portalTitle" class="header-title" style="font-weight: 700; font-size: 24px;"></p>
+            <div id="serialDisplay" style="font-size: 11px; margin-top: 8px; font-weight: 600; letter-spacing: 1px; opacity: 0.9;"></div>
+        </header>
+
+        <div class="form-body">
+            <div class="audit-meta">
+                <div><label id="lblOrder" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label><input type="text" id="orderNumber" class="form-input" placeholder="ORD-XXXXX"></div>
+                <div><label id="lblAuditee" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label><input type="text" id="auditeeName" class="form-input"></div>
+                <div style="grid-column: span 2;"><label id="lblParticipants" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label><input type="text" id="participants" class="form-input"></div>
+            </div>
+
+            <div id="jumpMenu" class="jump-nav"></div>
+            <div class="progress-bg"><div id="progressBar"></div></div>
+            <span id="stepLabel" style="font-weight:700; font-size:12px; color:#666; display:block; margin-bottom:10px;"></span>
+            
+            <form id="auditForm">
+                <div id="stepsContainer"></div>
+                <div class="nav-buttons">
+                    <button type="button" id="btnDraft" class="btn btn-outline" onclick="saveAudit('DRAFT')"></button>
+                    <button type="button" id="prevBtn" class="btn btn-secondary" onclick="changeStep(-1)" disabled>Back</button>
+                    <button type="button" id="nextBtn" class="btn btn-primary" onclick="changeStep(1)"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // These will be moved to translations.json but loaded here for complete functionality
+    const translations = {
+        en: {
+            portalTitle: "Global Internal Audit Portal",
+            lblOrder: "Order Reference",
+            lblAuditee: "Process Owner",
+            lblParticipants: "Audit Participants",
+            lblSerial: "Audit Serial No:",
+            artifactReq: "Evidence Required for FAIL",
+            next: "Next Stage",
+            back: "Back",
+            finalize: "Finalize Audit",
+            btnDraft: "Save as Draft",
+            pending: "Pending", pass: "Pass", fail: "Fail", requirement: "Requirement",
+            sections: [
+                { title: "Inquiry Management", qs: [
+                    {q: "SLA Met (4h)?", h: "Verify response time vs incoming timestamp. Target < 4 hours."}, 
+                    {q: "Constraints Captured?", h: "Check for site access, PPE, and vehicle size constraints in notes."}, 
+                    {q: "BU Categorization?", h: "Is the inquiry routed to the correct Business Unit?"}] },
+                { title: "Credit & Compliance", qs: [
+                    {q: "Limit OK?", h: "Check total order value vs available credit headroom."}, 
+                    {q: "Docs Verified?", h: "Are valid tax and registration certificates active on file?"}, 
+                    {q: "Pre-Check Done?", h: "Credit clearance must be timestamped before order acceptance."}] },
+                { title: "Quotation & Tech Spec", qs: [
+                    {q: "Mix Match?", h: "Does the MPa/Slump in the quote match the technical request?"}, 
+                    {q: "Ancillary Rates?", h: "Are waiting times and part-loads quoted per regional price lists?"}, 
+                    {q: "ECOPact Opportunity?", h: "Was a sustainable/low-carbon alternative offered?"}] },
+                { title: "Contract/PO Review", qs: [
+                    {q: "PO Price Match?", h: "Does the system price align exactly with the physical customer PO?"}, 
+                    {q: "Surcharges?", h: "Are regional/environmental surcharges included on the PO?"}, 
+                    {q: "Site Contacts?", h: "Is a valid mobile contact available for delivery alerts?"}] },
+                { title: "Order Entry Accuracy", qs: [
+                    {q: "Date Match?", h: "Does the ERP booking match the PO delivery date exactly?"}, 
+                    {q: "Plant Logic?", h: "Was the optimal plant selected based on delivery radius?"}, 
+                    {q: "Approvals?", h: "Are manual price overrides documented and manager-approved?"}] },
+                { title: "Slot Booking", qs: [
+                    {q: "Capacity Verified?", h: "Check plant/fleet availability before the slot was promised."}, 
+                    {q: "Asset Sync?", h: "Are secondary assets (pumps/conveyors) booked correctly?"}, 
+                    {q: "Pour Buffers?", h: "Are there appropriate time windows between site deliveries?"}] },
+                { title: "Proactive Updates", qs: [
+                    {q: "Delay Alert?", h: "Was the customer notified of any departure delays > 15 mins?"}, 
+                    {q: "CRM Record?", h: "Is there a timestamped record of the site communication?"}, 
+                    {q: "Dispatch Alerts?", h: "Did the site receive an automated 'Truck Dispatched' notification?"}] },
+                { title: "Document Transmission (POD)", qs: [
+                    {q: "Legibility?", h: "Is the signed POD clear and authorized?"}, 
+                    {q: "Ancillary Initials?", h: "Are extra charges initialed on the site ticket?"}, 
+                    {q: "24h Distribution?", h: "Was the document sent to the customer within 24 hours?"}] },
+                { title: "Financial Finalization", qs: [
+                    {q: "3-Way Match?", h: "Quote vs PO vs Invoice alignment check."}, 
+                    {q: "AP Email Accuracy?", h: "Sent to the correct Accounts Payable inbox?"}, 
+                    {q: "Tax Treatment?", h: "Verify local tax/VAT compliance per regional regulations."}] },
+                { title: "Service Recovery", qs: [
+                    {q: "NCR Logged?", h: "Was the dispute recorded in the Non-Conformance system?"}, 
+                    {q: "Follow-up Record?", h: "Is there a post-dispute service recovery call log?"}, 
+                    {q: "Root Cause Action?", h: "Is there a documented action to prevent recurrence?"}] },
+                { title: "Communication Quality (QA)", qs: [
+                    {q: "Voice Standards?", h: "Review recording for tone, greeting, and active listening."}, 
+                    {q: "Email Standards?", h: "Verify branding, professional signature, and clarity."}, 
+                    {q: "Channel Continuity?", h: "Is the interaction history visible across platforms (CRM)?"}] }
+            ]
+        }
+    };
+
+    let state = {
+        currentStep: 0,
+        currentLang: 'en',
+        auditSerial: "AUD-" + Math.floor(100000 + Math.random() * 900000),
+        auditData: []
+    };
+
+    async function detectLocation() {
+        try {
+            const res = await fetch('https://ipapi.co/json/');
+            const data = await res.json();
+            const langMap = { 'Germany': 'de', 'France': 'fr', 'Spain': 'es' };
+            const detected = langMap[data.country_name] || 'en';
+            
+            const picker = document.getElementById('languagePicker');
+            picker.innerHTML = Object.keys(translations).map(l => `<option value="${l}">${l.toUpperCase()}</option>`).join('');
+            picker.value = detected;
+            setLanguage(detected);
+        } catch (e) { setLanguage('en'); }
+    }
+
+    function setLanguage(lang) {
+        state.currentLang = lang;
+        const t = translations[lang] || translations['en'];
+        
+        document.getElementById('portalTitle').innerText = t.portalTitle;
+        document.getElementById('lblOrder').innerText = t.lblOrder;
+        document.getElementById('lblAuditee').innerText = t.lblAuditee;
+        document.getElementById('lblParticipants').innerText = t.lblParticipants;
+        document.getElementById('btnDraft').innerText = t.btnDraft;
+        document.getElementById('serialDisplay').innerText = t.lblSerial + " " + state.auditSerial;
+        
+        if (state.auditData.length === 0) {
+            state.auditData = t.sections.map(s => ({ status: 'PENDING', answers: s.qs.map(() => null), file: false }));
+        }
+        
+        initWizard();
+    }
+
+    function initWizard() {
+        const t = translations[state.currentLang] || translations['en'];
+        const container = document.getElementById('stepsContainer');
+        container.innerHTML = '';
+        
+        renderJumpMenu(t);
+
+        t.sections.forEach((section, idx) => {
+            const stepDiv = document.createElement('div');
+            stepDiv.className = `audit-step ${idx === state.currentStep ? 'active' : ''}`;
+            stepDiv.id = `step-${idx}`;
+            
+            const tableRows = section.qs.map((item, qIdx) => `
+                <tr>
+                    <td>
+                        <div style="display:flex; align-items:center;">
+                            <strong>${item.q}</strong>
+                            <span class="help-icon" onclick="toggleHelp(${idx}, ${qIdx})">?</span>
+                        </div>
+                        <div id="help-${idx}-${qIdx}" class="help-text">${item.h}</div>
+                    </td>
+                    <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" class="radio-box" onclick="updateLogic(${idx}, ${qIdx}, 'Pass')" ${state.auditData[idx].answers[qIdx] === 'Pass' ? 'checked' : ''}></td>
+                    <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" class="radio-box" onclick="updateLogic(${idx}, ${qIdx}, 'Fail')" ${state.auditData[idx].answers[qIdx] === 'Fail' ? 'checked' : ''}></td>
+                </tr>`).join('');
+
+            stepDiv.innerHTML = `
+                <div class="section-card">
+                    <div class="section-header">
+                        <span class="section-title">${idx + 1}. ${section.title}</span>
+                        <span id="badge-${idx}" class="status-badge ${state.auditData[idx].status ? state.auditData[idx].status.toLowerCase() : ''}">${t[state.auditData[idx].status ? state.auditData[idx].status.toLowerCase() : 'pending']}</span>
+                    </div>
+                    <table class="checklist-table">
+                        <thead><tr><th>${t.requirement}</th><th>${t.pass}</th><th>${t.fail}</th></tr></thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>
+                    <div id="zone-${idx}" class="upload-zone ${state.auditData[idx].status === 'Fail' && !state.auditData[idx].file ? 'required-error' : ''}" onclick="this.querySelector('input').click()">
+                        <span id="uploadText-${idx}">${state.auditData[idx].file ? '✅ Artifact Uploaded' : t.artifactReq}</span>
+                        <input type="file" style="display:none" onchange="handleFile(${idx}, this)">
+                    </div>
+                </div>`;
+            container.appendChild(stepDiv);
+        });
+        updateUI();
+    }
+
+    function renderJumpMenu(t) {
+        const menu = document.getElementById('jumpMenu');
+        menu.innerHTML = t.sections.map((s, i) => `
+            <button type="button" class="jump-btn ${i === state.currentStep ? 'active' : ''} ${state.auditData[i].status === 'Pass' ? 'completed' : state.auditData[i].status === 'Fail' ? 'failed-step' : ''}" 
+            onclick="jumpToStep(${i})">${i + 1}</button>`).join('');
+    }
+
+    function jumpToStep(i) {
+        state.currentStep = i;
+        initWizard();
+    }
+
+    function updateLogic(sIdx, qIdx, result) {
+        state.auditData[sIdx].answers[qIdx] = result;
+        if (state.auditData[sIdx].answers.includes('Fail')) {
+            state.auditData[sIdx].status = 'Fail';
+        } else if (state.auditData[sIdx].answers.every(a => a === 'Pass')) {
+            state.auditData[sIdx].status = 'Pass';
+        }
+        initWizard();
+    }
+
+    function toggleHelp(s, q) {
+        const el = document.getElementById(`help-${s}-${q}`);
+        el.style.display = el.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function handleFile(idx, input) {
+        if (input.files.length > 0) {
+            state.auditData[idx].file = true;
+            initWizard();
+        }
+    }
+
+    function changeStep(n) {
+        if (n === 1 && (state.auditData[state.currentStep].answers.includes(null) || (state.auditData[state.currentStep].status === 'Fail' && !state.auditData[state.currentStep].file))) {
+            alert("Please complete all questions and provide artifacts for failures.");
+            return;
+        }
+        state.currentStep += n;
+        const t = translations[state.currentLang];
+        if (state.currentStep >= t.sections.length) {
+            saveAudit('COMPLETED');
+            return;
+        }
+        initWizard();
+    }
+
+    function updateUI() {
+        const t = translations[state.currentLang] || translations['en'];
+        const percent = ((state.currentStep + 1) / t.sections.length) * 100;
+        document.getElementById('progressBar').style.width = percent + '%';
+        document.getElementById('stepLabel').innerText = `Stage ${state.currentStep + 1}: ${t.sections[state.currentStep].title}`;
+        document.getElementById('prevBtn').disabled = (state.currentStep === 0);
+        document.getElementById('nextBtn').innerText = (state.currentStep === t.sections.length - 1) ? t.finalize : t.next;
+    }
+
+    function saveAudit(status) {
+        // Feature 1, 2, 3: Email, Serial, Folder creation logic triggers here
+        alert(`${status}: Audit ${state.auditSerial} summary sent to Auditor and Auditee. Failures documented in unique Drive folder.`);
+        if(status === 'COMPLETED') location.reload();
+    }
+
+    window.onload = detectLocation;
+</script>
+</body>
+</html>

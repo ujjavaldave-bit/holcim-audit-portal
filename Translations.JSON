@@ -1,0 +1,67 @@
+{
+  "en": {
+    "portalTitle": "Global Internal Audit Portal",
+    "lblOrder": "Order Reference",
+    "lblSerial": "Audit Serial No:",
+    "lblAuditee": "Process Owner",
+    "lblParticipants": "Audit Participants (Separate by comma)",
+    "artifactReq": "Evidence Required for FAIL",
+    "sections": [
+      { "title": "Inquiry Management", "qs": [
+          { "q": "SLA Met (4h)?", "h": "Verify response time vs incoming timestamp." },
+          { "q": "Constraints Captured?", "h": "Check for site access/vehicle constraints in notes." },
+          { "q": "BU Categorization?", "h": "Is the inquiry routed to the correct Business Unit?" }
+      ]},
+      { "title": "Credit & Compliance", "qs": [
+          { "q": "Limit OK?", "h": "Check order value vs available credit headroom." },
+          { "q": "Docs Verified?", "h": "Are valid tax/registration certificates active on file?" },
+          { "q": "Pre-Check Done?", "h": "Credit clearance must be timestamped before PO." }
+      ]},
+      { "title": "Quotation & Tech Spec", "qs": [
+          { "q": "Mix Match?", "h": "Does MPa/Slump in quote match technical request?" },
+          { "q": "Ancillary Rates?", "h": "Are waiting times/part-loads quoted correctly?" },
+          { "q": "ECOPact?", "h": "Was a sustainable alternative offered?" }
+      ]},
+      { "title": "Contract/PO Review", "qs": [
+          { "q": "PO Price Match?", "h": "Does system price match physical customer PO?" },
+          { "q": "Surcharges?", "h": "Are regional/environmental surcharges included?" },
+          { "q": "Site Contacts?", "h": "Is a valid mobile contact available for alerts?" }
+      ]},
+      { "title": "Order Entry Accuracy", "qs": [
+          { "q": "Date Match?", "h": "Does ERP booking match PO date exactly?" },
+          { "q": "Plant Logic?", "h": "Was the optimal plant selected?" },
+          { "q": "Approvals?", "h": "Are manual overrides manager-approved?" }
+      ]},
+      { "title": "Slot Booking", "qs": [
+          { "q": "Capacity?", "h": "Check plant/fleet availability before promise." },
+          { "q": "Asset Sync?", "h": "Are pumps/conveyors booked correctly?" },
+          { "q": "Pour Buffers?", "h": "Are there time windows between site deliveries?" }
+      ]},
+      { "title": "Proactive Updates", "qs": [
+          { "q": "Delay Alert?", "h": "Was customer told if truck >15m late?" },
+          { "q": "CRM Record?", "h": "Log of site communication exists?" },
+          { "q": "Dispatch Alerts?", "h": "Did site receive automated 'Dispatched' alert?" }
+      ]},
+      { "title": "Document (POD)", "qs": [
+          { "q": "Legibility?", "h": "Is the signed POD clear and authorized?" },
+          { "q": "Ancillary Initials?", "h": "Are extra charges initialed on the ticket?" },
+          { "q": "24h Dist?", "h": "Was POD sent to customer within 24 hours?" }
+      ]},
+      { "title": "Financial Finalization", "qs": [
+          { "q": "3-Way Match?", "h": "Quote vs PO vs Invoice alignment check." },
+          { "q": "AP Email Accuracy?", "h": "Sent to correct Accounts Payable inbox?" },
+          { "q": "Tax Treatment?", "h": "Local tax/VAT compliance per regulations." }
+      ]},
+      { "title": "Service Recovery", "qs": [
+          { "q": "NCR Logged?", "h": "Was dispute recorded in Non-Conformance system?" },
+          { "q": "Follow-up?", "h": "Is there a post-dispute service recovery call log?" },
+          { "q": "Root Cause?", "h": "Is there an action to prevent recurrence?" }
+      ]},
+      { "title": "Quality (Omni-Channel)", "qs": [
+          { "q": "Voice Standards?", "h": "Review recording for tone/greeting compliance." },
+          { "q": "Email Standards?", "h": "Verify branding and professional signature." },
+          { "q": "Continuity?", "h": "Interaction history visible across platforms?" }
+      ]}
+    ]
+  }
+}
