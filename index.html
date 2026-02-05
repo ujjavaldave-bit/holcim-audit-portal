@@ -108,9 +108,28 @@
 
         <div class="form-body">
             <div class="audit-meta">
-                <div><label id="lblOrder" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label><input type="text" id="orderNumber" class="form-input" placeholder="ORD-XXXXX"></div>
-                <div><label id="lblAuditee" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label><input type="text" id="auditeeName" class="form-input"></div>
-                <div style="grid-column: span 2;"><label id="lblParticipants" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label><input type="text" id="participants" class="form-input"></div>
+                <div>
+                    <label id="lblOrder" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label>
+                    <input type="text" id="orderNumber" class="form-input" placeholder="ORD-XXXXX">
+                </div>
+                <div>
+                    <label style="font-size: 11px; font-weight: 700; color: #888;">ASSESSMENT TYPE</label>
+                    <select id="auditRole" class="form-input">
+                        <option value="SELF">Self-Assessment (Process Owner)</option>
+                        <option value="AUDIT">Actual Audit (Internal Auditor)</option>
+                    </select>
+                    <button id="requestAccessBtn" onclick="requestAuditorAccess()" style="display:none; margin-top:5px; font-size:10px; color:var(--holcim-blue); background:none; border:none; text-decoration:underline; cursor:pointer;">
+                        Request Auditor Access
+                    </button>
+                </div>
+                <div style="grid-column: span 2;">
+                    <label id="lblAuditee" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label>
+                    <input type="text" id="auditeeName" class="form-input">
+                </div>
+                <div style="grid-column: span 2;">
+                    <label id="lblParticipants" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label>
+                    <input type="text" id="participants" class="form-input">
+                </div>
             </div>
 
             <div id="jumpMenu" class="jump-nav"></div>
@@ -130,7 +149,7 @@
 </div>
 
 <script>
-    const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit"; 
+    const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit";
 
     const auditJson = {
     "languages": {
@@ -190,33 +209,33 @@
                 { "title": "Technik", "qs": [{ "q": "Mix?", "h": "MPa." }, { "q": "Tarife?", "h": "Warten." }, { "q": "ECOPact?", "h": "Nachhaltig?" }] },
                 { "title": "Vertrag", "qs": [{ "q": "Preis?", "h": "System vs PO." }, { "q": "Zuschläge?", "h": "Umwelt." }, { "q": "Kontakte?", "h": "Handy." }] },
                 { "title": "Erfassung", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Werk?", "h": "Opt." }, { "q": "Freigab?", "h": "Genehm." }] },
-                { "title": "Slot", "qs": [{ "q": "Kapazität?", "h": "Flotte." }, { "q": "Assets?", "h": "Pumpen." }, { "q": "Puffer?", "h": "Fenster." }] },
+                { "title": "Slot", "qs": [{ "q": "Capazität?", "h": "Flotte." }, { "q": "Assets?", "h": "Pumpen." }, { "q": "Puffer?", "h": "Fenster." }] },
                 { "title": "Updates", "qs": [{ "q": "Verspätung?", "h": "Kunde." }, { "q": "CRM?", "h": "Dokumentiert." }, { "q": "Dispatch?", "h": "Versand." }] },
-                { "title": "POD", "qs": [{ "q": "Lesbar?", "h": "POD klar." }, { "q": "Handzeich?", "h": "Visiert." }, { "q": "24h?", "h": "24h." }] },
+                { "title": "POD", "qs": [{ "q": "Lesbar?", "h": "POD klar." }, { "q": "Handzeich?", "h": "Visiert." }, { "q": "24h Dist?", "h": "24h." }] },
                 { "title": "Finanzen", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Steuern?", "h": "MwSt." }] },
                 { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Reklam." }, { "q": "Follow-up?", "h": "Anrufe." }, { "q": "Ursache?", "h": "Prävention." }] },
                 { "title": "Qualität", "qs": [{ "q": "Stimme?", "h": "Tonfall." }, { "q": "Email?", "h": "Signatur." }, { "q": "CRM?", "h": "Verlauf." }] }
             ]
         },
-        "ar": {
-            "portalTitle": "بوابة التدقيق الداخلي العالمية", "lblOrder": "مرجع الطلب", "lblSerial": "الرقم التسلسلي:", "lblAuditee": "مسؤول العملية", "lblParticipants": "المشاركون", "artifactReq": "الأدلة المطلوبة للفشل", "next": "التالي", "back": "رجوع", "finalize": "إنهاء", "btnDraft": "مسودة", "pending": "قيد الانتظار", "pass": "ناجح", "fail": "فاشل", "requirement": "المتطلب",
-            "sections": [
-                { "title": "الاستفسارات", "qs": [{ "q": "SLA (4h)?", "h": "وقت الاستجابة." }, { "q": "القيود؟", "h": "دخول الموقع." }, { "q": "BU؟", "h": "الوحدة." }] }, 
-                { "title": "الائتمان", "qs": [{ "q": "الحد؟", "h": "الائتمان." }, { "q": "الوثائق؟", "h": "نشطة." }, { "q": "الفحص؟", "h": "طابع." }] }, 
-                { "title": "عرض السعر", "qs": [{ "q": "الخليط؟", "h": "MPa." }, { "q": "الأسعار؟", "h": "الانتظار." }, { "q": "ECOPact؟", "h": "مستدام؟" }] },
-                { "title": "العقد", "qs": [{ "q": "سعر؟", "h": "أمر الشراء." }, { "q": "رسوم؟", "h": "بيئية." }, { "q": "جهات؟", "h": "موبايل." }] },
-                { "title": "الإدخال", "qs": [{ "q": "تاريخ؟", "h": "ERP." }, { "q": "مصنع؟", "h": "الأمثل." }, { "q": "موافقات؟", "h": "سعرية." }] },
-                { "title": "الحجز", "qs": [{ "q": "القدرة؟", "h": "المصنع." }, { "q": "الأصول؟", "h": "المضخات." }, { "q": "فواصل؟", "h": "زمنية." }] },
-                { "title": "تحديثات", "qs": [{ "q": "تأخير؟", "h": "إبلاغ." }, { "q": "CRM؟", "h": "سجل." }, { "q": "تنبيه؟", "h": "تم." }] },
-                { "title": "POD", "qs": [{ "q": "وضوح؟", "h": "POD." }, { "q": "توقيع؟", "h": "إضافي." }, { "q": "24 ساعة؟", "h": "أرسل." }] },
-                { "title": "المالية", "qs": [{ "q": "مطابقة؟", "h": "عرض." }, { "q": "إيميل؟", "h": "AP." }, { "q": "ضريبة؟", "h": "محلي." }] },
-                { "title": "استعادة", "qs": [{ "q": "NCR؟", "h": "نزاع." }, { "q": "متابعة؟", "h": "مكالمات." }, { "q": "سبب؟", "h": "منع." }] },
-                { "title": "الجودة", "qs": [{ "q": "صوت؟", "h": "نبرة." }, { "q": "بريد؟", "h": "توقيع." }, { "q": "قناة؟", "h": "سجل." }] }
-            ]
-        },
         "bn": {
             "portalTitle": "অডিট পোর্টাল", "lblOrder": "অর্ডার", "lblSerial": "নং:", "lblAuditee": "মালিক", "lblParticipants": "অংশগ্রহণকারী", "artifactReq": "প্রমাণ", "next": "পরবর্তী", "back": "পিছনে", "finalize": "সম্পন্ন", "btnDraft": "খসড়া", "pending": "অপেক্ষা", "pass": "পাস", "fail": "ব্যর্থ", "requirement": "প্রয়োজন",
             "sections": [{ "title": "ইনকোয়ারি", "qs": [{ "q": "SLA?", "h": "রেসপন্স।" }, { "q": "সীমাবদ্ধতা?", "h": "সাইট।" }, { "q": "BU?", "h": "ইউনিট?" }] }, { "title": "ক্রেডিট", "qs": [{ "q": "লিমিট?", "h": "ভ্যালু।" }, { "q": "ডকুমেন্ট?", "h": "সার্টিফিকেট।" }, { "q": "চেক?", "h": "টাইম।" }] }, { "title": "উদ্ধৃতি", "qs": [{ "q": "মিক্স?", "h": "MPa।" }, { "q": "রেট?", "h": "অপেক্ষা।" }, { "q": "ECOPact?", "h": "বিকল্প?" }] }, { "title": "চুক্তি", "qs": [{ "q": "দাম?", "h": "PO।" }, { "q": "চার্জ?", "h": "পরিবেশ।" }, { "q": "যোগাযোগ?", "h": "মোবাইল।" }] }, { "title": "এন্ট্রি", "qs": [{ "q": "তারিখ?", "h": "ERP।" }, { "q": "প্ল্যান্ট?", "h": "সেরা।" }, { "q": "অনুমোদন?", "h": "ম্যানেজার।" }] }, { "title": "স্লট", "qs": [{ "q": "ক্ষমতা?", "h": "বহর।" }, { "q": "অ্যাসেট?", "h": "পাম্প।" }, { "q": "বাফার?", "h": "উইন্ডো।" }] }, { "title": "আপডেট", "qs": [{ "q": "দেরি?", "h": "জানানো।" }, { "q": "CRM?", "h": "লগ।" }, { "q": "ডিসপ্যাচ?", "h": "অ্যালার্ট।" }] }, { "title": "POD", "qs": [{ "q": "স্পষ্টতা?", "h": "পরিষ্কার।" }, { "q": "স্বাক্ষর?", "h": "চার্জ।" }, { "q": "24h?", "h": "পাঠানো।" }] }, { "title": "আর্থিক", "qs": [{ "q": "3-Way?", "h": "মিল।" }, { "q": "ইমেল?", "h": "AP।" }, { "q": "ট্যাক্স?", "h": "ভ্যাট।" }] }, { "title": "রিকভারি", "qs": [{ "q": "NCR?", "h": "সিস্টেম।" }, { "q": "ফলো-আপ?", "h": "কল।" }, { "q": "কারণ?", "h": "প্রতিরোধ।" }] }, { "title": "গুণমান", "qs": [{ "q": "কণ্ঠস্বর?", "h": "টোন।" }, { "q": "ইমেল?", "h": "স্বাক্ষর।" }, { "q": "CRM?", "h": "ইতিহাস।" }] }]
+        },
+        "ar": {
+            "portalTitle": "بوابة التدقيق الداخلي العالمية", "lblOrder": "مرجع الطلب", "lblSerial": "الرقم التسلسلي للتدقيق:", "lblAuditee": "مسؤول العملية", "lblParticipants": "المشاركون في التدقيق (فصل بفاصلة)", "artifactReq": "الأدلة المطلوبة للفشل", "next": "المرحلة التالية", "back": "رجوع", "finalize": "إنهاء التدقيق", "btnDraft": "حفظ كمسودة", "pending": "قيد الانتظار", "pass": "ناجح", "fail": "فاشل", "requirement": "المتطلب",
+            "sections": [
+                { "title": "إدارة الاستفسارات", "qs": [{ "q": "هل تم الالتزام بـ SLA (4 ساعات)؟", "h": "تحقق من وقت الاستجابة مقابل وقت الاستلام." }, { "q": "هل تم تسجيل القيود؟", "h": "تحقق من قيود دخول الموقع أو المركبات." }, { "q": "تصنيف وحدة العمل؟", "h": "هل تم توجيه الاستفسار إلى وحدة العمل الصحيحة؟" }] }, 
+                { "title": "الائتمان والامتثال", "qs": [{ "q": "الحد الائتماني مقبول؟", "h": "تحقق من قيمة الطلب مقابل الرصيد المتاح." }, { "q": "الوثائق تم التحقق منها؟", "h": "هل شهادات التسجيل الضريبي فعالة؟" }, { "q": "تم الفحص المسبق؟", "h": "يجب أن يكون التخليص الائتماني مؤرخًا قبل الطلب." }] }, 
+                { "title": "الاقتباس والمواصفات الفنية", "qs": [{ "q": "تطابق المزيج؟", "h": "هل تتطابق القوة/الهبوط في العرض مع الطلب الفني؟" }, { "q": "معدلات الخدمات الإضافية؟", "h": "هل تم تسعير أوقات الانتظار والحمولات الجزئية؟" }, { "q": "فرصة ECOPact؟", "h": "هل تم تقديم بديل مستدام/منخفض الكربون؟" }] },
+                { "title": "مراجعة العقد", "qs": [{ "q": "تطابق سعر؟", "h": "النظام مع أمر الشراء." }, { "q": "الرسوم؟", "h": "رسوم بيئية." }, { "q": "جهات اتصال؟", "h": "رقم موبايل." }] },
+                { "title": "دقة الإدخال", "qs": [{ "q": "تطابق التاريخ؟", "h": "ERP مع تاريخ الشراء." }, { "q": "منطق المصنع؟", "h": "المصنع الأمثل." }, { "q": "الموافقات؟", "h": "الموافقة السعرية." }] },
+                { "title": "حجز المواعيد", "qs": [{ "q": "القدرة؟", "h": "توفر المصنع." }, { "q": "الأصول؟", "h": "حجز المضخات." }, { "q": "فواصل صب؟", "h": "فترات زمنية." }] },
+                { "title": "تحديثات استباقية", "qs": [{ "q": "تنبيه التأخير؟", "h": "إبلاغ العميل." }, { "q": "سجل CRM؟", "h": "سجل التواصل." }, { "q": "تنبيه الإرسال؟", "h": "تم الإرسال." }] },
+                { "title": "وثيقة التسليم (POD)", "qs": [{ "q": "وضوح القراءة؟", "h": "POD واضح." }, { "q": "توقيع الرسوم؟", "h": "توقيع إضافي." }, { "q": "24 ساعة؟", "h": "أرسل للعميل." }] },
+                { "title": "النهائي المالي", "qs": [{ "q": "مطابقة؟", "h": "عرض وطلب شراء." }, { "q": "دقة الإيميل؟", "h": "صندوق AP." }, { "q": "الضرائب؟", "h": "الضريبة المحلية." }] },
+                { "title": "استعادة الخدمة", "qs": [{ "q": "تسجيل NCR؟", "h": "تسجيل النزاع." }, { "q": "المتابعة؟", "h": "سجل مكالمات." }, { "q": "السبب الجذري؟", "h": "منع التكرار." }] },
+                { "title": "جودة الاتصال (QA)", "qs": [{ "q": "معايير الصوت؟", "h": "النبرة." }, { "q": "معايير البريد؟", "h": "التوقيع." }, { "q": "استمرارية؟", "h": "سجل التفاعل." }] }
+            ]
         }
     },
     "markets": [
@@ -229,15 +248,54 @@
         currentLang: 'en',
         auditSerial: "AUD-" + Math.floor(100000 + Math.random() * 900000),
         auditData: [],
-        ssoToken: null
+        ssoToken: null,
+        userEmail: "",
+        userName: ""
     };
 
-    function handleCredentialResponse(response) {
+    async function handleCredentialResponse(response) {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
         state.ssoToken = response.credential;
+        state.userEmail = payload.email.toLowerCase();
+        state.userName = payload.name;
+
+        // Check permissions from backend
+        try {
+            const check = await fetch(`${API_URL.replace('/submit', '/check-permissions')}?email=${state.userEmail}`);
+            const perm = await check.json();
+            
+            const rolePicker = document.getElementById('auditRole');
+            const requestBtn = document.getElementById('requestAccessBtn');
+
+            if (perm.isAuditor) {
+                rolePicker.disabled = false;
+                requestBtn.style.display = 'none';
+            } else {
+                rolePicker.value = "SELF";
+                rolePicker.disabled = true;
+                requestBtn.style.display = 'block';
+            }
+        } catch (e) {
+            console.log("Permission check failed, defaulting to Self-Assessment.");
+        }
+
         document.getElementById('ssoOverlay').style.display = 'none';
         document.getElementById('auditMain').style.display = 'block';
         populateLanguagePicker();
         setLanguage('en');
+    }
+
+    async function requestAuditorAccess() {
+        try {
+            const res = await fetch(`${API_URL.replace('/submit', '/request-access')}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: state.userEmail, name: state.userName })
+            });
+            if (res.ok) alert("Access request sent to the Audit Admin team.");
+        } catch (e) {
+            alert("Error sending request.");
+        }
     }
 
     function populateLanguagePicker() {
@@ -358,6 +416,8 @@
     async function saveAudit(finalStatus) {
         const payload = {
             serial: state.auditSerial,
+            role: document.getElementById('auditRole').value,
+            userEmail: state.userEmail,
             orderNumber: document.getElementById('orderNumber').value,
             auditee: document.getElementById('auditeeName').value,
             participants: document.getElementById('participants').value,
