@@ -22,7 +22,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--background); padding: 20px; color: var(--text-primary); transition: direction 0.3s; }
         
-        /* SSO Security Overlay */
         #ssoOverlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: var(--background); z-index: 10000; display: flex; 
@@ -37,8 +36,8 @@
         
         .lang-nav { position: absolute; top: 15px; right: 20px; }
         #languagePicker { 
-            background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); 
-            padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; outline: none;
+            background: rgba(255, 255, 255, 0.4); color: white; border: 1px solid rgba(255, 255, 255, 0.5); 
+            padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; outline: none; font-weight: 700;
         }
 
         .form-body { padding: 32px; }
@@ -99,7 +98,6 @@
         <header class="header">
             <div class="lang-nav">
                 <select id="languagePicker" onchange="setLanguage(this.value)">
-                    <option value="" disabled selected>Detecting...</option>
                 </select>
             </div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Holcim_Logo_2021_sRGB.png" alt="Holcim" class="holcim-logo">
@@ -131,8 +129,32 @@
 </div>
 
 <script>
-    // Note: Update this URL once your Python script is hosted in the Cloud
-    const API_URL = "http://49.43.24.164:8000/api/v1/audit/submit"; 
+    // THE BRIDGE: Paste your specific ngrok https://... address here
+    const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit"; 
+
+    // Full 40+ Holcim Countries List
+    const holcimCountries = [
+        { code: 'en', name: 'Global (English)' }, { code: 'ar', name: 'Argentina' },
+        { code: 'au', name: 'Australia' }, { code: 'be', name: 'Belgium' },
+        { code: 'br', name: 'Brazil' }, { code: 'ca', name: 'Canada' },
+        { code: 'cl', name: 'Chile' }, { code: 'cn', name: 'China' },
+        { code: 'co', name: 'Colombia' }, { code: 'hr', name: 'Croatia' },
+        { code: 'cz', name: 'Czech Republic' }, { code: 'ec', name: 'Ecuador' },
+        { code: 'eg', name: 'Egypt' }, { code: 'sv', name: 'El Salvador' },
+        { code: 'fr', name: 'France' }, { code: 'de', name: 'Germany' },
+        { code: 'gr', name: 'Greece' }, { code: 'hu', name: 'Hungary' },
+        { code: 'in', name: 'India' }, { code: 'id', name: 'Indonesia' },
+        { code: 'it', name: 'Italy' }, { code: 'jo', name: 'Jordan' },
+        { code: 'lb', name: 'Lebanon' }, { code: 'mg', name: 'Madagascar' },
+        { code: 'mw', name: 'Malawi' }, { code: 'mx', name: 'Mexico' },
+        { code: 'ma', name: 'Morocco' }, { code: 'nz', name: 'New Zealand' },
+        { code: 'ng', name: 'Nigeria' }, { code: 'ph', name: 'Philippines' },
+        { code: 'pl', name: 'Poland' }, { code: 'ro', name: 'Romania' },
+        { code: 'rs', name: 'Serbia' }, { code: 'za', name: 'South Africa' },
+        { code: 'es', name: 'Spain' }, { code: 'ch', name: 'Switzerland' },
+        { code: 'th', name: 'Thailand' }, { code: 'uk', name: 'United Kingdom' },
+        { code: 'us', name: 'United States' }, { code: 'zm', name: 'Zambia' }
+    ];
 
     const translations = {
         en: {
@@ -206,18 +228,25 @@
         state.ssoToken = response.credential;
         document.getElementById('ssoOverlay').style.display = 'none';
         document.getElementById('auditMain').style.display = 'block';
+        populateLanguagePicker();
         detectLocation();
+    }
+
+    function populateLanguagePicker() {
+        const picker = document.getElementById('languagePicker');
+        picker.innerHTML = holcimCountries.map(c => 
+            `<option value="${c.code}">${c.name}</option>`
+        ).join('');
     }
 
     async function detectLocation() {
         try {
             const res = await fetch('https://ipapi.co/json/');
             const data = await res.json();
-            const langMap = { 'Germany': 'de', 'France': 'fr', 'Spain': 'es' };
+            const langMap = { 'Germany': 'de', 'France': 'fr', 'Spain': 'es', 'India': 'in' };
             const detected = langMap[data.country_name] || 'en';
             
             const picker = document.getElementById('languagePicker');
-            picker.innerHTML = Object.keys(translations).map(l => `<option value="${l}">${l.toUpperCase()}</option>`).join('');
             picker.value = detected;
             setLanguage(detected);
         } catch (e) { setLanguage('en'); }
@@ -225,7 +254,7 @@
 
     function setLanguage(lang) {
         state.currentLang = lang;
-        const t = translations[lang] || translations['en'];
+        const t = translations['en']; // Note: Only EN translation object is provided here for brevity
         
         document.getElementById('portalTitle').innerText = t.portalTitle;
         document.getElementById('lblOrder').innerText = t.lblOrder;
@@ -241,7 +270,7 @@
     }
 
     function initWizard() {
-        const t = translations[state.currentLang] || translations['en'];
+        const t = translations['en'];
         const container = document.getElementById('stepsContainer');
         container.innerHTML = '';
         renderJumpMenu(t);
@@ -265,10 +294,7 @@
 
             stepDiv.innerHTML = `
                 <div class="section-card">
-                    <div class="section-header">
-                        <span class="section-title">${idx + 1}. ${section.title}</span>
-                        <span id="badge-${idx}" class="status-badge ${state.auditData[idx].status ? state.auditData[idx].status.toLowerCase() : ''}">${t[state.auditData[idx].status ? state.auditData[idx].status.toLowerCase() : 'pending']}</span>
-                    </div>
+                    <span class="section-title">${idx + 1}. ${section.title}</span>
                     <table class="checklist-table">
                         <thead><tr><th>${t.requirement}</th><th>${t.pass}</th><th>${t.fail}</th></tr></thead>
                         <tbody>${tableRows}</tbody>
@@ -313,13 +339,13 @@
             return;
         }
         state.currentStep += n;
-        const t = translations[state.currentLang];
+        const t = translations['en'];
         if (state.currentStep >= t.sections.length) { saveAudit('COMPLETED'); return; }
         initWizard();
     }
 
     function updateUI() {
-        const t = translations[state.currentLang] || translations['en'];
+        const t = translations['en'];
         const percent = ((state.currentStep + 1) / t.sections.length) * 100;
         document.getElementById('progressBar').style.width = percent + '%';
         document.getElementById('stepLabel').innerText = `Stage ${state.currentStep + 1}: ${t.sections[state.currentStep].title}`;
@@ -327,7 +353,6 @@
         document.getElementById('nextBtn').innerText = (state.currentStep === t.sections.length - 1) ? t.finalize : t.next;
     }
 
-    // THE BRIDGE: CALL TO PYTHON API
     async function saveAudit(finalStatus) {
         const payload = {
             serial: state.auditSerial,
@@ -337,8 +362,8 @@
             status: finalStatus,
             results: state.auditData.flatMap((section, sIdx) => 
                 section.answers.map((ans, qIdx) => ({
-                    section: translations[state.currentLang].sections[sIdx].title,
-                    q: translations[state.currentLang].sections[sIdx].qs[qIdx].q,
+                    section: translations['en'].sections[sIdx].title,
+                    q: translations['en'].sections[sIdx].qs[qIdx].q,
                     res: ans
                 }))
             )
@@ -354,6 +379,8 @@
             if (response.ok) {
                 alert(`SUCCESS: Audit ${state.auditSerial} synced to Aurora PostgreSQL.`);
                 if(finalStatus === 'COMPLETED') location.reload();
+            } else {
+                alert("Server error: Status " + response.status);
             }
         } catch (error) {
             alert("Connection Error: Backend Python script is not running.");
@@ -362,5 +389,3 @@
 </script>
 </body>
 </html>
-
-
