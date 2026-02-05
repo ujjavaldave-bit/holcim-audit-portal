@@ -1,67 +1,192 @@
-{
-  "en": {
-    "portalTitle": "Global Internal Audit Portal",
-    "lblOrder": "Order Reference",
-    "lblSerial": "Audit Serial No:",
-    "lblAuditee": "Process Owner",
-    "lblParticipants": "Audit Participants (Separate by comma)",
-    "artifactReq": "Evidence Required for FAIL",
-    "sections": [
-      { "title": "Inquiry Management", "qs": [
-          { "q": "SLA Met (4h)?", "h": "Verify response time vs incoming timestamp." },
-          { "q": "Constraints Captured?", "h": "Check for site access/vehicle constraints in notes." },
-          { "q": "BU Categorization?", "h": "Is the inquiry routed to the correct Business Unit?" }
-      ]},
-      { "title": "Credit & Compliance", "qs": [
-          { "q": "Limit OK?", "h": "Check order value vs available credit headroom." },
-          { "q": "Docs Verified?", "h": "Are valid tax/registration certificates active on file?" },
-          { "q": "Pre-Check Done?", "h": "Credit clearance must be timestamped before PO." }
-      ]},
-      { "title": "Quotation & Tech Spec", "qs": [
-          { "q": "Mix Match?", "h": "Does MPa/Slump in quote match technical request?" },
-          { "q": "Ancillary Rates?", "h": "Are waiting times/part-loads quoted correctly?" },
-          { "q": "ECOPact?", "h": "Was a sustainable alternative offered?" }
-      ]},
-      { "title": "Contract/PO Review", "qs": [
-          { "q": "PO Price Match?", "h": "Does system price match physical customer PO?" },
-          { "q": "Surcharges?", "h": "Are regional/environmental surcharges included?" },
-          { "q": "Site Contacts?", "h": "Is a valid mobile contact available for alerts?" }
-      ]},
-      { "title": "Order Entry Accuracy", "qs": [
-          { "q": "Date Match?", "h": "Does ERP booking match PO date exactly?" },
-          { "q": "Plant Logic?", "h": "Was the optimal plant selected?" },
-          { "q": "Approvals?", "h": "Are manual overrides manager-approved?" }
-      ]},
-      { "title": "Slot Booking", "qs": [
-          { "q": "Capacity?", "h": "Check plant/fleet availability before promise." },
-          { "q": "Asset Sync?", "h": "Are pumps/conveyors booked correctly?" },
-          { "q": "Pour Buffers?", "h": "Are there time windows between site deliveries?" }
-      ]},
-      { "title": "Proactive Updates", "qs": [
-          { "q": "Delay Alert?", "h": "Was customer told if truck >15m late?" },
-          { "q": "CRM Record?", "h": "Log of site communication exists?" },
-          { "q": "Dispatch Alerts?", "h": "Did site receive automated 'Dispatched' alert?" }
-      ]},
-      { "title": "Document (POD)", "qs": [
-          { "q": "Legibility?", "h": "Is the signed POD clear and authorized?" },
-          { "q": "Ancillary Initials?", "h": "Are extra charges initialed on the ticket?" },
-          { "q": "24h Dist?", "h": "Was POD sent to customer within 24 hours?" }
-      ]},
-      { "title": "Financial Finalization", "qs": [
-          { "q": "3-Way Match?", "h": "Quote vs PO vs Invoice alignment check." },
-          { "q": "AP Email Accuracy?", "h": "Sent to correct Accounts Payable inbox?" },
-          { "q": "Tax Treatment?", "h": "Local tax/VAT compliance per regulations." }
-      ]},
-      { "title": "Service Recovery", "qs": [
-          { "q": "NCR Logged?", "h": "Was dispute recorded in Non-Conformance system?" },
-          { "q": "Follow-up?", "h": "Is there a post-dispute service recovery call log?" },
-          { "q": "Root Cause?", "h": "Is there an action to prevent recurrence?" }
-      ]},
-      { "title": "Quality (Omni-Channel)", "qs": [
-          { "q": "Voice Standards?", "h": "Review recording for tone/greeting compliance." },
-          { "q": "Email Standards?", "h": "Verify branding and professional signature." },
-          { "q": "Continuity?", "h": "Interaction history visible across platforms?" }
-      ]}
+const auditJson = {
+    "languages": {
+        "en": {
+            "portalTitle": "Global Internal Audit Portal",
+            "lblOrder": "Order Reference",
+            "lblSerial": "Audit Serial No:",
+            "lblAuditee": "Process Owner",
+            "lblParticipants": "Audit Participants (Separate by comma)",
+            "artifactReq": "Evidence Required for FAIL",
+            "next": "Next Stage", "back": "Back", "finalize": "Finalize Audit",
+            "btnDraft": "Save as Draft", "pending": "Pending", "pass": "Pass", "fail": "Fail", "requirement": "Requirement",
+            "sections": [
+                { "title": "Inquiry Management", "qs": [{ "q": "SLA Met (4h)?", "h": "Verify response time vs incoming timestamp." }, { "q": "Constraints Captured?", "h": "Check for site access/vehicle constraints in notes." }, { "q": "BU Categorization?", "h": "Is the inquiry routed to the correct Business Unit?" }] },
+                { "title": "Credit & Compliance", "qs": [{ "q": "Limit OK?", "h": "Check order value vs available credit headroom." }, { "q": "Docs Verified?", "h": "Are valid tax/registration certificates active on file?" }, { "q": "Pre-Check Done?", "h": "Credit clearance must be timestamped before PO." }] },
+                { "title": "Quotation & Tech Spec", "qs": [{ "q": "Mix Match?", "h": "Does MPa/Slump in quote match technical request?" }, { "q": "Ancillary Rates?", "h": "Are waiting times/part-loads quoted correctly?" }, { "q": "ECOPact?", "h": "Was a sustainable alternative offered?" }] },
+                { "title": "Contract/PO Review", "qs": [{ "q": "PO Price Match?", "h": "Does system price match physical customer PO?" }, { "q": "Surcharges?", "h": "Are regional/environmental surcharges included?" }, { "q": "Site Contacts?", "h": "Is a valid mobile contact available for alerts?" }] },
+                { "title": "Order Entry Accuracy", "qs": [{ "q": "Date Match?", "h": "Does ERP booking match PO date exactly?" }, { "q": "Plant Logic?", "h": "Was the optimal plant selected?" }, { "q": "Approvals?", "h": "Are manual overrides manager-approved?" }] },
+                { "title": "Slot Booking", "qs": [{ "q": "Capacity?", "h": "Check plant/fleet availability before promise." }, { "q": "Asset Sync?", "h": "Are pumps/conveyors booked correctly?" }, { "q": "Pour Buffers?", "h": "Are there time windows between site deliveries?" }] },
+                { "title": "Proactive Updates", "qs": [{ "q": "Delay Alert?", "h": "Was customer told if truck >15m late?" }, { "q": "CRM Record?", "h": "Log of site communication exists?" }, { "q": "Dispatch Alerts?", "h": "Did site receive automated 'Dispatched' alert?" }] },
+                { "title": "Document (POD)", "qs": [{ "q": "Legibility?", "h": "Is the signed POD clear and authorized?" }, { "q": "Ancillary Initials?", "h": "Are extra charges initialed on the ticket?" }, { "q": "24h Dist?", "h": "Was POD sent to customer within 24 hours?" }] },
+                { "title": "Financial Finalization", "qs": [{ "q": "3-Way Match?", "h": "Quote vs PO vs Invoice alignment check." }, { "q": "AP Email Accuracy?", "h": "Sent to correct Accounts Payable inbox?" }, { "q": "Tax Treatment?", "h": "Local tax/VAT compliance per regulations." }] },
+                { "title": "Service Recovery", "qs": [{ "q": "NCR Logged?", "h": "Was dispute recorded in Non-Conformance system?" }, { "q": "Follow-up?", "h": "Is there a post-dispute service recovery call log?" }, { "q": "Root Cause?", "h": "Is there an action to prevent recurrence?" }] },
+                { "title": "Quality (Omni-Channel)", "qs": [{ "q": "Voice Standards?", "h": "Review recording for tone/greeting compliance." }, { "q": "Email Standards?", "h": "Verify branding and professional signature." }, { "q": "Continuity?", "h": "Interaction history visible across platforms?" }] }
+            ]
+        },
+        "fr": {
+            "portalTitle": "Portail d'Audit Interne Global",
+            "lblOrder": "Référence de Commande",
+            "lblSerial": "N° de Série d'Audit:",
+            "lblAuditee": "Propriétaire du Processus",
+            "lblParticipants": "Participants (Séparer par virgule)",
+            "artifactReq": "Preuve Requise pour ÉCHEC",
+            "next": "Étape Suivante", "back": "Retour", "finalize": "Finaliser l'Audit",
+            "btnDraft": "Enregistrer Brouillon", "pending": "En attente", "pass": "Réussi", "fail": "Échec", "requirement": "Exigence",
+            "sections": [
+                { "title": "Gestion des Demandes", "qs": [{ "q": "SLA respecté (4h)?", "h": "Vérifier le temps de réponse." }, { "q": "Contraintes saisies?", "h": "Vérifier l'accès au site." }, { "q": "Catégorisation BU?", "h": "Routage vers la bonne unité?" }] },
+                { "title": "Crédit et Conformité", "qs": [{ "q": "Limite OK?", "h": "Valeur vs marge de crédit." }, { "q": "Docs vérifiés?", "h": "Certificats fiscaux actifs?" }, { "q": "Pré-vérification?", "h": "Validation datée." }] },
+                { "title": "Devis et Spécifications", "qs": [{ "q": "Mélange correct?", "h": "MPa conforme?" }, { "q": "Tarifs annexes?", "h": "Temps d'attente inclus?" }, { "q": "ECOPact?", "h": "Offre durable?" }] },
+                { "title": "Révision Contrat/BC", "qs": [{ "q": "Prix conforme?", "h": "Le prix correspond au BC." }, { "q": "Surcharges?", "h": "Frais environnementaux?" }, { "q": "Contacts site?", "h": "Mobile valide?" }] },
+                { "title": "Précision de Saisie", "qs": [{ "q": "Date conforme?", "h": "ERP correspond au BC." }, { "q": "Logique usine?", "h": "Usine optimale?" }, { "q": "Approbations?", "h": "Prix approuvés?" }] },
+                { "title": "Réservation Créneau", "qs": [{ "q": "Capacité?", "h": "Vérifier usine/flotte." }, { "q": "Synchro actifs?", "h": "Pompes réservées." }, { "q": "Tampons?", "h": "Fenêtres de temps." }] },
+                { "title": "Mises à jour", "qs": [{ "q": "Alerte retard?", "h": "Client informé si >15 min." }, { "q": "Dossier CRM?", "h": "Trace de communication." }, { "q": "Alertes départ?", "h": "Notification envoyée." }] },
+                { "title": "Document (POD)", "qs": [{ "q": "Lisibilité?", "h": "POD clair." }, { "q": "Initiales?", "h": "Frais paraphés." }, { "q": "Dist. 24h?", "h": "Envoyé sous 24h." }] },
+                { "title": "Finalisation Financière", "qs": [{ "q": "3-Way Match?", "h": "Devis/BC/Facture." }, { "q": "E-mail AP?", "h": "Bonne boîte e-mail?" }, { "q": "TVA?", "h": "Conformité fiscale." }] },
+                { "title": "Recouvrement Service", "qs": [{ "q": "NCR enregistré?", "h": "Litige saisi." }, { "q": "Suivi?", "h": "Journal d'appel." }, { "q": "Cause racine?", "h": "Action préventive." }] },
+                { "title": "Qualité (Omnicanal)", "qs": [{ "q": "Standards voix?", "h": "Ton conforme." }, { "q": "Standards e-mail?", "h": "Branding pro." }, { "q": "Continuité?", "h": "Historique CRM." }] }
+            ]
+        },
+        "es": {
+            "portalTitle": "Portal de Auditoría Interna Global",
+            "lblOrder": "Referencia de Pedido",
+            "lblSerial": "No. Serial de Auditoría:",
+            "lblAuditee": "Dueño del Proceso",
+            "lblParticipants": "Participantes (Separar por coma)",
+            "artifactReq": "Evidencia requerida para FALLO",
+            "next": "Siguiente Etapa", "back": "Atrás", "finalize": "Finalizar Auditoría",
+            "btnDraft": "Guardar Borrador", "pending": "Pendiente", "pass": "Pasa", "fail": "Fallo", "requirement": "Requisito",
+            "sections": [
+                { "title": "Gestión de Consultas", "qs": [{ "q": "¿SLA cumplido (4h)?", "h": "Verificar tiempo de respuesta." }, { "q": "¿Restricciones?", "h": "Check acceso sitio." }, { "q": "¿Categorización?", "h": "¿Unidad correcta?" }] },
+                { "title": "Crédito y Cumplimiento", "qs": [{ "q": "¿Límite OK?", "h": "Pedido vs crédito." }, { "q": "¿Docs verificados?", "h": "¿Certificados activos?" }, { "q": "¿Pre-chequeo?", "h": "Sello de tiempo." }] },
+                { "title": "Cotización y Especificaciones", "qs": [{ "q": "¿Mezcla correcta?", "h": "¿Coincide MPa?" }, { "q": "¿Tarifas?", "h": "¿Tiempos espera?" }, { "q": "¿ECOPact?", "h": "¿Alternativa sostenible?" }] },
+                { "title": "Revisión Contrato/OC", "qs": [{ "q": "¿Precio coincide?", "h": "Precio sistema vs OC." }, { "q": "¿Recargos?", "h": "Cargos ambientales." }, { "q": "¿Contactos?", "h": "Móvil válido." }] },
+                { "title": "Precisión Pedido", "qs": [{ "q": "¿Fecha coincide?", "h": "ERP vs OC." }, { "q": "¿Planta?", "h": "Planta óptima." }, { "q": "¿Aprobaciones?", "h": "Precios aprobados." }] },
+                { "title": "Reserva de Cupos", "qs": [{ "q": "¿Capacidad?", "h": "Planta/flota disponible." }, { "q": "¿Sincronía?", "h": "Bombas reservadas." }, { "q": "¿Márgenes?", "h": "Ventanas de tiempo." }] },
+                { "title": "Actualizaciones", "qs": [{ "q": "¿Alerta?", "h": "Cliente avisado." }, { "q": "¿Registro CRM?", "h": "Registro comunicación." }, { "q": "¿Despacho?", "h": "Alerta recibida." }] },
+                { "title": "Documento (POD)", "qs": [{ "q": "¿Legibilidad?", "h": "POD firmado claro." }, { "q": "¿Iniciales?", "h": "Cargos firmados." }, { "q": "¿Dist. 24h?", "h": "Enviado en 24h." }] },
+                { "title": "Finalización Financiera", "qs": [{ "q": "¿Cruce 3 vías?", "h": "Cotización/OC/Factura." }, { "q": "¿E-mail AP?", "h": "Buzón correcto." }, { "q": "¿Impuestos?", "h": "IVA local." }] },
+                { "title": "Recuperación Servicio", "qs": [{ "q": "¿NCR?", "h": "Disputa registrada." }, { "q": "¿Seguimiento?", "h": "Log llamada." }, { "q": "¿Causa raíz?", "h": "Acción preventiva." }] },
+                { "title": "Calidad", "qs": [{ "q": "¿Voz?", "h": "Tono conforme." }, { "q": "¿E-mail?", "h": "Firma pro." }, { "q": "¿Continuidad?", "h": "Historial CRM." }] }
+            ]
+        },
+        "de": {
+            "portalTitle": "Globales Internes Audit-Portal",
+            "lblOrder": "Bestellreferenz",
+            "lblSerial": "Audit-Seriennummer:",
+            "lblAuditee": "Prozessverantwortlicher",
+            "lblParticipants": "Teilnehmer (mit Komma trennen)",
+            "artifactReq": "Nachweis für FEHLGESCHLAGEN",
+            "next": "Nächste Stufe", "back": "Zurück", "finalize": "Audit abschließen",
+            "btnDraft": "Entwurf speichern", "pending": "Ausstehend", "pass": "Bestanden", "fail": "Fehlgeschlagen", "requirement": "Anforderung",
+            "sections": [
+                { "title": "Anfragemanagement", "qs": [{ "q": "SLA (4h)?", "h": "Reaktionszeit prüfen." }, { "q": "Einschränkungen?", "h": "Baustellenzugang prüfen." }, { "q": "Kategorisierung?", "h": "Richtige BU?" }] },
+                { "title": "Kredit & Compliance", "qs": [{ "q": "Kreditlimit?", "h": "Wert vs Limit." }, { "q": "Dokumente?", "h": "Zertifikate aktiv?" }, { "q": "Check?", "h": "Zeitstempel vorhanden." }] },
+                { "title": "Angebot & Technik", "qs": [{ "q": "Mix?", "h": "MPa/Slump korrekt?" }, { "q": "Tarife?", "h": "Wartezeiten korrekt?" }, { "q": "ECOPact?", "h": "Nachhaltig?" }] },
+                { "title": "Vertrag/PO", "qs": [{ "q": "Preis?", "h": "System vs PO." }, { "q": "Zuschläge?", "h": "Umweltzuschläge?" }, { "q": "Kontakte?", "h": "Handy vorhanden." }] },
+                { "title": "Auftragserfassung", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Werk?", "h": "Optimales Werk." }, { "q": "Freigaben?", "h": "Genehmigt?" }] },
+                { "title": "Slot-Buchung", "qs": [{ "q": "Kapazität?", "h": "Werk/Flotte frei." }, { "q": "Assets?", "h": "Pumpen gebucht." }, { "q": "Puffer?", "h": "Zeitfenster." }] },
+                { "title": "Updates", "qs": [{ "q": "Verspätung?", "h": "Kunde informiert." }, { "q": "CRM?", "h": "Kontakt dokumentiert." }, { "q": "Dispatch?", "h": "Alerta gesendet." }] },
+                { "title": "POD", "qs": [{ "q": "Lesbarkeit?", "h": "POD klar." }, { "q": "Handzeichen?", "h": "Gebühren visiert." }, { "q": "24h Dist?", "h": "Innerhalb 24h." }] },
+                { "title": "Finanzen", "qs": [{ "q": "3-Way?", "h": "Angebot/PO/Rechnung." }, { "q": "E-Mail?", "h": "Korrekte AP." }, { "q": "Steuern?", "h": "Compliance." }] },
+                { "title": "Service Recovery", "qs": [{ "q": "NCR?", "h": "Eingetragen." }, { "q": "Follow-up?", "h": "Anrufliste." }, { "q": "Ursache?", "h": "Prävention." }] },
+                { "title": "Qualität", "qs": [{ "q": "Stimme?", "h": "Tonfall." }, { "q": "E-Mail?", "h": "Signatur." }, { "q": "CRM?", "h": "Verlauf." }] }
+            ]
+        },
+        "it": {
+            "portalTitle": "Portale Global Internal Audit", "lblOrder": "Riferimento Ordine", "lblSerial": "N. Serie Audit:", "lblAuditee": "Titolare Processo", "lblParticipants": "Partecipanti", "artifactReq": "Prova richiesta per FALLIMENTO", "next": "Prossimo", "back": "Indietro", "finalize": "Finalizza", "btnDraft": "Salva Bozza", "pending": "In attesa", "pass": "Superato", "fail": "Fallito", "requirement": "Requisito",
+            "sections": [{ "title": "Gestione Richieste", "qs": [{ "q": "SLA (4h)?", "h": "Verifica tempi." }, { "q": "Vincoli?", "h": "Accesso cantiere." }, { "q": "BU?", "h": "Unità corretta?" }] }, { "title": "Credito & Compliance", "qs": [{ "q": "Limite?", "h": "Valore vs credito." }, { "q": "Docs?", "h": "Certificati attivi." }, { "q": "Pre-Check?", "h": "Timestamp." }] }, { "title": "Preventivo", "qs": [{ "q": "Mix?", "h": "MPa corretto?" }, { "q": "Tariffe?", "h": "Attese quotate?" }, { "q": "ECOPact?", "h": "Alternativa?" }] }, { "title": "Contratto/PO", "qs": [{ "q": "Prezzo?", "h": "Sistema vs PO." }, { "q": "Surcharge?", "h": "Costi ambientali." }, { "q": "Contatti?", "h": "Cellulare." }] }, { "title": "Inserimento Ordine", "qs": [{ "q": "Data?", "h": "ERP vs PO." }, { "q": "Impianto?", "h": "Ottimale." }, { "q": "Approvazioni?", "h": "Manager OK." }] }, { "title": "Booking", "qs": [{ "q": "Capacità?", "h": "Flotta." }, { "q": "Assets?", "h": "Pompe." }, { "q": "Buffer?", "h": "Finestre." }] }, { "title": "Aggiornamenti", "qs": [{ "q": "Ritardo?", "h": "Cliente avvisato." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alerta." }] }, { "title": "POD", "qs": [{ "q": "Leggibile?", "h": "POD chiaro." }, { "q": "Sigle?", "h": "Oneri firmati." }, { "q": "24h?", "h": "Inviato." }] }, { "title": "Finanza", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP corretta." }, { "q": "Tasse?", "h": "IVA." }] }, { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Log." }, { "q": "Follow-up?", "h": "Log chiamata." }, { "q": "Root Cause?", "h": "Azione." }] }, { "title": "Qualità", "qs": [{ "q": "Voce?", "h": "Tono." }, { "q": "Email?", "h": "Firma." }, { "q": "CRM?", "h": "History." }] }]
+        },
+        "pl": {
+            "portalTitle": "Globalny Portal Audytu", "lblOrder": "Numer Zamówienia", "lblSerial": "Nr Seryjny:", "lblAuditee": "Właściciel Procesu", "lblParticipants": "Uczestnicy", "artifactReq": "Dowód wymagany dla BŁĘDU", "next": "Dalej", "back": "Wstecz", "finalize": "Zakończ", "btnDraft": "Zapisz Szkic", "pending": "Oczekiwanie", "pass": "Zaliczony", "fail": "Błąd", "requirement": "Wymaganie",
+            "sections": [{ "title": "Zapytania", "qs": [{ "q": "SLA (4h)?", "h": "Czas reakcji." }, { "q": "Ograniczenia?", "h": "Dostęp do budowy." }, { "q": "BU?", "h": "Jednostka." }] }, { "title": "Kredyt", "qs": [{ "q": "Limit?", "h": "Wartość vs limit." }, { "q": "Dokumenty?", "h": "Certyfikaty." }, { "q": "Check?", "h": "Znacznik czasu." }] }, { "title": "Oferta", "qs": [{ "q": "Miks?", "h": "MPa." }, { "q": "Stawki?", "h": "Czas oczekiwania." }, { "q": "ECOPact?", "h": "Eko?" }] }, { "title": "Umowa/PO", "qs": [{ "q": "Cena?", "h": "System vs PO." }, { "q": "Dopłaty?", "h": "Środowiskowe." }, { "q": "Kontakt?", "h": "Komórka." }] }, { "title": "Wprowadzanie", "qs": [{ "q": "Data?", "h": "ERP vs PO." }, { "q": "Betoniarnia?", "h": "Optymalna." }, { "q": "Zgody?", "h": "Manager." }] }, { "title": "Rezerwacja", "qs": [{ "q": "Wydajność?", "h": "Flota." }, { "q": "Pompy?", "h": "Zarezerwowane." }, { "q": "Bufory?", "h": "Okna czasowe." }] }, { "title": "Status", "qs": [{ "q": "Opóźnienie?", "h": "Klient powiadomiony." }, { "q": "CRM?", "h": "Logi." }, { "q": "Dispatch?", "h": "Alert." }] }, { "title": "POD", "qs": [{ "q": "Czytelność?", "h": "POD jasny." }, { "q": "Parafki?", "h": "Koszty." }, { "q": "24h?", "h": "Wysłano." }] }, { "title": "Finanse", "qs": [{ "q": "3-Way?", "h": "Zgodność." }, { "q": "Email?", "h": "AP." }, { "q": "Podatki?", "h": "VAT." }] }, { "title": "Reklamacje", "qs": [{ "q": "NCR?", "h": "Zalogowano." }, { "q": "Kontakt?", "h": "Telefon." }, { "q": "Przyczyna?", "h": "Zapobieganie." }] }, { "title": "Jakość", "qs": [{ "q": "Głos?", "h": "Ton." }, { "q": "Email?", "h": "Podpis." }, { "q": "CRM?", "h": "Historia." }] }]
+        },
+        "ro": {
+            "portalTitle": "Portal Global de Audit", "lblOrder": "Referință Comandă", "lblSerial": "Nr. Serie Audit:", "lblAuditee": "Proprietar Proces", "lblParticipants": "Participanți", "artifactReq": "Dovezi necesare pentru EȘEC", "next": "Pasul următor", "back": "Înapoi", "finalize": "Finalizare", "btnDraft": "Salvare Draft", "pending": "În așteptare", "pass": "Admis", "fail": "Eșec", "requirement": "Cerință",
+            "sections": [{ "title": "Management Cereri", "qs": [{ "q": "SLA (4h)?", "h": "Timp răspuns." }, { "q": "Restricții?", "h": "Acces șantier." }, { "q": "BU?", "h": "Unitate corectă?" }] }, { "title": "Credit", "qs": [{ "q": "Limită?", "h": "Valoare vs credit." }, { "q": "Docs?", "h": "Certificate active." }, { "q": "Check?", "h": "Marcaj timp." }] }, { "title": "Ofertă", "qs": [{ "q": "Mix?", "h": "MPa corect?" }, { "q": "Tarife?", "h": "Așteptare." }, { "q": "ECOPact?", "h": "Alternativă?" }] }, { "title": "Contract/PO", "qs": [{ "q": "Preț?", "h": "Sistem vs PO." }, { "q": "Supracosturi?", "h": "Mediu." }, { "q": "Contacte?", "h": "Mobil." }] }, { "title": "Introducere", "qs": [{ "q": "Dată?", "h": "ERP vs PO." }, { "q": "Stație?", "h": "Optimă." }, { "q": "Aprobări?", "h": "Manager." }] }, { "title": "Slot", "qs": [{ "q": "Capacitate?", "h": "Flotă." }, { "q": "Active?", "h": "Pompe." }, { "q": "Buffere?", "h": "Ferestre." }] }, { "title": "Update-uri", "qs": [{ "q": "Întârziere?", "h": "Client anunțat." }, { "q": "CRM?", "h": "Log." }, { "q": "Expediere?", "h": "Alertă." }] }, { "title": "POD", "qs": [{ "q": "Lizibilitate?", "h": "POD clar." }, { "q": "Inițiale?", "h": "Costuri." }, { "q": "24h?", "h": "Trimis." }] }, { "title": "Financiar", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Taxe?", "h": "TVA." }] }, { "title": "Recuperare", "qs": [{ "q": "NCR?", "h": "Sistem." }, { "q": "Follow-up?", "h": "Telefon." }, { "q": "Cauză?", "h": "Prevenire." }] }, { "title": "Calitate", "qs": [{ "q": "Voce?", "h": "Ton." }, { "q": "Email?", "h": "Semnătură." }, { "q": "CRM?", "h": "Istoric." }] }]
+        },
+        "ar": {
+            "portalTitle": "بوابة التدقيق الداخلي العالمية", "lblOrder": "مرجع الطلب", "lblSerial": "الرقم التسلسلي:", "lblAuditee": "مسؤول العملية", "lblParticipants": "المشاركون", "artifactReq": "الأدلة المطلوبة للفشل", "next": "المرحلة التالية", "back": "رجوع", "finalize": "إنهاء", "btnDraft": "حفظ كمسودة", "pending": "قيد الانتظار", "pass": "ناجح", "fail": "فاشل", "requirement": "المتطلب",
+            "sections": [{ "title": "إدارة الاستفسارات", "qs": [{ "q": "SLA (4h)?", "h": "وقت الاستجابة." }, { "q": "القيود؟", "h": "دخول الموقع." }, { "q": "BU؟", "h": "الوحدة الصحيحة." }] }, { "title": "الائتمان والامتثال", "qs": [{ "q": "الحد؟", "h": "القيمة vs الائتمان." }, { "q": "الوثائق؟", "h": "الشهادات نشطة." }, { "q": "الفحص؟", "h": "طابع زمني." }] }, { "title": "عرض السعر", "qs": [{ "q": "الخليط؟", "h": "MPa صحيح؟" }, { "q": "الأسعار؟", "h": "وقت الانتظار." }, { "q": "ECOPact؟", "h": "بديل مستدام؟" }] }, { "title": "العقد/PO", "qs": [{ "q": "السعر؟", "h": "النظام vs PO." }, { "q": "الرسوم؟", "h": "رسوم بيئية." }, { "q": "الاتصال؟", "h": "رقم موبايل." }] }, { "title": "دقة الإدخال", "qs": [{ "q": "التاريخ؟", "h": "ERP vs PO." }, { "q": "المصنع؟", "h": "المصنع الأمثل." }, { "q": "الموافقات؟", "h": "موافقة المدير." }] }, { "title": "الحجز", "qs": [{ "q": "السعة؟", "h": "الأسطول." }, { "q": "الأصول؟", "h": "المضخات." }, { "q": "الفواصل؟", "h": "نوافذ زمنية." }] }, { "title": "التحديثات", "qs": [{ "q": "تأخير؟", "h": "إبلاغ العميل." }, { "q": "CRM؟", "h": "سجل التواصل." }, { "q": "التوصيل؟", "h": "تنبيه." }] }, { "title": "POD", "qs": [{ "q": "وضوح؟", "h": "POD واضح." }, { "q": "التوقيع؟", "h": "الرسوم." }, { "q": "24h؟", "h": "أُرسل." }] }, { "title": "المالية", "qs": [{ "q": "3-Way؟", "h": "المطابقة." }, { "q": "Email؟", "h": "AP صحيح." }, { "q": "الضرائب؟", "h": "الضريبة." }] }, { "title": "استعادة الخدمة", "qs": [{ "q": "NCR؟", "h": "تسجيل الشكوى." }, { "q": "المتابعة؟", "h": "سجل المكالمة." }, { "q": "السبب؟", "h": "منع التكرار." }] }, { "title": "الجودة", "qs": [{ "q": "الصوت؟", "h": "النبرة." }, { "q": "Email؟", "h": "التوقيع." }, { "q": "CRM؟", "h": "تاريخ التواصل." }] }]
+        },
+        "bg": {
+            "portalTitle": "Глобален Одит Портал", "lblOrder": "Референция", "lblSerial": "Сер. №:", "lblAuditee": "Собственик", "lblParticipants": "Участници", "artifactReq": "Доказателство при НЕУСПЕХ", "next": "Следващ", "back": "Назад", "finalize": "Финализирай", "btnDraft": "Чернова", "pending": "Изчаква", "pass": "Успех", "fail": "Неуспех", "requirement": "Изискване",
+            "sections": [{ "title": "Запитвания", "qs": [{ "q": "SLA (4h)?", "h": "Време за отговор." }, { "q": "Ограничения?", "h": "Достъп." }, { "q": "BU?", "h": "Правилно BU?" }] }, { "title": "Кредит", "qs": [{ "q": "Лимит?", "h": "Стойност vs лимит." }, { "q": "Документи?", "h": "Сертификати." }, { "q": "Check?", "h": "Времеви печат." }] }, { "title": "Оферта", "qs": [{ "q": "Микс?", "h": "MPa." }, { "q": "Тарифи?", "h": "Престой." }, { "q": "ECOPact?", "h": "Еко?" }] }, { "title": "Договор/PO", "qs": [{ "q": "Цена?", "h": "Система vs PO." }, { "q": "Такси?", "h": "Екологични." }, { "q": "Контакт?", "h": "Мобилен." }] }, { "title": "Въвеждане", "qs": [{ "q": "Дата?", "h": "ERP vs PO." }, { "q": "Бетонов възел?", "h": "Оптимален." }, { "q": "Одобрения?", "h": "Мениджър." }] }, { "title": "Резервация", "qs": [{ "q": "Капацитет?", "h": "Автопарк." }, { "q": "Помпи?", "h": "Резервирани." }, { "q": "Буфери?", "h": "Времеви прозорци." }] }, { "title": "Статус", "qs": [{ "q": "Закъснение?", "h": "Клиент информиран." }, { "q": "CRM?", "h": "Лог." }, { "q": "Dispatch?", "h": "Алерт." }] }, { "title": "POD", "qs": [{ "q": "Четливост?", "h": "Ясен POD." }, { "q": "Инициали?", "h": "Такси." }, { "q": "24h?", "h": "Изпратен." }] }, { "title": "Финанси", "qs": [{ "q": "3-Way?", "h": "Мач." }, { "q": "Email?", "h": "AP." }, { "q": "Данъци?", "h": "ДДС." }] }, { "title": "Рекламации", "qs": [{ "q": "NCR?", "h": "Система." }, { "q": "Следене?", "h": "Разговор." }, { "q": "Причина?", "h": "Превенция." }] }, { "title": "Качество", "qs": [{ "q": "Глас?", "h": "Тон." }, { "q": "Email?", "h": "Подпис." }, { "q": "CRM?", "h": "История." }] }]
+        },
+        "hr": {
+            "portalTitle": "Globalni Portal Revizije", "lblOrder": "Referenca", "lblSerial": "Serijski broj:", "lblAuditee": "Vlasnik", "lblParticipants": "Sudionici", "artifactReq": "Dokaz za NEUSPJEH", "next": "Dalje", "back": "Natrag", "finalize": "Završi", "btnDraft": "Spremi skicu", "pending": "Čeka", "pass": "Uspjeh", "fail": "Neuspjeh", "requirement": "Zahtjev",
+            "sections": [{ "title": "Upiti", "qs": [{ "q": "SLA (4h)?", "h": "Vrijeme odgovora." }, { "q": "Ograničenja?", "h": "Pristup." }, { "q": "BU?", "h": "Ispravan BU?" }] }, { "title": "Kredit", "qs": [{ "q": "Limit?", "h": "Iznos vs limit." }, { "q": "Docs?", "h": "Potvrde." }, { "q": "Check?", "h": "Timestamp." }] }, { "title": "Ponuda", "qs": [{ "q": "Miks?", "h": "MPa." }, { "q": "Tarife?", "h": "Čekanje." }, { "q": "ECOPact?", "h": "Alternativa?" }] }, { "title": "Ugovor/PO", "qs": [{ "q": "Cijena?", "h": "Sustav vs PO." }, { "q": "Naknade?", "h": "Eko." }, { "q": "Kontakti?", "h": "Mobitel." }] }, { "title": "Unos", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Betonara?", "h": "Optimalna." }, { "q": "Odobrenja?", "h": "Manager." }] }, { "title": "Slot", "qs": [{ "q": "Kapacitet?", "h": "Vozila." }, { "q": "Assets?", "h": "Pumpe." }, { "q": "Buffery?", "h": "Prozori." }] }, { "title": "Status", "qs": [{ "q": "Kašnjenje?", "h": "Klijent javljen." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alert." }] }, { "title": "POD", "qs": [{ "q": "Čitljivost?", "h": "POD jasan." }, { "q": "Paraf?", "h": "Troškovi." }, { "q": "24h?", "h": "Poslano." }] }, { "title": "Financije", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Porezi?", "h": "PDV." }] }, { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Sustav." }, { "q": "Follow-up?", "h": "Poziv." }, { "q": "Uzrok?", "h": "Prevencija." }] }, { "title": "Kvaliteta", "qs": [{ "q": "Glas?", "h": "Ton." }, { "q": "Email?", "h": "Potpis." }, { "q": "CRM?", "h": "Povijest." }] }]
+        },
+        "cs": {
+            "portalTitle": "Globální Auditní Portál", "lblOrder": "Reference", "lblSerial": "Sér. č.:", "lblAuditee": "Vlastník", "lblParticipants": "Účastníci", "artifactReq": "Důkaz pro FAIL", "next": "Další", "back": "Zpět", "finalize": "Finalizovat", "btnDraft": "Návrh", "pending": "Čeká", "pass": "OK", "fail": "Fail", "requirement": "Požadavek",
+            "sections": [{ "title": "Dotazy", "qs": [{ "q": "SLA (4h)?", "h": "Doba odezvy." }, { "q": "Omezení?", "h": "Přístup." }, { "q": "BU?", "h": "Správná BU?" }] }, { "title": "Kredit", "qs": [{ "q": "Limit?", "h": "Hodnota vs limit." }, { "q": "Docs?", "h": "Certifikáty." }, { "q": "Check?", "h": "Časové razítko." }] }, { "title": "Nabídka", "qs": [{ "q": "Mix?", "h": "MPa." }, { "q": "Tarify?", "h": "Čekání." }, { "q": "ECOPact?", "h": "Eko?" }] }, { "title": "Smlouva/PO", "qs": [{ "q": "Cena?", "h": "Systém vs PO." }, { "q": "Příplatky?", "h": "Envi." }, { "q": "Kontakty?", "h": "Mobil." }] }, { "title": "Zadání", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Betonárna?", "h": "Optimální." }, { "q": "Schválení?", "h": "Manažer." }] }, { "title": "Slot", "qs": [{ "q": "Kapacita?", "h": "Vozový park." }, { "q": "Assets?", "h": "Čerpadla." }, { "q": "Pufry?", "h": "Okna." }] }, { "title": "Status", "qs": [{ "q": "Zpoždění?", "h": "Klient informován." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alert." }] }, { "title": "POD", "qs": [{ "q": "Čitelnost?", "h": "POD jasný." }, { "q": "Iniciály?", "h": "Poplatky." }, { "q": "24h?", "h": "Odesláno." }] }, { "title": "Finance", "qs": [{ "q": "3-Way?", "h": "Shoda." }, { "q": "Email?", "h": "AP." }, { "q": "Daně?", "h": "DPH." }] }, { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Systém." }, { "q": "Follow-up?", "h": "Hovor." }, { "q": "Příčina?", "h": "Prevence." }] }, { "title": "Kvalita", "qs": [{ "q": "Hlas?", "h": "Tón." }, { "q": "Email?", "h": "Podpis." }, { "q": "CRM?", "h": "Historie." }] }]
+        },
+        "hu": {
+            "portalTitle": "Globális Audit Portál", "lblOrder": "Referencia", "lblSerial": "Sorozatszám:", "lblAuditee": "Felelős", "lblParticipants": "Résztvevők", "artifactReq": "Bizonyíték hiba esetén", "next": "Következő", "back": "Vissza", "finalize": "Véglegesít", "btnDraft": "Mentés", "pending": "Függőben", "pass": "Megfelelt", "fail": "Hiba", "requirement": "Követelmény",
+            "sections": [{ "title": "Megkeresések", "qs": [{ "q": "SLA (4h)?", "h": "Válaszidő." }, { "q": "Korlátok?", "h": "Hozzáférés." }, { "q": "BU?", "h": "Megfelelő BU?" }] }, { "title": "Hitel", "qs": [{ "q": "Limit?", "h": "Érték vs limit." }, { "q": "Dokumentum?", "h": "Tanúsítvány." }, { "q": "Check?", "h": "Időbélyeg." }] }, { "title": "Ajánlat", "qs": [{ "q": "Mix?", "h": "MPa." }, { "q": "Díjak?", "h": "Várakozás." }, { "q": "ECOPact?", "h": "Eko?" }] }, { "title": "Szerződés/PO", "qs": [{ "q": "Ár?", "h": "Rendszer vs PO." }, { "q": "Felárak?", "h": "Envi." }, { "q": "Kontaktok?", "h": "Mobil." }] }, { "title": "Rögzítés", "qs": [{ "q": "Dátum?", "h": "ERP vs PO." }, { "q": "Üzem?", "h": "Optimális." }, { "q": "Jóváhagyás?", "h": "Manager." }] }, { "title": "Slot", "qs": [{ "q": "Kapacitás?", "h": "Flotta." }, { "q": "Assets?", "h": "Pumpák." }, { "q": "Bufferek?", "h": "Ablakok." }] }, { "title": "Státusz", "qs": [{ "q": "Késés?", "h": "Ügyfél értesítve." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Riasztás." }] }, { "title": "POD", "qs": [{ "q": "Olvashatóság?", "h": "POD tiszta." }, { "q": "Szignó?", "h": "Díjak." }, { "q": "24h?", "h": "Elküldve." }] }, { "title": "Pénzügy", "qs": [{ "q": "3-Way?", "h": "Egyezés." }, { "q": "Email?", "h": "AP." }, { "q": "Adó?", "h": "ÁFA." }] }, { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Rendszer." }, { "q": "Követés?", "h": "Hívás." }, { "q": "Ok?", "h": "Megelőzés." }] }, { "title": "Minőség", "qs": [{ "q": "Hang?", "h": "Tónus." }, { "q": "Email?", "h": "Aláírás." }, { "q": "CRM?", "h": "Előzmény." }] }]
+        },
+        "sr": {
+            "portalTitle": "Globalni Audit Portal", "lblOrder": "Referenca", "lblSerial": "Serijski broj:", "lblAuditee": "Vlasnik", "lblParticipants": "Učesnici", "artifactReq": "Dokaz za NEUSPEH", "next": "Dalje", "back": "Nazad", "finalize": "Završi", "btnDraft": "Sačuvaj skicu", "pending": "Čeka", "pass": "Uspeh", "fail": "Neuspeh", "requirement": "Zahtev",
+            "sections": [{ "title": "Upiti", "qs": [{ "q": "SLA (4h)?", "h": "Vreme odgovora." }, { "q": "Ograničenja?", "h": "Pristup." }, { "q": "BU?", "h": "Ispravan BU?" }] }, { "title": "Kredit", "qs": [{ "q": "Limit?", "h": "Iznos vs limit." }, { "q": "Docs?", "h": "Potvrde." }, { "q": "Check?", "h": "Timestamp." }] }, { "title": "Ponuda", "qs": [{ "q": "Miks?", "h": "MPa." }, { "q": "Tarife?", "h": "Čekanje." }, { "q": "ECOPact?", "h": "Alternativa?" }] }, { "title": "Ugovor/PO", "qs": [{ "q": "Cena?", "h": "Sistem vs PO." }, { "q": "Naknade?", "h": "Eko." }, { "q": "Kontakti?", "h": "Mobilni." }] }, { "title": "Unos", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Betonara?", "h": "Optimalna." }, { "q": "Odobrenja?", "h": "Manager." }] }, { "title": "Slot", "qs": [{ "q": "Kapacitet?", "h": "Vozila." }, { "q": "Assets?", "h": "Pumpe." }, { "q": "Buffery?", "h": "Prozori." }] }, { "title": "Status", "qs": [{ "q": "Kašnjenje?", "h": "Klijent javljen." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alert." }] }, { "title": "POD", "qs": [{ "q": "Čitljivost?", "h": "POD jasan." }, { "q": "Paraf?", "h": "Troškovi." }, { "q": "24h?", "h": "Poslato." }] }, { "title": "Finansije", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Porezi?", "h": "PDV." }] }, { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Sistem." }, { "q": "Follow-up?", "h": "Poziv." }, { "q": "Uzrok?", "h": "Prevencija." }] }, { "title": "Kvalitet", "qs": [{ "q": "Glas?", "h": "Ton." }, { "q": "Email?", "h": "Potpis." }, { "q": "CRM?", "h": "Istorija." }] }]
+        },
+        "sk": {
+            "portalTitle": "Globálny Auditný Portál", "lblOrder": "Referencia", "lblSerial": "Sér. č.:", "lblAuditee": "Vlastník", "lblParticipants": "Účastníci", "artifactReq": "Dôkaz pre FAIL", "next": "Ďalej", "back": "Späť", "finalize": "Finalizovať", "btnDraft": "Návrh", "pending": "Čaká", "pass": "OK", "fail": "Fail", "requirement": "Požiadavka",
+            "sections": [{ "title": "Dopyty", "qs": [{ "q": "SLA (4h)?", "h": "Doba odozvy." }, { "q": "Obmedzenia?", "h": "Prístup." }, { "q": "BU?", "h": "Správna BU?" }] }, { "title": "Kredit", "qs": [{ "q": "Limit?", "h": "Hodnota vs limit." }, { "q": "Docs?", "h": "Certifikáty." }, { "q": "Check?", "h": "Časová pečiatka." }] }, { "title": "Ponuka", "qs": [{ "q": "Mix?", "h": "MPa." }, { "q": "Tarify?", "h": "Čakanie." }, { "q": "ECOPact?", "h": "Eko?" }] }, { "title": "Zmluva/PO", "qs": [{ "q": "Cena?", "h": "Systém vs PO." }, { "q": "Príplatky?", "h": "Envi." }, { "q": "Kontakty?", "h": "Mobil." }] }, { "title": "Zadanie", "qs": [{ "q": "Dátum?", "h": "ERP vs PO." }, { "q": "Betonáreň?", "h": "Optimálna." }, { "q": "Schválenie?", "h": "Manažér." }] }, { "title": "Slot", "qs": [{ "q": "Kapacita?", "h": "Vozový park." }, { "q": "Assets?", "h": "Čerpadlá." }, { "q": "Pufre?", "h": "Okná." }] }, { "title": "Status", "qs": [{ "q": "Meškanie?", "h": "Klient informovaný." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alert." }] }, { "title": "POD", "qs": [{ "q": "Čitateľnosť?", "h": "POD jasný." }, { "q": "Iniciály?", "h": "Poplatky." }, { "q": "24h?", "h": "Odoslané." }] }, { "title": "Financie", "qs": [{ "q": "3-Way?", "h": "Zhoda." }, { "q": "Email?", "h": "AP." }, { "q": "Dane?", "h": "DPH." }] }, { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Systém." }, { "q": "Follow-up?", "h": "Hovor." }, { "q": "Príčina?", "h": "Prevencia." }] }, { "title": "Kvalita", "qs": [{ "q": "Hlas?", "h": "Tón." }, { "q": "Email?", "h": "Podpis." }, { "q": "CRM?", "h": "História." }] }]
+        },
+        "el": {
+            "portalTitle": "Παγκόσμια Πύλη Ελέγχου", "lblOrder": "Αναφορά Παραγγελίας", "lblSerial": "Σερ. Αρ.:", "lblAuditee": "Υπεύθυνος", "lblParticipants": "Συμμετέχοντες", "artifactReq": "Αποδεικτικά ΑΠΟΤΥΧΙΑΣ", "next": "Επόμενο", "back": "Πίσω", "finalize": "Οριστικοποίηση", "btnDraft": "Αποθήκευση", "pending": "Εκκρεμεί", "pass": "Επιτυχία", "fail": "Αποτυχία", "requirement": "Απαίτηση",
+            "sections": [{ "title": "Διαχείριση", "qs": [{ "q": "SLA (4h)?", "h": "Χρόνος απόκρισης." }, { "q": "Περιορισμοί?", "h": "Πρόσβαση." }, { "q": "BU?", "h": "Σωστό BU?" }] }, { "title": "Πίστωση", "qs": [{ "q": "Όριο?", "h": "Αξία vs όριο." }, { "q": "Docs?", "h": "Πιστοποιητικά." }, { "q": "Check?", "h": "Timestamp." }] }, { "title": "Προσφορά", "qs": [{ "q": "Μίγμα?", "h": "MPa σωστό?" }, { "q": "Χρεώσεις?", "h": "Αναμονή." }, { "q": "ECOPact?", "h": "Εναλλακτική?" }] }, { "title": "Σύμβαση/PO", "qs": [{ "q": "Τιμή?", "h": "Σύστημα vs PO." }, { "q": "Επιβαρύνσεις?", "h": "Περιβαλλοντικά." }, { "q": "Contacts?", "h": "Κινητό." }] }, { "title": "Καταχώρηση", "qs": [{ "q": "Ημερομηνία?", "h": "ERP vs PO." }, { "q": "Εργοστάσιο?", "h": "Βέλτιστο." }, { "q": "Εγκρίσεις?", "h": "Manager." }] }, { "title": "Slot", "qs": [{ "q": "Capacity?", "h": "Στόλος." }, { "q": "Assets?", "h": "Πρέσες." }, { "q": "Buffers?", "h": "Παράθυρα." }] }, { "title": "Status", "qs": [{ "q": "Καθυστέρηση?", "h": "Ενημέρωση." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alert." }] }, { "title": "POD", "qs": [{ "q": "Ανάγνωση?", "h": "POD καθαρό." }, { "q": "Μονογραφές?", "h": "Χρεώσεις." }, { "q": "24h?", "h": "Εστάλη." }] }, { "title": "Οικονομικά", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Φόροι?", "h": "ΦΠΑ." }] }, { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Σύστημα." }, { "q": "Follow-up?", "h": "Κλήση." }, { "q": "Αιτία?", "h": "Πρόληψη." }] }, { "title": "Ποιότητα", "qs": [{ "q": "Φωνή?", "h": "Τόνος." }, { "q": "Email?", "h": "Υπογραφή." }, { "q": "CRM?", "h": "Ιστορικό." }] }]
+        },
+        "az": {
+            "portalTitle": "Qlobal Audit Portalı", "lblOrder": "Sifariş", "lblSerial": "Ser. No:", "lblAuditee": "Sahib", "lblParticipants": "İştirakçılar", "artifactReq": "Uğursuzluq sübutu", "next": "Növbəti", "back": "Geri", "finalize": "Tamamla", "btnDraft": "Yadda saxla", "pending": "Gözləyir", "pass": "Uğurlu", "fail": "Uğursuz", "requirement": "Tələb",
+            "sections": [{ "title": "Sorğular", "qs": [{ "q": "SLA (4h)?", "h": "Cavab vaxtı." }, { "q": "Məhdudiyyət?", "h": "Giriş." }, { "q": "BU?", "h": "Düzgün BU?" }] }, { "title": "Kredit", "qs": [{ "q": "Limit?", "h": "Dəyər vs limit." }, { "q": "Sənəd?", "h": "Sertifikat." }, { "q": "Check?", "h": "Zaman." }] }, { "title": "Təklif", "qs": [{ "q": "Miks?", "h": "MPa düzdür?" }, { "q": "Tarif?", "h": "Gözləmə." }, { "q": "ECOPact?", "h": "Eko?" }] }, { "title": "Müqavilə/PO", "qs": [{ "q": "Qiymət?", "h": "Sistem vs PO." }, { "q": "Rüsum?", "h": "Eko." }, { "q": "Kontakt?", "h": "Mobil." }] }, { "title": "Daxil etmə", "qs": [{ "q": "Tarix?", "h": "ERP vs PO." }, { "q": "Zavod?", "h": "Optimal." }, { "q": "Təsdiq?", "h": "Menecer." }] }, { "title": "Slot", "qs": [{ "q": "Güc?", "h": "Donanma." }, { "q": "Aktiv?", "h": "Nasoslar." }, { "q": "Bufer?", "h": "Pəncərələr." }] }, { "title": "Status", "qs": [{ "q": "Gecikmə?", "h": "Müştəri məlumatı." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alert." }] }, { "title": "POD", "qs": [{ "q": "Oxunaqlı?", "h": "POD təmiz." }, { "q": "İmza?", "h": "Xərclər." }, { "q": "24h?", "h": "Göndərilib." }] }, { "title": "Maliyyə", "qs": [{ "q": "3-Way?", "h": "Uyğunluq." }, { "q": "Email?", "h": "AP." }, { "q": "Vergi?", "h": "ƏDV." }] }, { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Sistem." }, { "q": "Follow-up?", "h": "Zəng." }, { "q": "Səbəb?", "h": "Profilaktika." }] }, { "title": "Keyfiyyət", "qs": [{ "q": "Səs?", "h": "Ton." }, { "q": "Email?", "h": "İmza." }, { "q": "CRM?", "h": "Tarix." }] }]
+        },
+        "pt": {
+            "portalTitle": "Portal Global de Auditoria", "lblOrder": "Referência", "lblSerial": "Nº Série:", "lblAuditee": "Dono Processo", "lblParticipants": "Participantes", "artifactReq": "Prova para FALHA", "next": "Próximo", "back": "Voltar", "finalize": "Finalizar", "btnDraft": "Salvar rascunho", "pending": "Pendente", "pass": "Aprovado", "fail": "Falha", "requirement": "Requisito",
+            "sections": [{ "title": "Gestão", "qs": [{ "q": "SLA (4h)?", "h": "Tempo resposta." }, { "q": "Restrições?", "h": "Acesso obra." }, { "q": "BU?", "h": "Unidade correta?" }] }, { "title": "Crédito", "qs": [{ "q": "Limite?", "h": "Valor vs crédito." }, { "q": "Docs?", "h": "Certidões." }, { "q": "Check?", "h": "Timestamp." }] }, { "title": "Proposta", "qs": [{ "q": "Mix?", "h": "MPa correto?" }, { "q": "Tarifas?", "h": "Espera." }, { "q": "ECOPact?", "h": "Sustentável?" }] }, { "title": "Contrato/PO", "qs": [{ "q": "Preço?", "h": "Sistema vs PO." }, { "q": "Taxas?", "h": "Ambientais." }, { "q": "Contatos?", "h": "Celular." }] }, { "title": "Entrada", "qs": [{ "q": "Data?", "h": "ERP vs PO." }, { "q": "Central?", "h": "Otimizada." }, { "q": "Aprovações?", "h": "Gerente." }] }, { "title": "Slot", "qs": [{ "q": "Capacidade?", "h": "Frota." }, { "q": "Ativos?", "h": "Bombas." }, { "q": "Buffers?", "h": "Janelas." }] }, { "title": "Status", "qs": [{ "q": "Atraso?", "h": "Avisado." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alerta." }] }, { "title": "POD", "qs": [{ "q": "Legibilidade?", "h": "POD claro." }, { "q": "Rubrica?", "h": "Custos." }, { "q": "24h?", "h": "Enviado." }] }, { "title": "Finanças", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Impostos?", "h": "IVA." }] }, { "title": "Recuperação", "qs": [{ "q": "NCR?", "h": "Sistema." }, { "q": "Follow-up?", "h": "Chamada." }, { "q": "Causa?", "h": "Prevenção." }] }, { "title": "Qualidade", "qs": [{ "q": "Voz?", "h": "Tom." }, { "q": "Email?", "h": "Assinatura." }, { "q": "CRM?", "h": "Histórico." }] }]
+        },
+        "bn": {
+            "portalTitle": "গ্লোবাল অডিট পোর্টাল", "lblOrder": "অর্ডার রেফারেন্স", "lblSerial": "সিরিয়াল নম্বর:", "lblAuditee": "প্রসেস মালিক", "lblParticipants": "অংশগ্রহণকারী", "artifactReq": "ব্যর্থতার প্রমাণ", "next": "পরবর্তী", "back": "পিছনে", "finalize": "সম্পন্ন করুন", "btnDraft": "খসড়া", "pending": "অপেক্ষমান", "pass": "পাস", "fail": "ব্যর্থ", "requirement": "প্রয়োজনীয়তা",
+            "sections": [{ "title": "ইনকোয়ারি", "qs": [{ "q": "SLA (4h)?", "h": "রেসপন্স টাইম।" }, { "q": "সীমাবদ্ধতা?", "h": "সাইট অ্যাক্সেস।" }, { "q": "BU?", "h": "সঠিক ইউনিট?" }] }, { "title": "ক্রেডিট", "qs": [{ "q": "লিমিট?", "h": "ভ্যালু বনাম লিমিট।" }, { "q": "ডকুমেন্ট?", "h": "সার্টিফিকেট।" }, { "q": "চেক?", "h": "টাইমস্ট্যাম্প।" }] }, { "title": "উদ্ধৃতি", "qs": [{ "q": "মিক্স?", "h": "MPa সঠিক?" }, { "q": "রেট?", "h": "অপেক্ষার সময়।" }, { "q": "ECOPact?", "h": "বিকল্প?" }] }, { "title": "চুক্তি/PO", "qs": [{ "q": "দাম?", "h": "সিস্টেম বনাম PO।" }, { "q": "সারচার্জ?", "h": "পরিবেশগত।" }, { "q": "যোগাযোগ?", "h": "মোবাইল।" }] }, { "title": "এন্ট্রি", "qs": [{ "q": "তারিখ?", "h": "ERP বনাম PO।" }, { "q": "প্ল্যান্ট?", "h": "সেরা প্ল্যান্ট।" }, { "q": "অনুমোদন?", "h": "ম্যানেজার।" }] }, { "title": "স্লট", "qs": [{ "q": "ক্ষমতা?", "h": "বহর।" }, { "q": "অ্যাসেট?", "h": "পাম্প।" }, { "q": "বাফার?", "h": "উইন্ডো।" }] }, { "title": "আপডেট", "qs": [{ "q": "দেরি?", "h": "গ্রাহককে জানানো।" }, { "q": "CRM?", "h": "লগ।" }, { "q": "ডিসপ্যাচ?", "h": "অ্যালার্ট।" }] }, { "title": "POD", "qs": [{ "q": "স্পষ্টতা?", "h": "POD পরিষ্কার।" }, { "q": "স্বাক্ষর?", "h": "চার্জ।" }, { "q": "24h?", "h": "পাঠানো হয়েছে।" }] }, { "title": "আর্থিক", "qs": [{ "q": "3-Way?", "h": "মিল।" }, { "q": "ইমেল?", "h": "AP সঠিক।" }, { "q": "ট্যাক্স?", "h": "ভ্যাট।" }] }, { "title": "রিকভারি", "qs": [{ "q": "NCR?", "h": "সিস্টেম।" }, { "q": "ফলো-আপ?", "h": "কল লগ।" }, { "q": "কারণ?", "h": "প্রতিরোধ।" }] }, { "title": "গুণমান", "qs": [{ "q": "কণ্ঠস্বর?", "h": "টোন।" }, { "q": "ইমেল?", "h": "স্বাক্ষর।" }, { "q": "CRM?", "h": "ইতিহাস।" }] }]
+        }
+    },
+    "markets": [
+        { "region": "Europe", "country": "United Kingdom", "code": "en" },
+        { "region": "Europe", "country": "Switzerland", "code": "de" },
+        { "region": "Europe", "country": "France", "code": "fr" },
+        { "region": "Europe", "country": "Germany", "code": "de" },
+        { "region": "Europe", "country": "Belgium", "code": "fr" },
+        { "region": "Europe", "country": "Austria", "code": "de" },
+        { "region": "Europe", "country": "Bulgaria", "code": "bg" },
+        { "region": "Europe", "country": "Croatia", "code": "hr" },
+        { "region": "Europe", "country": "Czech Republic", "code": "cs" },
+        { "region": "Europe", "country": "Greece", "code": "el" },
+        { "region": "Europe", "country": "Hungary", "code": "hu" },
+        { "region": "Europe", "country": "Italy", "code": "it" },
+        { "region": "Europe", "country": "Poland", "code": "pl" },
+        { "region": "Europe", "country": "Romania", "code": "ro" },
+        { "region": "Europe", "country": "Serbia", "code": "sr" },
+        { "region": "Europe", "country": "Slovakia", "code": "sk" },
+        { "region": "Europe", "country": "Spain", "code": "es" },
+        { "region": "Europe", "country": "Azerbaijan", "code": "az" },
+        { "region": "Latin America", "country": "Argentina", "code": "es" },
+        { "region": "Latin America", "country": "Brazil", "code": "pt" },
+        { "region": "Latin America", "country": "Colombia", "code": "es" },
+        { "region": "Latin America", "country": "Costa Rica", "code": "es" },
+        { "region": "Latin America", "country": "Ecuador", "code": "es" },
+        { "region": "Latin America", "country": "El Salvador", "code": "es" },
+        { "region": "Latin America", "country": "Guatemala", "code": "es" },
+        { "region": "Latin America", "country": "Mexico", "code": "es" },
+        { "region": "Latin America", "country": "Nicaragua", "code": "es" },
+        { "region": "Latin America", "country": "Peru", "code": "es" },
+        { "region": "Middle East & Africa", "country": "Algeria", "code": "fr" },
+        { "region": "Middle East & Africa", "country": "Cameroon", "code": "fr" },
+        { "region": "Middle East & Africa", "country": "Egypt", "code": "ar" },
+        { "region": "Middle East & Africa", "country": "Iraq", "code": "ar" },
+        { "region": "Middle East & Africa", "country": "Jordan", "code": "ar" },
+        { "region": "Middle East & Africa", "country": "Lebanon", "code": "ar" },
+        { "region": "Middle East & Africa", "country": "Morocco", "code": "fr" },
+        { "region": "Asia Pacific", "country": "Australia", "code": "en" },
+        { "region": "Asia Pacific", "country": "New Zealand", "code": "en" },
+        { "region": "Asia Pacific", "country": "Bangladesh", "code": "bn" }
     ]
-  }
-}
+};
