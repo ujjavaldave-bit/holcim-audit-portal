@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global Internal Audit | Holcim Group</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -21,7 +22,14 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Inter', sans-serif; background: var(--background); padding: 20px; color: var(--text-primary); transition: direction 0.3s; }
         
-        .container { max-width: 950px; margin: 0 auto; }
+        /* SSO Security Overlay */
+        #ssoOverlay { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--background); z-index: 10000; display: flex; 
+            flex-direction: column; align-items: center; justify-content: center; 
+        }
+
+        .container { max-width: 950px; margin: 0 auto; display: none; } 
         .card { background: var(--surface); border-radius: var(--radius-lg); box-shadow: 0 20px 50px rgba(29,67,112,0.12); overflow: hidden; animation: slideUp 0.4s ease-out; }
         
         .header { background: var(--holcim-gradient); padding: 30px; text-align: center; color: white; position: relative; }
@@ -32,13 +40,11 @@
             background: rgba(255, 255, 255, 0.2); color: white; border: 1px solid rgba(255, 255, 255, 0.3); 
             padding: 4px 12px; border-radius: 20px; font-size: 12px; cursor: pointer; outline: none;
         }
-        #languagePicker option { color: black; }
 
         .form-body { padding: 32px; }
         .audit-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
         .form-input { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 12px; outline: none; font-family: inherit; }
 
-        /* Jump Menu Navigation */
         .jump-nav { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 25px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid var(--border); justify-content: center; }
         .jump-btn { width: 35px; height: 35px; border-radius: 50%; border: 1px solid var(--border); background: white; cursor: pointer; font-size: 12px; font-weight: 700; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
         .jump-btn.active { background: var(--holcim-blue); color: white; border-color: var(--holcim-blue); }
@@ -52,12 +58,7 @@
         .audit-step.active { display: block; animation: fadeIn 0.3s; }
 
         .section-card { border: 1px solid var(--border); border-radius: 16px; padding: 24px; background: #fafbfc; position: relative; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .section-title { font-weight: 700; color: var(--holcim-blue); font-size: 18px; }
-
-        .status-badge { padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: 800; text-transform: uppercase; background: #eee; }
-        .status-badge.pass { background: var(--success); color: white; }
-        .status-badge.fail { background: var(--danger); color: white; }
+        .section-title { font-weight: 700; color: var(--holcim-blue); font-size: 18px; margin-bottom: 15px; display: block;}
 
         .checklist-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
         .checklist-table th { background: #f8fafc; padding: 12px; text-align: center; font-size: 10px; text-transform: uppercase; color: #64748b; border-bottom: 1px solid var(--border); }
@@ -70,8 +71,7 @@
         .upload-zone.required-error { border-color: var(--danger); background: #fff5f5; border-width: 3px; animation: shake 0.5s; }
 
         .nav-buttons { display: flex; gap: 15px; margin-top: 25px; }
-        .btn { flex: 1; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: 0.3s; }
-        .btn-secondary { background: #e2e6eb; color: var(--text-primary); }
+        .btn { flex: 1; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: 0.3s; font-family: inherit; }
         .btn-primary { background: var(--holcim-gradient); color: white; }
         .btn-outline { border: 2px solid var(--holcim-blue); color: var(--holcim-blue); background: white; }
         .btn:disabled { opacity: 0.3; cursor: not-allowed; }
@@ -83,7 +83,18 @@
 </head>
 <body>
 
-<div class="container">
+<div id="ssoOverlay">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Holcim_Logo_2021_sRGB.png" alt="Holcim" style="height: 50px; margin-bottom: 20px;">
+    <h2 style="color: var(--holcim-blue); margin-bottom: 25px;">Internal Audit Login</h2>
+    <div id="g_id_onload"
+         data-client_id="YOUR_HOLCIM_CLIENT_ID.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin" data-type="standard"></div>
+</div>
+
+<div class="container" id="auditMain">
     <div class="card">
         <header class="header">
             <div class="lang-nav">
@@ -120,7 +131,9 @@
 </div>
 
 <script>
-    // These will be moved to translations.json but loaded here for complete functionality
+    // Note: Update this URL once your Python script is hosted in the Cloud
+    const API_URL = "http://127.0.0.1:8000/api/v1/audit/submit"; 
+
     const translations = {
         en: {
             portalTitle: "Global Internal Audit Portal",
@@ -129,11 +142,8 @@
             lblParticipants: "Audit Participants",
             lblSerial: "Audit Serial No:",
             artifactReq: "Evidence Required for FAIL",
-            next: "Next Stage",
-            back: "Back",
-            finalize: "Finalize Audit",
-            btnDraft: "Save as Draft",
-            pending: "Pending", pass: "Pass", fail: "Fail", requirement: "Requirement",
+            next: "Next Stage", back: "Back", finalize: "Finalize Audit",
+            btnDraft: "Save as Draft", pending: "Pending", pass: "Pass", fail: "Fail", requirement: "Requirement",
             sections: [
                 { title: "Inquiry Management", qs: [
                     {q: "SLA Met (4h)?", h: "Verify response time vs incoming timestamp. Target < 4 hours."}, 
@@ -187,8 +197,17 @@
         currentStep: 0,
         currentLang: 'en',
         auditSerial: "AUD-" + Math.floor(100000 + Math.random() * 900000),
-        auditData: []
+        auditData: [],
+        ssoToken: null
     };
+
+    // SSO HANDSHAKE
+    function handleCredentialResponse(response) {
+        state.ssoToken = response.credential;
+        document.getElementById('ssoOverlay').style.display = 'none';
+        document.getElementById('auditMain').style.display = 'block';
+        detectLocation();
+    }
 
     async function detectLocation() {
         try {
@@ -218,7 +237,6 @@
         if (state.auditData.length === 0) {
             state.auditData = t.sections.map(s => ({ status: 'PENDING', answers: s.qs.map(() => null), file: false }));
         }
-        
         initWizard();
     }
 
@@ -226,13 +244,11 @@
         const t = translations[state.currentLang] || translations['en'];
         const container = document.getElementById('stepsContainer');
         container.innerHTML = '';
-        
         renderJumpMenu(t);
 
         t.sections.forEach((section, idx) => {
             const stepDiv = document.createElement('div');
             stepDiv.className = `audit-step ${idx === state.currentStep ? 'active' : ''}`;
-            stepDiv.id = `step-${idx}`;
             
             const tableRows = section.qs.map((item, qIdx) => `
                 <tr>
@@ -243,8 +259,8 @@
                         </div>
                         <div id="help-${idx}-${qIdx}" class="help-text">${item.h}</div>
                     </td>
-                    <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" class="radio-box" onclick="updateLogic(${idx}, ${qIdx}, 'Pass')" ${state.auditData[idx].answers[qIdx] === 'Pass' ? 'checked' : ''}></td>
-                    <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" class="radio-box" onclick="updateLogic(${idx}, ${qIdx}, 'Fail')" ${state.auditData[idx].answers[qIdx] === 'Fail' ? 'checked' : ''}></td>
+                    <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" onclick="updateLogic(${idx}, ${qIdx}, 'Pass')" ${state.auditData[idx].answers[qIdx] === 'Pass' ? 'checked' : ''}></td>
+                    <td style="text-align:center"><input type="radio" name="q_${idx}_${qIdx}" onclick="updateLogic(${idx}, ${qIdx}, 'Fail')" ${state.auditData[idx].answers[qIdx] === 'Fail' ? 'checked' : ''}></td>
                 </tr>`).join('');
 
             stepDiv.innerHTML = `
@@ -274,18 +290,11 @@
             onclick="jumpToStep(${i})">${i + 1}</button>`).join('');
     }
 
-    function jumpToStep(i) {
-        state.currentStep = i;
-        initWizard();
-    }
+    function jumpToStep(i) { state.currentStep = i; initWizard(); }
 
     function updateLogic(sIdx, qIdx, result) {
         state.auditData[sIdx].answers[qIdx] = result;
-        if (state.auditData[sIdx].answers.includes('Fail')) {
-            state.auditData[sIdx].status = 'Fail';
-        } else if (state.auditData[sIdx].answers.every(a => a === 'Pass')) {
-            state.auditData[sIdx].status = 'Pass';
-        }
+        state.auditData[sIdx].status = state.auditData[sIdx].answers.includes('Fail') ? 'Fail' : state.auditData[sIdx].answers.every(a => a === 'Pass') ? 'Pass' : 'PENDING';
         initWizard();
     }
 
@@ -295,23 +304,17 @@
     }
 
     function handleFile(idx, input) {
-        if (input.files.length > 0) {
-            state.auditData[idx].file = true;
-            initWizard();
-        }
+        if (input.files.length > 0) { state.auditData[idx].file = true; initWizard(); }
     }
 
     function changeStep(n) {
         if (n === 1 && (state.auditData[state.currentStep].answers.includes(null) || (state.auditData[state.currentStep].status === 'Fail' && !state.auditData[state.currentStep].file))) {
-            alert("Please complete all questions and provide artifacts for failures.");
+            alert("Complete all questions and provide artifacts for failures.");
             return;
         }
         state.currentStep += n;
         const t = translations[state.currentLang];
-        if (state.currentStep >= t.sections.length) {
-            saveAudit('COMPLETED');
-            return;
-        }
+        if (state.currentStep >= t.sections.length) { saveAudit('COMPLETED'); return; }
         initWizard();
     }
 
@@ -324,13 +327,38 @@
         document.getElementById('nextBtn').innerText = (state.currentStep === t.sections.length - 1) ? t.finalize : t.next;
     }
 
-    function saveAudit(status) {
-        // Feature 1, 2, 3: Email, Serial, Folder creation logic triggers here
-        alert(`${status}: Audit ${state.auditSerial} summary sent to Auditor and Auditee. Failures documented in unique Drive folder.`);
-        if(status === 'COMPLETED') location.reload();
-    }
+    // THE BRIDGE: CALL TO PYTHON API
+    async function saveAudit(finalStatus) {
+        const payload = {
+            serial: state.auditSerial,
+            orderNumber: document.getElementById('orderNumber').value,
+            auditee: document.getElementById('auditeeName').value,
+            participants: document.getElementById('participants').value,
+            status: finalStatus,
+            results: state.auditData.flatMap((section, sIdx) => 
+                section.answers.map((ans, qIdx) => ({
+                    section: translations[state.currentLang].sections[sIdx].title,
+                    q: translations[state.currentLang].sections[sIdx].qs[qIdx].q,
+                    res: ans
+                }))
+            )
+        };
 
-    window.onload = detectLocation;
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            
+            if (response.ok) {
+                alert(`SUCCESS: Audit ${state.auditSerial} synced to Aurora PostgreSQL.`);
+                if(finalStatus === 'COMPLETED') location.reload();
+            }
+        } catch (error) {
+            alert("Connection Error: Backend Python script is not running.");
+        }
+    }
 </script>
 </body>
 </html>
