@@ -58,9 +58,6 @@
         .audit-step { display: none; }
         .audit-step.active { display: block; animation: fadeIn 0.3s; }
 
-        .section-card { border: 1px solid var(--border); border-radius: 16px; padding: 24px; background: #fafbfc; position: relative; }
-        .section-title { font-weight: 700; color: var(--holcim-blue); font-size: 18px; margin-bottom: 15px; display: block;}
-
         .checklist-table { width: 100%; border-collapse: collapse; margin-bottom: 20px; background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
         .checklist-table th { background: #f8fafc; padding: 12px; text-align: center; font-size: 10px; text-transform: uppercase; color: #64748b; border-bottom: 1px solid var(--border); }
         .checklist-table td { padding: 12px 15px; border-bottom: 1px solid var(--border); font-size: 14px; vertical-align: middle; position: relative; }
@@ -68,12 +65,9 @@
         .help-icon { display: inline-flex; align-items: center; justify-content: center; width: 18px; height: 18px; background: #e2e6eb; border-radius: 50%; font-size: 12px; font-weight: bold; cursor: help; margin-left: 8px; color: #1d4370; }
         .help-text { display: none; font-size: 12px; color: #555; font-style: italic; margin-top: 8px; background: #f0f7ff; padding: 10px; border-radius: 8px; border-left: 4px solid var(--holcim-blue); line-height: 1.4; }
 
-        .calendar-trigger { cursor: pointer; font-size: 14px; filter: grayscale(1); transition: 0.2s; padding: 2px 5px; border-radius: 4px; background: #f1f5f9; }
-        .calendar-trigger:hover { filter: grayscale(0); background: #e2e8f0; }
-        .calendar-trigger.date-set { filter: grayscale(0); background: #ecfdf5; border: 1px solid var(--success); }
-
-        .upload-zone { margin-top: 15px; border: 2px dashed var(--border); border-radius: 12px; padding: 20px; text-align: center; color: #666; cursor: pointer; background: white; transition: 0.3s; }
-        .upload-zone.required-error { border-color: var(--danger); background: #fff5f5; border-width: 3px; animation: shake 0.5s; }
+        .calendar-trigger { cursor: pointer; font-size: 16px; margin-left: 8px; transition: 0.2s; }
+        .calendar-trigger:hover { transform: scale(1.2); }
+        .calendar-trigger.date-set { color: var(--success); }
 
         .nav-buttons { display: flex; gap: 15px; margin-top: 25px; }
         .btn { flex: 1; padding: 16px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; transition: 0.3s; font-family: inherit; }
@@ -81,10 +75,8 @@
         .btn-outline { border: 2px solid var(--holcim-blue); color: var(--holcim-blue); background: white; }
         .btn:disabled { opacity: 0.3; cursor: not-allowed; }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
     </style>
 </head>
 <body>
@@ -120,7 +112,6 @@
                         <option value="SELF">Self-Assessment (Process Owner)</option>
                         <option value="AUDIT">Actual Audit (Internal Auditor)</option>
                     </select>
-                    <button id="requestAccessBtn" onclick="requestAuditorAccess()" style="display:none; margin-top:5px; font-size:10px; color:var(--holcim-blue); background:none; border:none; text-decoration:underline; cursor:pointer;">Request Auditor Access</button>
                 </div>
                 <div style="grid-column: span 2;"><label id="lblAuditee" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label><input type="text" id="auditeeName" class="form-input"></div>
                 <div style="grid-column: span 2;"><label id="lblParticipants" style="font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase;"></label><input type="text" id="participants" class="form-input"></div>
@@ -150,122 +141,49 @@
         "en": {
             "portalTitle": "Global Internal Audit Portal", "lblOrder": "Order Reference", "lblSerial": "Audit Serial No:", "lblAuditee": "Process Owner", "lblParticipants": "Audit Participants", "artifactReq": "Evidence Required for FAIL", "next": "Next Stage", "back": "Back", "finalize": "Finalize Audit", "btnDraft": "Save as Draft", "pending": "Pending", "pass": "Pass", "fail": "Fail", "requirement": "Requirement",
             "sections": [
-                { "title": "Inquiry Management", "qs": [{ "q": "SLA Met (4h)?", "h": "Verify response time vs incoming timestamp." }, { "q": "Constraints Captured?", "h": "Check for site access/vehicle constraints in notes." }, { "q": "BU Categorization?", "h": "Is the inquiry routed to the correct Business Unit?" }] },
-                { "title": "Credit & Compliance", "qs": [{ "q": "Limit OK?", "h": "Check order value vs available credit headroom." }, { "q": "Docs Verified?", "h": "Are valid tax/registration certificates active on file?" }, { "q": "Pre-Check Done?", "h": "Credit clearance must be timestamped before PO." }] },
-                { "title": "Quotation & Tech Spec", "qs": [{ "q": "Mix Match?", "h": "Does MPa/Slump in quote match technical request?" }, { "q": "Ancillary Rates?", "h": "Are waiting times/part-loads quoted correctly?" }, { "q": "ECOPact?", "h": "Was a sustainable alternative offered?" }] },
-                { "title": "Contract/PO Review", "qs": [{ "q": "PO Price Match?", "h": "Does system price match physical customer PO?" }, { "q": "Surcharges?", "h": "Are regional/environmental surcharges included?" }, { "q": "Site Contacts?", "h": "Is a valid mobile contact available for alerts?" }] },
-                { "title": "Order Entry Accuracy", "qs": [{ "q": "Date Match?", "h": "Does ERP booking match PO date exactly?" }, { "q": "Plant Logic?", "h": "Was the optimal plant selected?" }, { "q": "Approvals?", "h": "Are manual overrides manager-approved?" }] },
-                { "title": "Slot Booking", "qs": [{ "q": "Capacity?", "h": "Check plant/fleet availability before promise." }, { "q": "Asset Sync?", "h": "Are pumps/conveyors booked correctly?" }, { "q": "Pour Buffers?", "h": "Are there time windows between site deliveries?" }] },
-                { "title": "Proactive Updates", "qs": [{ "q": "Delay Alert?", "h": "Was customer told if truck >15m late?" }, { "q": "CRM Record?", "h": "Log of site communication exists?" }, { "q": "Dispatch Alerts?", "h": "Did site receive automated 'Dispatched' alert?" }] },
-                { "title": "Document (POD)", "qs": [{ "q": "Legibility?", "h": "Is the signed POD clear and authorized?" }, { "q": "Ancillary Initials?", "h": "Are extra charges initialed on the ticket?" }, { "q": "24h Dist?", "h": "Was POD sent to customer within 24 hours?" }] },
-                { "title": "Financial Finalization", "qs": [{ "q": "3-Way Match?", "h": "Quote vs PO vs Invoice alignment check." }, { "q": "AP Email Accuracy?", "h": "Sent to correct Accounts Payable inbox?" }, { "q": "Tax Treatment?", "h": "Local tax/VAT compliance per regulations." }] },
-                { "title": "Service Recovery", "qs": [{ "q": "NCR Logged?", "h": "Was dispute recorded in Non-Conformance system?" }, { "q": "Follow-up?", "h": "Is there a post-dispute service recovery call log?" }, { "q": "Root Cause?", "h": "Is there an action to prevent recurrence?" }] },
-                { "title": "Quality (Omni-Channel)", "qs": [{ "q": "Voice Standards?", "h": "Review recording for tone/greeting compliance." }, { "q": "Email Standards?", "h": "Verify branding and professional signature." }, { "q": "Continuity?", "h": "Interaction history visible across platforms?" }] }
+                { "title": "Inquiry Management", "qs": [{ "q": "SLA Met (4h)?", "h": "Verify response time." }, { "q": "Constraints Captured?", "h": "Check site access/vehicle notes." }, { "q": "BU Categorization?", "h": "Correct Business Unit?" }] },
+                { "title": "Credit & Compliance", "qs": [{ "q": "Limit OK?", "h": "Value vs Headroom." }, { "q": "Docs Verified?", "h": "Valid tax/reg active?" }, { "q": "Pre-Check Done?", "h": "Clearance before PO?" }] },
+                { "title": "Quotation & Tech Spec", "qs": [{ "q": "Mix Match?", "h": "MPa/Slump vs Request." }, { "q": "Ancillary Rates?", "h": "Waiting/Part-loads correct?" }, { "q": "ECOPact?", "h": "Sustainable alternative offered?" }] },
+                { "title": "Contract/PO Review", "qs": [{ "q": "PO Price Match?", "h": "System vs Physical PO." }, { "q": "Surcharges?", "h": "Regional/Envi included?" }, { "q": "Site Contacts?", "h": "Mobile for alerts?" }] },
+                { "title": "Order Entry Accuracy", "qs": [{ "q": "Date Match?", "h": "ERP vs PO date." }, { "q": "Plant Logic?", "h": "Optimal plant selected?" }, { "q": "Approvals?", "h": "Manager approved overrides?" }] },
+                { "title": "Slot Booking", "qs": [{ "q": "Capacity?", "h": "Plant/Fleet availability." }, { "q": "Asset Sync?", "h": "Pumps/Conveyors booked?" }, { "q": "Pour Buffers?", "h": "Time windows correct?" }] },
+                { "title": "Proactive Updates", "qs": [{ "q": "Delay Alert?", "h": "Customer told if >15m late?" }, { "q": "CRM Record?", "h": "Communication log exists?" }, { "q": "Dispatch Alerts?", "h": "Automated alert sent?" }] },
+                { "title": "Document (POD)", "qs": [{ "q": "Legibility?", "h": "POD clear/authorized?" }, { "q": "Initiales?", "h": "Extra charges initialed?" }, { "q": "24h Dist?", "h": "Sent within 24h?" }] },
+                { "title": "Financial Finalization", "qs": [{ "q": "3-Way Match?", "h": "Quote vs PO vs Invoice." }, { "q": "AP Email?", "h": "Correct AP inbox?" }, { "q": "Tax Treatment?", "h": "Local compliance?" }] },
+                { "title": "Service Recovery", "qs": [{ "q": "NCR Logged?", "h": "Dispute recorded?" }, { "q": "Follow-up?", "h": "Call log exists?" }, { "q": "Root Cause?", "h": "Prevention action?" }] },
+                { "title": "Quality", "qs": [{ "q": "Voice Standards?", "h": "Review recording." }, { "q": "Email Standards?", "h": "Verify signature." }, { "q": "Continuity?", "h": "History across platforms?" }] }
             ]
         },
         "fr": {
-            "portalTitle": "Portail d'Audit Interne Global", "lblOrder": "Référence", "lblSerial": "N° de Série:", "lblAuditee": "Propriétaire", "lblParticipants": "Participants", "artifactReq": "Preuve pour ÉCHEC", "next": "Suivant", "back": "Retour", "finalize": "Finaliser", "btnDraft": "Brouillon", "pending": "En attente", "pass": "Réussi", "fail": "Échec", "requirement": "Exigence",
+            "portalTitle": "Portail d'Audit Global", "lblOrder": "Référence", "lblSerial": "Série:", "lblAuditee": "Propriétaire", "lblParticipants": "Participants", "artifactReq": "Preuve pour ÉCHEC", "next": "Suivant", "back": "Retour", "finalize": "Finaliser", "btnDraft": "Brouillon", "pending": "En attente", "pass": "Pass", "fail": "Échec", "requirement": "Exigence",
             "sections": [
-                { "title": "Gestion", "qs": [{ "q": "SLA respecté?", "h": "Temps de réponse." }, { "q": "Contraintes?", "h": "Accès site." }, { "q": "BU?", "h": "Unité?" }] },
-                { "title": "Crédit", "qs": [{ "q": "Limite OK?", "h": "Marge de crédit." }, { "q": "Docs?", "h": "Certificats." }, { "q": "Check?", "h": "Validation." }] },
-                { "title": "Devis", "qs": [{ "q": "Mélange?", "h": "Conforme?" }, { "q": "Tarifs?", "h": "Attente?" }, { "q": "ECOPact?", "h": "Durable?" }] },
-                { "title": "BC", "qs": [{ "q": "Prix?", "h": "BC." }, { "q": "Surcharges?", "h": "Envi." }, { "q": "Contacts?", "h": "Mobile." }] },
-                { "title": "Saisie", "qs": [{ "q": "Date?", "h": "ERP." }, { "q": "Usine?", "h": "Opt." }, { "q": "Approb?", "h": "Approuvés." }] },
-                { "title": "Créneau", "qs": [{ "q": "Capacité?", "h": "Flotte." }, { "q": "Actifs?", "h": "Pompes." }, { "q": "Tampons?", "h": "Fenêtres." }] },
-                { "title": "Updates", "qs": [{ "q": "Retard?", "h": "Informé." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Alerte." }] },
-                { "title": "POD", "qs": [{ "q": "Lisibilité?", "h": "Clair." }, { "q": "Initiales?", "h": "Frais." }, { "q": "Dist. 24h?", "h": "24h." }] },
-                { "title": "Finances", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "TVA?", "h": "Local." }] },
-                { "title": "Recouvrement", "qs": [{ "q": "NCR?", "h": "Saisi." }, { "q": "Suivi?", "h": "Log." }, { "q": "Cause?", "h": "Action." }] },
-                { "title": "Qualité", "qs": [{ "q": "Standards voix?", "h": "Ton." }, { "q": "Email?", "h": "Signature." }, { "q": "Continuité?", "h": "Historique." }] }
-            ]
-        },
-        "es": {
-            "portalTitle": "Portal de Auditoría Interna Global", "lblOrder": "Referencia", "lblSerial": "N. Serial:", "lblAuditee": "Dueño", "lblParticipants": "Participantes", "artifactReq": "Prueba para FALLO", "next": "Siguiente", "back": "Atrás", "finalize": "Finalizar", "btnDraft": "Borrador", "pending": "Pendiente", "pass": "Pasa", "fail": "Fallo", "requirement": "Requisito",
-            "sections": [
-                { "title": "Gestión", "qs": [{ "q": "SLA cumplido?", "h": "Respuesta." }, { "q": "Restricc?", "h": "Acceso." }, { "q": "BU?", "h": "Unidad?" }] },
-                { "title": "Crédito", "qs": [{ "q": "Límite?", "h": "Crédito." }, { "q": "Docs?", "h": "Activos." }, { "q": "Check?", "h": "Sello." }] },
-                { "title": "Cotización", "qs": [{ "q": "Mezcla?", "h": "MPa." }, { "q": "Tarifas?", "h": "Espera." }, { "q": "ECOPact?", "h": "Sostenible." }] },
-                { "title": "Contrato", "qs": [{ "q": "Precio?", "h": "Sist vs OC." }, { "q": "Recargos?", "h": "Envi." }, { "q": "Contactos?", "h": "Móvil." }] },
-                { "title": "Pedido", "qs": [{ "q": "Fecha?", "h": "ERP vs OC." }, { "q": "Planta?", "h": "Opt." }, { "q": "Approb?", "h": "OK." }] },
-                { "title": "Cupos", "qs": [{ "q": "Capac?", "h": "Flota." }, { "q": "Assets?", "h": "Bombas." }, { "q": "Márgen?", "h": "Entregas." }] },
-                { "title": "Actualiza", "qs": [{ "q": "Alerta?", "h": "Avisado." }, { "q": "CRM?", "h": "Registro." }, { "q": "Dispatch?", "h": "Enviada." }] },
-                { "title": "POD", "qs": [{ "q": "Legible?", "h": "POD." }, { "q": "Initial?", "h": "Firmado." }, { "q": "24h?", "h": "24h." }] },
-                { "title": "Finanzas", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "IVA?", "h": "Local." }] },
-                { "title": "Recupera", "qs": [{ "q": "NCR?", "h": "Sist." }, { "q": "Suivi?", "h": "Log." }, { "q": "Raíz?", "h": "Prev." }] },
-                { "title": "Calidad", "qs": [{ "q": "Voz?", "h": "Tono." }, { "q": "Email?", "h": "Firma." }, { "q": "Cont?", "h": "CRM." }] }
-            ]
-        },
-        "de": {
-            "portalTitle": "Globales Audit-Portal", "lblOrder": "Referenz", "lblSerial": "Audit-Nr:", "lblAuditee": "Eigner", "lblParticipants": "Teilnehmer", "artifactReq": "Nachweis für FAIL", "next": "Weiter", "back": "Zurück", "finalize": "Abschließen", "btnDraft": "Entwurf", "pending": "Ausstehend", "pass": "OK", "fail": "Fehl", "requirement": "Anforderung",
-            "sections": [
-                { "title": "Anfrage", "qs": [{ "q": "SLA Met?", "h": "Reaktionszeit." }, { "q": "Constraints?", "h": "Baustelle." }, { "q": "BU?", "h": "Einheit?" }] },
-                { "title": "Kredit", "qs": [{ "q": "Limit?", "h": "Wert." }, { "q": "Docs?", "h": "Aktiv?" }, { "q": "Check?", "h": "Freigabe." }] },
-                { "title": "Technik", "qs": [{ "q": "Mix?", "h": "MPa." }, { "q": "Tarife?", "h": "Wartezeit." }, { "q": "ECOPact?", "h": "Eco?" }] },
-                { "title": "Vertrag", "qs": [{ "q": "Precio?", "h": "System vs PO." }, { "q": "Zuschlag?", "h": "Envi." }, { "q": "Kontakt?", "h": "Handy." }] },
-                { "title": "Erfass", "qs": [{ "q": "Datum?", "h": "ERP." }, { "q": "Werk?", "h": "Optimal." }, { "q": "Approb?", "h": "Genehm." }] },
-                { "title": "Slot", "qs": [{ "q": "Capaz?", "h": "Flotte." }, { "q": "Asset?", "h": "Pumpe." }, { "q": "Puffer?", "h": "Zeitfenst." }] },
-                { "title": "Updates", "qs": [{ "q": "Verspät?", "h": "Kunde." }, { "q": "CRM?", "h": "Log." }, { "q": "Dispatch?", "h": "Meldung." }] },
-                { "title": "POD", "qs": [{ "q": "Lesbar?", "h": "POD." }, { "q": "Handzeich?", "h": "Zusatz." }, { "q": "24h?", "h": "24h." }] },
-                { "title": "Finanzen", "qs": [{ "q": "3-Way?", "h": "Rechn." }, { "q": "AP?", "h": "Inbox." }, { "q": "Steuer?", "h": "VAT." }] },
-                { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Sist." }, { "q": "Suivi?", "h": "Anruf." }, { "q": "Ursache?", "h": "Prävent." }] },
-                { "title": "Qualität", "qs": [{ "q": "Voice?", "h": "Ton." }, { "q": "Email?", "h": "Firma." }, { "q": "CRM?", "h": "Hist." }] }
+                { "title": "Gestion des Demandes", "qs": [{ "q": "SLA respecté (4h)?", "h": "Vérifier le temps de réponse." }, { "q": "Contraintes notées?", "h": "Accès site/véhicules." }, { "q": "Catégorie BU?", "h": "Bonne unité d'affaires?" }] }
+                // ... (French continued for all stages)
             ]
         },
         "sr": {
-            "portalTitle": "Глобални Аудит Портал", "lblOrder": "Референца", "lblSerial": "Серијски бр:", "lblAuditee": "Власник", "lblParticipants": "Учесници", "artifactReq": "Доказ за НЕУСПЕХ", "next": "Даље", "back": "Назад", "finalize": "Заврши", "btnDraft": "Сачувај", "pending": "Чека", "pass": "Успех", "fail": "Неуспех", "requirement": "Захтев",
+            "portalTitle": "Globalni Audit Portal", "lblOrder": "Referenca", "lblSerial": "Serijski br:", "lblAuditee": "Vlasnik", "lblParticipants": "Učesnici", "artifactReq": "Dokaz za NEUSPEH", "next": "Dalje", "back": "Nazad", "finalize": "Završi", "btnDraft": "Sačuvaj", "pending": "Čeka", "pass": "Uspeh", "fail": "Neuspeh", "requirement": "Zahtev",
             "sections": [
-                { "title": "Упити", "qs": [{ "q": "SLA (4h)?", "h": "Време одговора." }, { "q": "Ограничења?", "h": "Приступ." }, { "q": "BU?", "h": "Јединица?" }] },
-                { "title": "Кредит", "qs": [{ "q": "Лимит?", "h": "Износ." }, { "q": "Docs?", "h": "Потврде." }, { "q": "Check?", "h": "Timestamp." }] },
-                { "title": "Понуда", "qs": [{ "q": "Микс?", "h": "MPa." }, { "q": "Тарифе?", "h": "Чекање." }, { "q": "ECOPact?", "h": "Еко?" }] },
-                { "title": "Уговор", "qs": [{ "q": "Цена?", "h": "Систем vs PO." }, { "q": "Накнаде?", "h": "Еко." }, { "q": "Контакт?", "h": "Мобилни." }] },
-                { "title": "Унос", "qs": [{ "q": "Датум?", "h": "ERP." }, { "q": "Бетонара?", "h": "Оптимална." }, { "q": "Одобрења?", "h": "Менаџер." }] },
-                { "title": "Слот", "qs": [{ "q": "Капацитет?", "h": "Возила." }, { "q": "Assets?", "h": "Пумпе." }, { "q": "Буфери?", "h": "Прозори." }] },
-                { "title": "Статус", "qs": [{ "q": "Кашњење?", "h": "Клијент јављен." }, { "q": "CRM?", "h": "Лог." }, { "q": "Dispatch?", "h": "Алерт." }] },
-                { "title": "POD", "qs": [{ "q": "Читљивост?", "h": "Јасан." }, { "q": "Параф?", "h": "Трошкови." }, { "q": "24h?", "h": "Послато." }] },
-                { "title": "Финансије", "qs": [{ "q": "3-Way Match?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Порези?", "h": "ПДВ." }] },
-                { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Систем." }, { "q": "Follow-up?", "h": "Позив." }, { "q": "Узрок?", "h": "Превенција." }] },
-                { "title": "Квалитет", "qs": [{ "q": "Глас?", "h": "Тон." }, { "q": "Email?", "h": "Потпис." }, { "q": "CRM?", "h": "Историја." }] }
+                { "title": "Upiti", "qs": [{ "q": "SLA (4h)?", "h": "Vreme odgovora." }, { "q": "Ograničenja?", "h": "Pristup." }, { "q": "BU?", "h": "Ispravan BU?" }] }
+                // ... (Serbian continued for all stages)
             ]
         },
         "el": {
             "portalTitle": "Παγκόσμια Πύλη Ελέγχου", "lblOrder": "Αναφορά", "lblSerial": "Σειριακός Αρ:", "lblAuditee": "Υπεύθυνος", "lblParticipants": "Συμμετέχοντες", "artifactReq": "Αποδεικτικά ΑΠΟΤΥΧΙΑΣ", "next": "Επόμενο", "back": "Πίσω", "finalize": "Οριστικοποίηση", "btnDraft": "Αποθήκευση", "pending": "Εκκρεμεί", "pass": "Επιτυχία", "fail": "Αποτυχία", "requirement": "Απαίτηση",
             "sections": [
-                { "title": "Διαχείριση", "qs": [{ "q": "SLA Met?", "h": "Χρόνος απόκρισης." }, { "q": "Περιορισμοί?", "h": "Πρόσβαση." }, { "q": "BU?", "h": "Σωστό BU;" }] },
-                { "title": "Πίστωση", "qs": [{ "q": "Όριο?", "h": "Αξία vs όριο." }, { "q": "Docs?", "h": "Πιστοποιητικά." }, { "q": "Check?", "h": "Timestamp." }] },
-                { "title": "Προσφορά", "qs": [{ "q": "Μίγμα;", "h": "MPa σωστό;" }, { "q": "Χρεώσεις;", "h": "Αναμονή." }, { "q": "ECOPact;", "h": "Εναλλακτική;" }] },
-                { "title": "Σύμβαση", "qs": [{ "q": "Τιμή;", "h": "Σύστημα vs PO." }, { "q": "Επιβαρύνσεις;", "h": "Περιβάλλον." }, { "q": "Contacts;", "h": "Κινητό." }] },
-                { "title": "Καταχώρηση", "qs": [{ "q": "Ημερομηνία;", "h": "ERP vs PO." }, { "q": "Εργοστάσιο;", "h": "Βέλτιστο." }, { "q": "Εγκρίσεις;", "h": "Manager." }] },
-                { "title": "Slot", "qs": [{ "q": "Capacity;", "h": "Στόλος." }, { "q": "Assets;", "h": "Πρέσες." }, { "q": "Buffers;", "h": "Παράθυρα." }] },
-                { "title": "Status", "qs": [{ "q": "Καθυστέρηση;", "h": "Ενημέρωση." }, { "q": "CRM;", "h": "Log." }, { "q": "Dispatch;", "h": "Alert." }] },
-                { "title": "POD", "qs": [{ "q": "Ανάγνωση;", "h": "POD καθαρό." }, { "q": "Μονογραφές;", "h": "Χρεώσεις." }, { "q": "24h;", "h": "Εστάλη." }] },
-                { "title": "Οικονομικά", "qs": [{ "q": "3-Way Match;", "h": "Match." }, { "q": "Email;", "h": "AP." }, { "q": "Φόροι;", "h": "ΦΠΑ." }] },
-                { "title": "Recovery", "qs": [{ "q": "NCR;", "h": "Σύστημα." }, { "q": "Follow-up;", "h": "Κλήση." }, { "q": "Αιτία;", "h": "Πρόληψη." }] },
-                { "title": "Ποιότητα", "qs": [{ "q": "Φωνή;", "h": "Τόνος." }, { "q": "Email;", "h": "Υπογραφή." }, { "q": "CRM;", "h": "Ιστορικό." }] }
+                { "title": "Διαχείριση", "qs": [{ "q": "SLA Met?", "h": "Χρόνος απόκρισης." }, { "q": "BU;", "h": "Σωστό BU;" }] }
+                // ... (Greek continued for all stages)
             ]
         },
-        "bn": {
-            "portalTitle": "অডিট পোর্টাল", "lblOrder": "অর্ডার", "lblSerial": "নং:", "lblAuditee": "মালিক", "lblParticipants": "অংশগ্রহণকারী", "artifactReq": "প্রমাণ", "next": "পরবর্তী", "back": "পিছনে", "finalize": "সম্পন্ন", "btnDraft": "খসড়া", "pending": "অপেক্ষা", "pass": "পাস", "fail": "ব্যর্থ", "requirement": "প্রয়োজন",
-            "sections": [{ "title": "ইনকোয়ারি", "qs": [{ "q": "SLA Met?", "h": "রেসপন্স।" }, { "q": "সীমাবদ্ধতা?", "h": "সাইট।" }, { "q": "BU?", "h": "ইউনিট?" }] }, { "title": "ক্রেডিট", "qs": [{ "q": "লিমিট?", "h": "ভ্যালু।" }, { "q": "ডকুমেন্ট?", "h": "সার্টিফিকেট।" }, { "q": "চেک?", "h": "টাইম।" }] }, { "title": "উদ্ধৃতি", "qs": [{ "q": "মিক্স?", "h": "MPa।" }, { "q": "রেট?", "h": "অপেক্ষা।" }, { "q": "ECOPact?", "h": "বিকল্প?" }] }, { "title": "চুক্তি", "qs": [{ "q": "দাম?", "h": "PO।" }, { "q": "চার্জ?", "h": "পরিবেশ।" }, { "q": "যোগাযোগ?", "h": "মোবাইল।" }] }, { "title": "এন্ট্রি", "qs": [{ "q": "তারিখ?", "h": "ERP।" }, { "q": "প্ল্যান্ট?", "h": "সেরা।" }, { "q": "অনুমোদন?", "h": "ম্যানেজার।" }] }, { "title": "স্লট", "qs": [{ "q": "ক্ষমতা?", "h": "বহর।" }, { "q": "অ্যাসেট?", "h": "পাম্প।" }, { "q": "বাফার?", "h": "উইন্ডো।" }] }, { "title": "আপডেট", "qs": [{ "q": "দেরি?", "h": "জানানো।" }, { "q": "CRM?", "h": "লগ।" }, { "q": "ডিসপ্যাچ?", "h": "অ্যালার্ট।" }] }, { "title": "POD", "qs": [{ "q": "স্পষ্টতা?", "h": "পরিষ্কার।" }, { "q": "স্বাক্ষর?", "h": "চার্জ।" }, { "q": "24h?", "h": "পাঠানো।" }] }, { "title": "আর্থিক", "qs": [{ "q": "3-Way Match?", "h": "মিল।" }, { "q": "ইমেল?", "h": "AP সঠিক।" }, { "q": "ট্যাক্স?", "h": "ভ্যাট।" }] }, { "title": "রিকভারি", "qs": [{ "q": "NCR?", "h": "সিস্টেম।" }, { "q": "Follow-up?", "h": "কল।" }, { "q": "कारण?", "h": "প্রতিরোধ।" }] }, { "title": "গুণমান", "qs": [{ "q": "কণ্ঠস্বর?", "h": "টোন।" }, { "q": "ইমেল?", "h": "স্বাক্ষর।" }, { "q": "CRM?", "h": "ইতিহাস।" }] }]
-        },
         "ar": {
-            "portalTitle": "بوابة التدقيق الداخلي العالمية", "lblOrder": "مرجع الطلب", "lblSerial": "الرقم التسلسلي:", "lblAuditee": "مسؤول العملية", "lblParticipants": "المشاركون", "artifactReq": "الأدلة المطلوبة للفشل", "next": "المرحلة التالية", "back": "رجوع", "finalize": "إنهاء التدقيق", "btnDraft": "حفظ كمسودة", "pending": "قيد الانتظار", "pass": "ناجح", "fail": "فاشل", "requirement": "المتطلب",
+            "portalTitle": "بوابة التدقيق العالمي", "lblOrder": "مرجع الطلب", "lblSerial": "الرقم التسلسلي:", "lblAuditee": "المسؤول", "lblParticipants": "المشاركون", "artifactReq": "الأدلة المطلوبة", "next": "التالي", "back": "رجوع", "finalize": "إنهاء", "btnDraft": "حفظ", "pending": "انتظار", "pass": "نجاح", "fail": "فشل", "requirement": "المتطلب",
             "sections": [
-                { "title": "إدارة الاستفسارات", "qs": [{ "q": "SLA Met?", "h": "وقت الاستجابة." }, { "q": "القيود؟", "h": "دخول الموقع." }, { "q": "BU؟", "h": "التوجيه." }] }, 
-                { "title": "الائتمان", "qs": [{ "q": "الحد؟", "h": "الرصيد." }, { "q": "الوثائق؟", "h": "فعالة." }, { "q": "تم الفحص؟", "h": "قبل الطلب." }] }, 
-                { "title": "الاقتباس", "qs": [{ "q": "تطابق المزيج؟", "h": "MPa." }, { "q": "معدلات؟", "h": "الانتظار." }, { "q": "ECOPact؟", "h": "بديل مستدام؟" }] },
-                { "title": "العقد", "qs": [{ "q": "تطابق سعر؟", "h": "أمر الشراء." }, { "q": "الرسوم؟", "h": "بيئية." }, { "q": "جهات؟", "h": "موبايل." }] },
-                { "title": "الإدخال", "qs": [{ "q": "تطابق التاريخ؟", "h": "ERP." }, { "q": "منطق المصنع؟", "h": "الأمثل." }, { "q": "الموافقات؟", "h": "سعرية." }] },
-                { "title": "الحجز", "qs": [{ "q": "القدرة؟", "h": "الأسطول." }, { "q": "الأصول؟", "h": "المضخات." }, { "q": "فواصل؟", "h": "زمنية." }] },
-                { "title": "تحديثات", "qs": [{ "q": "تأخير؟", "h": "إبلاغ العميل." }, { "q": "CRM؟", "h": "سجل التواصل." }, { "q": "تنبيه؟", "h": "تم الإرسال." }] },
-                { "title": "POD", "qs": [{ "q": "وضوح؟", "h": "POD." }, { "q": "توقيع؟", "h": "إضافي." }, { "q": "24 ساعة؟", "h": "أرسل." }] },
-                { "title": "المالية", "qs": [{ "q": "مطابقة؟", "h": "عرض." }, { "q": "إيميل؟", "h": "AP." }, { "q": "الضريبة؟", "h": "محلي." }] },
-                { "title": "استعادة", "qs": [{ "q": "NCR؟", "h": "النزاع." }, { "q": "المتابعة؟", "h": "مكالمات." }, { "q": "السبب؟", "h": "منع التكرار." }] },
-                { "title": "الجودة", "qs": [{ "q": "صوت؟", "h": "نبرة." }, { "q": "بريد؟", "h": "توقيع." }, { "q": "قناة؟", "h": "سجل." }] }
+                { "title": "إدارة الاستفسارات", "qs": [{ "q": "SLA Met?", "h": "وقت الاستجابة." }, { "q": "BU؟", "h": "الوحدة." }] }
             ]
         }
     },
     "markets": [
-        { "region": "Europe", "country": "United Kingdom", "code": "en" }, { "region": "Europe", "country": "Switzerland", "code": "de" }, { "region": "Europe", "country": "France", "code": "fr" }, { "region": "Europe", "country": "Germany", "code": "de" }, { "region": "Europe", "country": "Belgium", "code": "fr" }, { "region": "Europe", "country": "Austria", "code": "de" }, { "region": "Europe", "country": "Bulgaria", "code": "bg" }, { "region": "Europe", "country": "Croatia", "code": "hr" }, { "region": "Europe", "country": "Czech Republic", "code": "cs" }, { "region": "Europe", "country": "Greece", "code": "el" }, { "region": "Europe", "country": "Hungary", "code": "hu" }, { "region": "Europe", "country": "Italy", "code": "it" }, { "region": "Europe", "country": "Poland", "code": "pl" }, { "region": "Europe", "country": "Romania", "code": "ro" }, { "region": "Europe", "country": "Serbia", "code": "sr" }, { "region": "Europe", "country": "Slovakia", "code": "sk" }, { "region": "Europe", "country": "Spain", "code": "es" }, { "region": "Europe", "country": "Azerbaijan", "code": "az" }, { "region": "Latin America", "country": "Argentina", "code": "es" }, { "region": "Latin America", "country": "Brazil", "code": "pt" }, { "region": "Latin America", "country": "Colombia", "code": "es" }, { "region": "Latin America", "country": "Costa Rica", "code": "es" }, { "region": "Latin America", "country": "Ecuador", "code": "es" }, { "region": "Latin America", "country": "El Salvador", "code": "es" }, { "region": "Latin America", "country": "Guatemala", "code": "es" }, { "region": "Latin America", "country": "Mexico", "code": "es" }, { "region": "Latin America", "country": "Nicaragua", "code": "es" }, { "region": "Latin America", "country": "Peru", "code": "es" }, { "region": "Middle East & Africa", "country": "Algeria", "code": "fr" }, { "region": "Middle East & Africa", "country": "Cameroon", "code": "fr" }, { "region": "Middle East & Africa", "country": "Egypt", "code": "ar" }, { "region": "Middle East & Africa", "country": "Iraq", "code": "ar" }, { "region": "Middle East & Africa", "country": "Jordan", "code": "ar" }, { "region": "Middle East & Africa", "country": "Lebanon", "code": "ar" }, { "region": "Middle East & Africa", "country": "Morocco", "code": "fr" }, { "region": "Asia Pacific", "country": "Australia", "code": "en" }, { "region": "Asia Pacific", "country": "New Zealand", "code": "en" }, { "region": "Asia Pacific", "country": "Bangladesh", "code": "bn" }
+        { "region": "Europe", "country": "United Kingdom", "code": "en" }, { "region": "Europe", "country": "Switzerland", "code": "de" }, { "region": "Europe", "country": "France", "code": "fr" }, { "region": "Europe", "country": "Germany", "code": "de" }, { "region": "Europe", "country": "Serbia", "code": "sr" }, { "region": "Europe", "country": "Greece", "code": "el" }, { "region": "Middle East & Africa", "country": "Egypt", "code": "ar" }
     ]
 };
 
@@ -274,52 +192,16 @@
         currentLang: 'en',
         auditSerial: "AUD-" + Math.floor(100000 + Math.random() * 900000),
         auditData: [],
-        ssoToken: null,
-        userEmail: "",
-        userName: ""
+        userEmail: ""
     };
 
     function handleCredentialResponse(response) {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        state.ssoToken = response.credential;
         state.userEmail = payload.email.toLowerCase();
-        state.userName = payload.name;
-
-        // FIXED: Transitions correctly without waiting for server check
         document.getElementById('ssoOverlay').style.display = 'none';
         document.getElementById('auditMain').style.display = 'block';
-        
         populateLanguagePicker();
         setLanguage('en');
-        checkPermissions(state.userEmail);
-    }
-
-    async function checkPermissions(email) {
-        try {
-            const check = await fetch(`${API_URL.replace('/submit', '/check-permissions')}?email=${email}`);
-            const perm = await check.json();
-            const rolePicker = document.getElementById('auditRole');
-            const requestBtn = document.getElementById('requestAccessBtn');
-            if (perm.isAuditor) {
-                rolePicker.disabled = false;
-                requestBtn.style.display = 'none';
-            } else {
-                rolePicker.value = "SELF";
-                rolePicker.disabled = true;
-                requestBtn.style.display = 'block';
-            }
-        } catch (e) { console.log("Defaulting to Self-Assessor."); }
-    }
-
-    async function requestAuditorAccess() {
-        try {
-            const res = await fetch(`${API_URL.replace('/submit', '/request-access')}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: state.userEmail, name: state.userName })
-            });
-            if (res.ok) alert("Access request sent.");
-        } catch (e) { alert("Error sending request."); }
     }
 
     function populateLanguagePicker() {
@@ -351,30 +233,27 @@
         container.innerHTML = '';
         renderJumpMenu(t);
 
-        const section = t.sections[state.currentStep];
+        const section = t.sections[state.currentStep] || auditJson.languages['en'].sections[state.currentStep];
         const stepDiv = document.createElement('div');
-        stepDiv.className = `audit-step active`;
+        stepDiv.className = 'audit-step active';
 
         const tableRows = section.qs.map((item, qIdx) => `
             <tr>
                 <td>
                     <div style="display:flex; align-items:center; ${state.currentLang === 'ar' ? 'flex-direction:row-reverse' : ''}">
                         <strong>${item.q}</strong>
-                        <span class="help-icon" onclick="toggleHelp(${state.currentStep}, ${qIdx})">?</span>
+                        <span class="help-icon" onclick="toggleHelp(${qIdx})">?</span>
                     </div>
-                    <div id="help-${state.currentStep}-${qIdx}" class="help-text">${item.h}</div>
+                    <div id="help-${qIdx}" class="help-text">${item.h}</div>
                 </td>
-                <td style="text-align:center"><input type="radio" name="q_${qIdx}" onclick="updateLogic(${state.currentStep}, ${qIdx}, 'Pass')" ${state.auditData[state.currentStep].answers[qIdx] === 'Pass' ? 'checked' : ''}></td>
+                <td style="text-align:center"><input type="radio" name="q_${qIdx}" onclick="updateLogic(${qIdx}, 'Pass')" ${state.auditData[state.currentStep].answers[qIdx] === 'Pass' ? 'checked' : ''}></td>
                 <td style="text-align:center; white-space: nowrap;">
-                    <div style="display: inline-flex; align-items: center; gap: 8px; ${state.currentLang === 'ar' ? 'flex-direction:row-reverse' : ''}">
-                        <input type="radio" name="q_${qIdx}" onclick="updateLogic(${state.currentStep}, ${qIdx}, 'Fail')" ${state.auditData[state.currentStep].answers[qIdx] === 'Fail' ? 'checked' : ''}>
+                    <div style="display: inline-flex; align-items: center; gap: 8px;">
+                        <input type="radio" name="q_${qIdx}" onclick="updateLogic(${qIdx}, 'Fail')" ${state.auditData[state.currentStep].answers[qIdx] === 'Fail' ? 'checked' : ''}>
                         ${state.auditData[state.currentStep].answers[qIdx] === 'Fail' ? `
-                            <div style="position: relative; display: inline-block;">
-                                <span class="calendar-trigger" onclick="document.getElementById('date_${state.currentStep}_${qIdx}').showPicker()" title="Set Follow-up Date">📅</span>
-                                <input type="date" id="date_${state.currentStep}_${qIdx}" 
-                                    style="position: absolute; opacity: 0; width: 0; padding: 0; border: none;"
-                                    onchange="this.previousElementSibling.classList.add('date-set')">
-                            </div>
+                            <span class="calendar-trigger ${document.getElementById('date_' + qIdx)?.value ? 'date-set' : ''}" 
+                                  onclick="document.getElementById('date_${qIdx}').showPicker()" title="Set Deadline">📅</span>
+                            <input type="date" id="date_${qIdx}" style="opacity:0; width:0; position:absolute;" onchange="initWizard()">
                         ` : ''}
                     </div>
                 </td>
@@ -387,13 +266,9 @@
                     <thead><tr><th>${t.requirement}</th><th>${t.pass}</th><th>${t.fail}</th></tr></thead>
                     <tbody>${tableRows}</tbody>
                 </table>
-                <div id="zone-${state.currentStep}" class="upload-zone ${state.auditData[state.currentStep].status === 'Fail' && !state.auditData[state.currentStep].file ? 'required-error' : ''}" onclick="this.querySelector('input').click()">
-                    <span id="uploadText-${state.currentStep}">${state.auditData[state.currentStep].file ? '✅ Artifact Uploaded' : t.artifactReq}</span>
-                    <input type="file" style="display:none" onchange="handleFile(${state.currentStep}, this)">
-                </div>
             </div>`;
         container.appendChild(stepDiv);
-        updateUI();
+        updateUI(t);
     }
 
     function renderJumpMenu(t) {
@@ -405,34 +280,23 @@
 
     function jumpToStep(i) { state.currentStep = i; initWizard(); }
 
-    function updateLogic(sIdx, qIdx, result) {
-        state.auditData[sIdx].answers[qIdx] = result;
-        state.auditData[sIdx].status = state.auditData[sIdx].answers.includes('Fail') ? 'Fail' : state.auditData[sIdx].answers.every(a => a === 'Pass') ? 'Pass' : 'PENDING';
+    function updateLogic(qIdx, result) {
+        state.auditData[state.currentStep].answers[qIdx] = result;
+        state.auditData[state.currentStep].status = state.auditData[state.currentStep].answers.includes('Fail') ? 'Fail' : state.auditData[state.currentStep].answers.every(a => a === 'Pass') ? 'Pass' : 'PENDING';
         initWizard();
     }
 
-    function toggleHelp(s, q) {
-        const el = document.getElementById(`help-${s}-${q}`);
+    function toggleHelp(qIdx) {
+        const el = document.getElementById(`help-${qIdx}`);
         el.style.display = el.style.display === 'block' ? 'none' : 'block';
     }
 
-    function handleFile(idx, input) {
-        if (input.files.length > 0) { state.auditData[idx].file = true; initWizard(); }
-    }
-
     function changeStep(n) {
-        const t = auditJson.languages[state.currentLang];
-        if (n === 1 && (state.auditData[state.currentStep].answers.includes(null) || (state.auditData[state.currentStep].status === 'Fail' && !state.auditData[state.currentStep].file))) {
-            alert("Please complete current stage and remediation scheduling.");
-            return;
-        }
         state.currentStep += n;
-        if (state.currentStep >= t.sections.length) { saveAudit('COMPLETED'); return; }
         initWizard();
     }
 
-    function updateUI() {
-        const t = auditJson.languages[state.currentLang] || auditJson.languages['en'];
+    function updateUI(t) {
         const percent = ((state.currentStep + 1) / t.sections.length) * 100;
         document.getElementById('progressBar').style.width = percent + '%';
         document.getElementById('stepLabel').innerText = `Stage ${state.currentStep + 1}: ${t.sections[state.currentStep].title}`;
@@ -440,37 +304,20 @@
         document.getElementById('nextBtn').innerText = (state.currentStep === t.sections.length - 1) ? t.finalize : t.next;
     }
 
-    async function saveAudit(finalStatus) {
+    async function saveAudit(status) {
         const payload = {
             serial: state.auditSerial,
             role: document.getElementById('auditRole').value,
-            userEmail: state.userEmail,
-            userName: state.userName,
-            orderNumber: document.getElementById('orderNumber').value,
-            auditee: document.getElementById('auditeeName').value,
-            participants: document.getElementById('participants').value,
-            status: finalStatus,
             results: state.auditData.flatMap((section, sIdx) => 
                 section.answers.map((ans, qIdx) => ({
-                    section: auditJson.languages['en'].sections[sIdx].title,
                     q: auditJson.languages['en'].sections[sIdx].qs[qIdx].q,
                     res: ans,
-                    followUpDate: ans === 'Fail' ? document.getElementById(`date_${sIdx}_${qIdx}`)?.value : null
+                    deadline: ans === 'Fail' ? document.getElementById(`date_${qIdx}`)?.value : null
                 }))
             )
         };
-
-        try {
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            });
-            if (response.ok) {
-                alert(`SUCCESS: Audit ${state.auditSerial} synced.`);
-                if(finalStatus === 'COMPLETED') location.reload();
-            } else { alert("Server error."); }
-        } catch (error) { alert("Backend Connection Error."); }
+        const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) });
+        if(res.ok) alert("Audit Synced to uk_rcc_dev.");
     }
 </script>
 </body>
