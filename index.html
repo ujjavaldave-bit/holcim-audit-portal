@@ -35,8 +35,6 @@
         .holcim-logo { height: 45px; filter: brightness(0) invert(1); margin-bottom: 10px; }
         
         .lang-nav { position: absolute; top: 15px; right: 20px; }
-        
-        /* FIXED: Added background and dark text color for visibility */
         #languagePicker { 
             background: white !important; 
             color: #1d4370 !important; 
@@ -101,8 +99,7 @@
     <div class="card">
         <header class="header">
             <div class="lang-nav">
-                <select id="languagePicker" onchange="setLanguage(this.value)">
-                </select>
+                <select id="languagePicker" onchange="setLanguage(this.value)"></select>
             </div>
             <img src="https://upload.wikimedia.org/wikipedia/commons/e/e3/Holcim_Logo_2021_sRGB.png" alt="Holcim" class="holcim-logo">
             <p id="portalTitle" class="header-title" style="font-weight: 700; font-size: 24px;"></p>
@@ -135,18 +132,10 @@
 <script>
     const API_URL = "https://mesne-unpreclusively-dana.ngrok-free.dev/api/v1/audit/submit"; 
 
-    // YOUR FULL GLOBAL JSON
     const auditJson = {
     "languages": {
         "en": {
-            "portalTitle": "Global Internal Audit Portal",
-            "lblOrder": "Order Reference",
-            "lblSerial": "Audit Serial No:",
-            "lblAuditee": "Process Owner",
-            "lblParticipants": "Audit Participants (Separate by comma)",
-            "artifactReq": "Evidence Required for FAIL",
-            "next": "Next Stage", "back": "Back", "finalize": "Finalize Audit",
-            "btnDraft": "Save as Draft", "pending": "Pending", "pass": "Pass", "fail": "Fail", "requirement": "Requirement",
+            "portalTitle": "Global Internal Audit Portal", "lblOrder": "Order Reference", "lblSerial": "Audit Serial No:", "lblAuditee": "Process Owner", "lblParticipants": "Audit Participants", "artifactReq": "Evidence Required for FAIL", "next": "Next Stage", "back": "Back", "finalize": "Finalize Audit", "btnDraft": "Save as Draft", "pending": "Pending", "pass": "Pass", "fail": "Fail", "requirement": "Requirement",
             "sections": [
                 { "title": "Inquiry Management", "qs": [{ "q": "SLA Met (4h)?", "h": "Verify response time vs incoming timestamp." }, { "q": "Constraints Captured?", "h": "Check for site access/vehicle constraints in notes." }, { "q": "BU Categorization?", "h": "Is the inquiry routed to the correct Business Unit?" }] },
                 { "title": "Credit & Compliance", "qs": [{ "q": "Limit OK?", "h": "Check order value vs available credit headroom." }, { "q": "Docs Verified?", "h": "Are valid tax/registration certificates active on file?" }, { "q": "Pre-Check Done?", "h": "Credit clearance must be timestamped before PO." }] },
@@ -162,115 +151,76 @@
             ]
         },
         "fr": {
-            "portalTitle": "Portail d'Audit Interne Global",
-            "lblOrder": "Référence de Commande",
-            "lblSerial": "N° de Série d'Audit:",
-            "lblAuditee": "Propriétaire du Processus",
-            "lblParticipants": "Participants (Séparer par virgule)",
-            "artifactReq": "Preuve Requise pour ÉCHEC",
-            "next": "Étape Suivante", "back": "Retour", "finalize": "Finaliser l'Audit",
-            "btnDraft": "Enregistrer Brouillon", "pending": "En attente", "pass": "Réussi", "fail": "Échec", "requirement": "Exigence",
+            "portalTitle": "Portail d'Audit Interne Global", "lblOrder": "Référence de Commande", "lblSerial": "N° de Série:", "lblAuditee": "Propriétaire", "lblParticipants": "Participants", "artifactReq": "Preuve pour ÉCHEC", "next": "Étape Suivante", "back": "Retour", "finalize": "Finaliser", "btnDraft": "Brouillon", "pending": "En attente", "pass": "Réussi", "fail": "Échec", "requirement": "Exigence",
             "sections": [
-                { "title": "Gestion des Demandes", "qs": [{ "q": "SLA respecté (4h)?", "h": "Vérifier le temps de réponse." }, { "q": "Contraintes saisies?", "h": "Vérifier l'accès au site." }, { "q": "Catégorisation BU?", "h": "Routage vers la bonne unité?" }] },
-                { "title": "Crédit et Conformité", "qs": [{ "q": "Limite OK?", "h": "Valeur vs marge de crédit." }, { "q": "Docs vérifiés?", "h": "Certificats fiscaux actifs?" }, { "q": "Pré-vérification?", "h": "Validation datée." }] },
-                { "title": "Devis et Spécifications", "qs": [{ "q": "Mélange correct?", "h": "MPa conforme?" }, { "q": "Tarifs annexes?", "h": "Temps d'attente inclus?" }, { "q": "ECOPact?", "h": "Offre durable?" }] },
-                { "title": "Révision Contrat/BC", "qs": [{ "q": "Prix conforme?", "h": "Le prix correspond au BC." }, { "q": "Surcharges?", "h": "Frais environnementaux?" }, { "q": "Contacts site?", "h": "Mobile valide?" }] },
-                { "title": "Précision de Saisie", "qs": [{ "q": "Date conforme?", "h": "ERP correspond au BC." }, { "q": "Logique usine?", "h": "Usine optimale?" }, { "q": "Approbations?", "h": "Prix approuvés?" }] },
-                { "title": "Réservation Créneau", "qs": [{ "q": "Capacité?", "h": "Vérifier usine/flotte." }, { "q": "Synchro actifs?", "h": "Pompes réservées." }, { "q": "Tampons?", "h": "Fenêtres de temps." }] },
-                { "title": "Mises à jour", "qs": [{ "q": "Alerte retard?", "h": "Client informé si >15 min." }, { "q": "Dossier CRM?", "h": "Trace de communication." }, { "q": "Alertes départ?", "h": "Notification envoyée." }] },
-                { "title": "Document (POD)", "qs": [{ "q": "Lisibilité?", "h": "POD clair." }, { "q": "Initiales?", "h": "Frais paraphés." }, { "q": "Dist. 24h?", "h": "Envoyé sous 24h." }] },
-                { "title": "Finalisation Financière", "qs": [{ "q": "3-Way Match?", "h": "Devis/BC/Facture." }, { "q": "E-mail AP?", "h": "Bonne boîte e-mail?" }, { "q": "TVA?", "h": "Conformité fiscale." }] },
-                { "title": "Recouvrement Service", "qs": [{ "q": "NCR enregistré?", "h": "Litige saisi." }, { "q": "Suivi?", "h": "Journal d'appel." }, { "q": "Cause racine?", "h": "Action préventive." }] },
-                { "title": "Qualité (Omnicanal)", "qs": [{ "q": "Standards voix?", "h": "Ton conforme." }, { "q": "Standards e-mail?", "h": "Branding pro." }, { "q": "Continuité?", "h": "Historique CRM." }] }
+                { "title": "Gestion", "qs": [{ "q": "SLA respecté?", "h": "Temps de réponse." }, { "q": "Contraintes?", "h": "Accès site." }, { "q": "BU?", "h": "Bonne unité?" }] },
+                { "title": "Crédit", "qs": [{ "q": "Limite OK?", "h": "Marge de crédit." }, { "q": "Docs?", "h": "Certificats." }, { "q": "Check?", "h": "Validation." }] },
+                { "title": "Devis", "qs": [{ "q": "Mélange?", "h": "Conforme?" }, { "q": "Tarifs?", "h": "Attente?" }, { "q": "ECOPact?", "h": "Durable?" }] },
+                { "title": "Contrat/BC", "qs": [{ "q": "Prix?", "h": "Correspond au BC." }, { "q": "Surcharges?", "h": "Envi." }, { "q": "Contacts?", "h": "Mobile." }] },
+                { "title": "Saisie", "qs": [{ "q": "Date?", "h": "ERP vs BC." }, { "q": "Usine?", "h": "Optimale?" }, { "q": "Approb?", "h": "Approuvés?" }] },
+                { "title": "Créneau", "qs": [{ "q": "Capacité?", "h": "Flotte." }, { "q": "Actifs?", "h": "Pompes." }, { "q": "Tampons?", "h": "Fenêtres." }] },
+                { "title": "Mises à jour", "qs": [{ "q": "Retard?", "h": "Informé." }, { "q": "CRM?", "h": "Communication." }, { "q": "Dispatch?", "h": "Notification." }] },
+                { "title": "POD", "qs": [{ "q": "Lisibilité?", "h": "POD clair." }, { "q": "Initiales?", "h": "Frais." }, { "q": "Dist. 24h?", "h": "24h." }] },
+                { "title": "Finances", "qs": [{ "q": "3-Way?", "h": "Alignement." }, { "q": "E-mail?", "h": "Boîte mail." }, { "q": "TVA?", "h": "Fiscale." }] },
+                { "title": "Recouvrement", "qs": [{ "q": "NCR?", "h": "Saisi." }, { "q": "Suivi?", "h": "Appel." }, { "q": "Cause?", "h": "Prévention." }] },
+                { "title": "Qualité", "qs": [{ "q": "Standards voix?", "h": "Ton." }, { "q": "Email?", "h": "Signature." }, { "q": "Continuité?", "h": "Historique." }] }
             ]
         },
         "es": {
-            "portalTitle": "Portal de Auditoría Interna Global",
-            "lblOrder": "Referencia de Pedido",
-            "lblSerial": "No. Serial de Auditoría:",
-            "lblAuditee": "Dueño del Proceso",
-            "lblParticipants": "Participantes (Separar por coma)",
-            "artifactReq": "Evidencia requerida para FALLO",
-            "next": "Siguiente Etapa", "back": "Atrás", "finalize": "Finalizar Auditoría",
-            "btnDraft": "Guardar Borrador", "pending": "Pendiente", "pass": "Pasa", "fail": "Fallo", "requirement": "Requisito",
+            "portalTitle": "Portal de Auditoría Interna Global", "lblOrder": "Referencia de Pedido", "lblSerial": "N. Serial:", "lblAuditee": "Dueño", "lblParticipants": "Participantes", "artifactReq": "Prueba para FALLO", "next": "Siguiente", "back": "Atrás", "finalize": "Finalizar", "btnDraft": "Borrador", "pending": "Pendiente", "pass": "Pasa", "fail": "Fallo", "requirement": "Requisito",
             "sections": [
-                { "title": "Gestión de Consultas", "qs": [{ "q": "¿SLA cumplido (4h)?", "h": "Verificar tiempo de respuesta." }, { "q": "¿Restricciones?", "h": "Check acceso sitio." }, { "q": "¿Categorización?", "h": "¿Unidad correcta?" }] },
-                { "title": "Crédito y Cumplimiento", "qs": [{ "q": "¿Límite OK?", "h": "Pedido vs crédito." }, { "q": "¿Docs verificados?", "h": "¿Certificados activos?" }, { "q": "¿Pre-chequeo?", "h": "Sello de tiempo." }] },
-                { "title": "Cotización y Especificaciones", "qs": [{ "q": "¿Mezcla correcta?", "h": "¿Coincide MPa?" }, { "q": "¿Tarifas?", "h": "¿Tiempos espera?" }, { "q": "¿ECOPact?", "h": "¿Alternativa sostenible?" }] },
-                { "title": "Revisión Contrato/OC", "qs": [{ "q": "¿Precio coincide?", "h": "Precio sistema vs OC." }, { "q": "¿Recargos?", "h": "Cargos ambientales." }, { "q": "¿Contactos?", "h": "Móvil válido." }] },
-                { "title": "Precisión Pedido", "qs": [{ "q": "¿Fecha coincide?", "h": "ERP vs OC." }, { "q": "¿Planta?", "h": "Planta óptima." }, { "q": "¿Aprobaciones?", "h": "Precios aprobados." }] },
-                { "title": "Reserva de Cupos", "qs": [{ "q": "¿Capacidad?", "h": "Planta/flota disponible." }, { "q": "¿Sincronía?", "h": "Bombas reservadas." }, { "q": "¿Márgenes?", "h": "Ventanas de tiempo." }] },
-                { "title": "Actualizaciones", "qs": [{ "q": "¿Alerta?", "h": "Cliente avisado." }, { "q": "¿Registro CRM?", "h": "Registro comunicación." }, { "q": "¿Despacho?", "h": "Alerta recibida." }] },
-                { "title": "Documento (POD)", "qs": [{ "q": "¿Legibilidad?", "h": "POD firmado claro." }, { "q": "¿Iniciales?", "h": "Cargos firmados." }, { "q": "¿Dist. 24h?", "h": "Enviado en 24h." }] },
-                { "title": "Finalización Financiera", "qs": [{ "q": "¿Cruce 3 vías?", "h": "Cotización/OC/Factura." }, { "q": "¿E-mail AP?", "h": "Buzón correcto." }, { "q": "¿Impuestos?", "h": "IVA local." }] },
-                { "title": "Recuperación Servicio", "qs": [{ "q": "¿NCR?", "h": "Disputa registrada." }, { "q": "¿Seguimiento?", "h": "Log llamada." }, { "q": "¿Causa raíz?", "h": "Acción preventiva." }] },
-                { "title": "Calidad", "qs": [{ "q": "¿Voz?", "h": "Tono conforme." }, { "q": "¿E-mail?", "h": "Firma pro." }, { "q": "¿Continuidad?", "h": "Historial CRM." }] }
+                { "title": "Gestión", "qs": [{ "q": "SLA cumplido?", "h": "Respuesta." }, { "q": "Restricc?", "h": "Acceso." }, { "q": "BU?", "h": "Unidad?" }] },
+                { "title": "Crédito", "qs": [{ "q": "Límite?", "h": "Crédito." }, { "q": "Docs?", "h": "Activos." }, { "q": "Check?", "h": "Sello." }] },
+                { "title": "Cotización", "qs": [{ "q": "Mezcla?", "h": "MPa." }, { "q": "Tarifas?", "h": "Espera." }, { "q": "ECOPact?", "h": "Sostenible." }] },
+                { "title": "Contrato", "qs": [{ "q": "Precio?", "h": "Sist vs OC." }, { "q": "Recargos?", "h": "Envi." }, { "q": "Contactos?", "h": "Móvil." }] },
+                { "title": "Pedido", "qs": [{ "q": "Fecha?", "h": "ERP vs OC." }, { "q": "Planta?", "h": "Opt." }, { "q": "Approb?", "h": "Approbados." }] },
+                { "title": "Cupos", "qs": [{ "q": "Capacidad?", "h": "Flota." }, { "q": "Assets?", "h": "Bombas." }, { "q": "Márgenes?", "h": "Entregas." }] },
+                { "title": "Actualiza", "qs": [{ "q": "Alerta?", "h": "Avisado." }, { "q": "CRM?", "h": "Registro." }, { "q": "Despacho?", "h": "Enviada." }] },
+                { "title": "POD", "qs": [{ "q": "Legible?", "h": "POD claro." }, { "q": "Initiales?", "h": "Firmados." }, { "q": "24h?", "h": "24h." }] },
+                { "title": "Finanzas", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "IVA?", "h": "IVA local." }] },
+                { "title": "Recupera", "qs": [{ "q": "NCR?", "h": "Disputa." }, { "q": "Follow-up?", "h": "Log." }, { "q": "Raíz?", "h": "Acción." }] },
+                { "title": "Calidad", "qs": [{ "q": "Voz?", "h": "Tono." }, { "q": "Email?", "h": "Firma." }, { "q": "Continuité?", "h": "CRM." }] }
             ]
         },
         "de": {
-            "portalTitle": "Globales Internes Audit-Portal",
-            "lblOrder": "Bestellreferenz",
-            "lblSerial": "Audit-Seriennummer:",
-            "lblAuditee": "Prozessverantwortlicher",
-            "lblParticipants": "Teilnehmer (mit Komma trennen)",
-            "artifactReq": "Nachweis für FEHLGESCHLAGEN",
-            "next": "Nächste Stufe", "back": "Zurück", "finalize": "Audit abschließen",
-            "btnDraft": "Entwurf speichern", "pending": "Ausstehend", "pass": "Bestanden", "fail": "Fehlgeschlagen", "requirement": "Anforderung",
+            "portalTitle": "Globales Audit-Portal", "lblOrder": "Referenz", "lblSerial": "Audit-Nr:", "lblAuditee": "Eigner", "lblParticipants": "Teilnehmer", "artifactReq": "Nachweis für FAIL", "next": "Weiter", "back": "Zurück", "finalize": "Abschließen", "btnDraft": "Entwurf", "pending": "Ausstehend", "pass": "OK", "fail": "Fehl", "requirement": "Anforderung",
             "sections": [
-                { "title": "Anfragemanagement", "qs": [{ "q": "SLA (4h)?", "h": "Reaktionszeit prüfen." }, { "q": "Einschränkungen?", "h": "Baustellenzugang prüfen." }, { "q": "Kategorisierung?", "h": "Richtige BU?" }] },
-                { "title": "Kredit & Compliance", "qs": [{ "q": "Kreditlimit?", "h": "Wert vs Limit." }, { "q": "Dokumente?", "h": "Zertifikate aktiv?" }, { "q": "Check?", "h": "Zeitstempel vorhanden." }] },
-                { "title": "Angebot & Technik", "qs": [{ "q": "Mix?", "h": "MPa/Slump korrekt?" }, { "q": "Tarife?", "h": "Wartezeiten korrekt?" }, { "q": "ECOPact?", "h": "Nachhaltig?" }] },
-                { "title": "Vertrag/PO", "qs": [{ "q": "Preis?", "h": "System vs PO." }, { "q": "Zuschläge?", "h": "Umweltzuschläge?" }, { "q": "Kontakte?", "h": "Handy vorhanden." }] },
-                { "title": "Auftragserfassung", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Werk?", "h": "Optimales Werk." }, { "q": "Freigaben?", "h": "Genehmigt?" }] },
-                { "title": "Slot-Buchung", "qs": [{ "q": "Kapazität?", "h": "Werk/Flotte frei." }, { "q": "Assets?", "h": "Pumpen gebucht." }, { "q": "Puffer?", "h": "Zeitfenster." }] },
-                { "title": "Updates", "qs": [{ "q": "Verspätung?", "h": "Kunde informiert." }, { "q": "CRM?", "h": "Kontakt dokumentiert." }, { "q": "Dispatch?", "h": "Alerta gesendet." }] },
-                { "title": "POD", "qs": [{ "q": "Lesbarkeit?", "h": "POD klar." }, { "q": "Handzeichen?", "h": "Gebühren visiert." }, { "q": "24h Dist?", "h": "Innerhalb 24h." }] },
-                { "title": "Finanzen", "qs": [{ "q": "3-Way?", "h": "Angebot/PO/Rechnung." }, { "q": "E-Mail?", "h": "Korrekte AP." }, { "q": "Steuern?", "h": "Compliance." }] },
-                { "title": "Service Recovery", "qs": [{ "q": "NCR?", "h": "Eingetragen." }, { "q": "Follow-up?", "h": "Anrufliste." }, { "q": "Ursache?", "h": "Prävention." }] },
-                { "title": "Qualität", "qs": [{ "q": "Stimme?", "h": "Tonfall." }, { "q": "E-Mail?", "h": "Signatur." }, { "q": "CRM?", "h": "Verlauf." }] }
+                { "title": "Anfrage", "qs": [{ "q": "SLA?", "h": "Reaktionszeit." }, { "q": "Einschränk?", "h": "Baustelle." }, { "q": "BU?", "h": "Einheit?" }] },
+                { "title": "Kredit", "qs": [{ "q": "Limit?", "h": "Kredit." }, { "q": "Docs?", "h": "Aktiv?" }, { "q": "Check?", "h": "Freigabe." }] },
+                { "title": "Technik", "qs": [{ "q": "Mix?", "h": "MPa." }, { "q": "Tarife?", "h": "Warten." }, { "q": "ECOPact?", "h": "Nachhaltig?" }] },
+                { "title": "Vertrag", "qs": [{ "q": "Preis?", "h": "System vs PO." }, { "q": "Zuschläge?", "h": "Umwelt." }, { "q": "Kontakte?", "h": "Handy." }] },
+                { "title": "Erfassung", "qs": [{ "q": "Datum?", "h": "ERP vs PO." }, { "q": "Werk?", "h": "Opt." }, { "q": "Freigab?", "h": "Genehm." }] },
+                { "title": "Slot", "qs": [{ "q": "Kapazität?", "h": "Flotte." }, { "q": "Assets?", "h": "Pumpen." }, { "q": "Puffer?", "h": "Fenster." }] },
+                { "title": "Updates", "qs": [{ "q": "Verspätung?", "h": "Kunde." }, { "q": "CRM?", "h": "Dokumentiert." }, { "q": "Dispatch?", "h": "Versand." }] },
+                { "title": "POD", "qs": [{ "q": "Lesbar?", "h": "POD klar." }, { "q": "Handzeich?", "h": "Visiert." }, { "q": "24h?", "h": "24h." }] },
+                { "title": "Finanzen", "qs": [{ "q": "3-Way?", "h": "Match." }, { "q": "Email?", "h": "AP." }, { "q": "Steuern?", "h": "MwSt." }] },
+                { "title": "Recovery", "qs": [{ "q": "NCR?", "h": "Reklam." }, { "q": "Follow-up?", "h": "Anrufe." }, { "q": "Ursache?", "h": "Prävention." }] },
+                { "title": "Qualität", "qs": [{ "q": "Stimme?", "h": "Tonfall." }, { "q": "Email?", "h": "Signatur." }, { "q": "CRM?", "h": "Verlauf." }] }
             ]
+        },
+        "ar": {
+            "portalTitle": "بوابة التدقيق الداخلي العالمية", "lblOrder": "مرجع الطلب", "lblSerial": "الرقم التسلسلي:", "lblAuditee": "مسؤول العملية", "lblParticipants": "المشاركون", "artifactReq": "الأدلة المطلوبة للفشل", "next": "التالي", "back": "رجوع", "finalize": "إنهاء", "btnDraft": "مسودة", "pending": "قيد الانتظار", "pass": "ناجح", "fail": "فاشل", "requirement": "المتطلب",
+            "sections": [
+                { "title": "الاستفسارات", "qs": [{ "q": "SLA (4h)?", "h": "وقت الاستجابة." }, { "q": "القيود؟", "h": "دخول الموقع." }, { "q": "BU؟", "h": "الوحدة." }] }, 
+                { "title": "الائتمان", "qs": [{ "q": "الحد؟", "h": "الائتمان." }, { "q": "الوثائق؟", "h": "نشطة." }, { "q": "الفحص؟", "h": "طابع." }] }, 
+                { "title": "عرض السعر", "qs": [{ "q": "الخليط؟", "h": "MPa." }, { "q": "الأسعار؟", "h": "الانتظار." }, { "q": "ECOPact؟", "h": "مستدام؟" }] },
+                { "title": "العقد", "qs": [{ "q": "سعر؟", "h": "أمر الشراء." }, { "q": "رسوم؟", "h": "بيئية." }, { "q": "جهات؟", "h": "موبايل." }] },
+                { "title": "الإدخال", "qs": [{ "q": "تاريخ؟", "h": "ERP." }, { "q": "مصنع؟", "h": "الأمثل." }, { "q": "موافقات؟", "h": "سعرية." }] },
+                { "title": "الحجز", "qs": [{ "q": "القدرة؟", "h": "المصنع." }, { "q": "الأصول؟", "h": "المضخات." }, { "q": "فواصل؟", "h": "زمنية." }] },
+                { "title": "تحديثات", "qs": [{ "q": "تأخير؟", "h": "إبلاغ." }, { "q": "CRM؟", "h": "سجل." }, { "q": "تنبيه؟", "h": "تم." }] },
+                { "title": "POD", "qs": [{ "q": "وضوح؟", "h": "POD." }, { "q": "توقيع؟", "h": "إضافي." }, { "q": "24 ساعة؟", "h": "أرسل." }] },
+                { "title": "المالية", "qs": [{ "q": "مطابقة؟", "h": "عرض." }, { "q": "إيميل؟", "h": "AP." }, { "q": "ضريبة؟", "h": "محلي." }] },
+                { "title": "استعادة", "qs": [{ "q": "NCR؟", "h": "نزاع." }, { "q": "متابعة؟", "h": "مكالمات." }, { "q": "سبب؟", "h": "منع." }] },
+                { "title": "الجودة", "qs": [{ "q": "صوت؟", "h": "نبرة." }, { "q": "بريد؟", "h": "توقيع." }, { "q": "قناة؟", "h": "سجل." }] }
+            ]
+        },
+        "bn": {
+            "portalTitle": "অডিট পোর্টাল", "lblOrder": "অর্ডার", "lblSerial": "নং:", "lblAuditee": "মালিক", "lblParticipants": "অংশগ্রহণকারী", "artifactReq": "প্রমাণ", "next": "পরবর্তী", "back": "পিছনে", "finalize": "সম্পন্ন", "btnDraft": "খসড়া", "pending": "অপেক্ষা", "pass": "পাস", "fail": "ব্যর্থ", "requirement": "প্রয়োজন",
+            "sections": [{ "title": "ইনকোয়ারি", "qs": [{ "q": "SLA?", "h": "রেসপন্স।" }, { "q": "সীমাবদ্ধতা?", "h": "সাইট।" }, { "q": "BU?", "h": "ইউনিট?" }] }, { "title": "ক্রেডিট", "qs": [{ "q": "লিমিট?", "h": "ভ্যালু।" }, { "q": "ডকুমেন্ট?", "h": "সার্টিফিকেট।" }, { "q": "চেক?", "h": "টাইম।" }] }, { "title": "উদ্ধৃতি", "qs": [{ "q": "মিক্স?", "h": "MPa।" }, { "q": "রেট?", "h": "অপেক্ষা।" }, { "q": "ECOPact?", "h": "বিকল্প?" }] }, { "title": "চুক্তি", "qs": [{ "q": "দাম?", "h": "PO।" }, { "q": "চার্জ?", "h": "পরিবেশ।" }, { "q": "যোগাযোগ?", "h": "মোবাইল।" }] }, { "title": "এন্ট্রি", "qs": [{ "q": "তারিখ?", "h": "ERP।" }, { "q": "প্ল্যান্ট?", "h": "সেরা।" }, { "q": "অনুমোদন?", "h": "ম্যানেজার।" }] }, { "title": "স্লট", "qs": [{ "q": "ক্ষমতা?", "h": "বহর।" }, { "q": "অ্যাসেট?", "h": "পাম্প।" }, { "q": "বাফার?", "h": "উইন্ডো।" }] }, { "title": "আপডেট", "qs": [{ "q": "দেরি?", "h": "জানানো।" }, { "q": "CRM?", "h": "লগ।" }, { "q": "ডিসপ্যাচ?", "h": "অ্যালার্ট।" }] }, { "title": "POD", "qs": [{ "q": "স্পষ্টতা?", "h": "পরিষ্কার।" }, { "q": "স্বাক্ষর?", "h": "চার্জ।" }, { "q": "24h?", "h": "পাঠানো।" }] }, { "title": "আর্থিক", "qs": [{ "q": "3-Way?", "h": "মিল।" }, { "q": "ইমেল?", "h": "AP।" }, { "q": "ট্যাক্স?", "h": "ভ্যাট।" }] }, { "title": "রিকভারি", "qs": [{ "q": "NCR?", "h": "সিস্টেম।" }, { "q": "ফলো-আপ?", "h": "কল।" }, { "q": "কারণ?", "h": "প্রতিরোধ।" }] }, { "title": "গুণমান", "qs": [{ "q": "কণ্ঠস্বর?", "h": "টোন।" }, { "q": "ইমেল?", "h": "স্বাক্ষর।" }, { "q": "CRM?", "h": "ইতিহাস।" }] }]
         }
-        // ... (Repeat for IT, PL, RO, AR, etc. as defined in your JSON)
     },
     "markets": [
-        { "region": "Europe", "country": "United Kingdom", "code": "en" },
-        { "region": "Europe", "country": "Switzerland", "code": "de" },
-        { "region": "Europe", "country": "France", "code": "fr" },
-        { "region": "Europe", "country": "Germany", "code": "de" },
-        { "region": "Europe", "country": "Belgium", "code": "fr" },
-        { "region": "Europe", "country": "Austria", "code": "de" },
-        { "region": "Europe", "country": "Bulgaria", "code": "bg" },
-        { "region": "Europe", "country": "Croatia", "code": "hr" },
-        { "region": "Europe", "country": "Czech Republic", "code": "cs" },
-        { "region": "Europe", "country": "Greece", "code": "el" },
-        { "region": "Europe", "country": "Hungary", "code": "hu" },
-        { "region": "Europe", "country": "Italy", "code": "it" },
-        { "region": "Europe", "country": "Poland", "code": "pl" },
-        { "region": "Europe", "country": "Romania", "code": "ro" },
-        { "region": "Europe", "country": "Serbia", "code": "sr" },
-        { "region": "Europe", "country": "Slovakia", "code": "sk" },
-        { "region": "Europe", "country": "Spain", "code": "es" },
-        { "region": "Europe", "country": "Azerbaijan", "code": "az" },
-        { "region": "Latin America", "country": "Argentina", "code": "es" },
-        { "region": "Latin America", "country": "Brazil", "code": "pt" },
-        { "region": "Latin America", "country": "Colombia", "code": "es" },
-        { "region": "Latin America", "country": "Costa Rica", "code": "es" },
-        { "region": "Latin America", "country": "Ecuador", "code": "es" },
-        { "region": "Latin America", "country": "El Salvador", "code": "es" },
-        { "region": "Latin America", "country": "Guatemala", "code": "es" },
-        { "region": "Latin America", "country": "Mexico", "code": "es" },
-        { "region": "Latin America", "country": "Nicaragua", "code": "es" },
-        { "region": "Latin America", "country": "Peru", "code": "es" },
-        { "region": "Middle East & Africa", "country": "Algeria", "code": "fr" },
-        { "region": "Middle East & Africa", "country": "Cameroon", "code": "fr" },
-        { "region": "Middle East & Africa", "country": "Egypt", "code": "ar" },
-        { "region": "Middle East & Africa", "country": "Iraq", "code": "ar" },
-        { "region": "Middle East & Africa", "country": "Jordan", "code": "ar" },
-        { "region": "Middle East & Africa", "country": "Lebanon", "code": "ar" },
-        { "region": "Middle East & Africa", "country": "Morocco", "code": "fr" },
-        { "region": "Asia Pacific", "country": "Australia", "code": "en" },
-        { "region": "Asia Pacific", "country": "New Zealand", "code": "en" },
-        { "region": "Asia Pacific", "country": "Bangladesh", "code": "bn" }
+        { "region": "Europe", "country": "United Kingdom", "code": "en" }, { "region": "Europe", "country": "Switzerland", "code": "de" }, { "region": "Europe", "country": "France", "code": "fr" }, { "region": "Europe", "country": "Germany", "code": "de" }, { "region": "Europe", "country": "Belgium", "code": "fr" }, { "region": "Europe", "country": "Austria", "code": "de" }, { "region": "Europe", "country": "Bulgaria", "code": "bg" }, { "region": "Europe", "country": "Croatia", "code": "hr" }, { "region": "Europe", "country": "Czech Republic", "code": "cs" }, { "region": "Europe", "country": "Greece", "code": "el" }, { "region": "Europe", "country": "Hungary", "code": "hu" }, { "region": "Europe", "country": "Italy", "code": "it" }, { "region": "Europe", "country": "Poland", "code": "pl" }, { "region": "Europe", "country": "Romania", "code": "ro" }, { "region": "Europe", "country": "Serbia", "code": "sr" }, { "region": "Europe", "country": "Slovakia", "code": "sk" }, { "region": "Europe", "country": "Spain", "code": "es" }, { "region": "Europe", "country": "Azerbaijan", "code": "az" }, { "region": "Latin America", "country": "Argentina", "code": "es" }, { "region": "Latin America", "country": "Brazil", "code": "pt" }, { "region": "Latin America", "country": "Colombia", "code": "es" }, { "region": "Latin America", "country": "Costa Rica", "code": "es" }, { "region": "Latin America", "country": "Ecuador", "code": "es" }, { "region": "Latin America", "country": "El Salvador", "code": "es" }, { "region": "Latin America", "country": "Guatemala", "code": "es" }, { "region": "Latin America", "country": "Mexico", "code": "es" }, { "region": "Latin America", "country": "Nicaragua", "code": "es" }, { "region": "Latin America", "country": "Peru", "code": "es" }, { "region": "Middle East & Africa", "country": "Algeria", "code": "fr" }, { "region": "Middle East & Africa", "country": "Cameroon", "code": "fr" }, { "region": "Middle East & Africa", "country": "Egypt", "code": "ar" }, { "region": "Middle East & Africa", "country": "Iraq", "code": "ar" }, { "region": "Middle East & Africa", "country": "Jordan", "code": "ar" }, { "region": "Middle East & Africa", "country": "Lebanon", "code": "ar" }, { "region": "Middle East & Africa", "country": "Morocco", "code": "fr" }, { "region": "Asia Pacific", "country": "Australia", "code": "en" }, { "region": "Asia Pacific", "country": "New Zealand", "code": "en" }, { "region": "Asia Pacific", "country": "Bangladesh", "code": "bn" }
     ]
 };
 
@@ -292,31 +242,25 @@
 
     function populateLanguagePicker() {
         const picker = document.getElementById('languagePicker');
-        // FIXED: Pulling from the markets array in your JSON
-        picker.innerHTML = auditJson.markets.map(m => 
-            `<option value="${m.code}">${m.country}</option>`
-        ).join('');
+        picker.innerHTML = auditJson.markets.map(m => `<option value="${m.code}">${m.country}</option>`).join('');
     }
 
     function setLanguage(lang) {
         state.currentLang = lang;
-        // FIXED: Looking into auditJson.languages[lang]
-        const t = auditJson.languages[lang] || auditJson.languages['en'];
+        const content = auditJson.languages[lang] || auditJson.languages['en'];
         
-        document.getElementById('portalTitle').innerText = t.portalTitle;
-        document.getElementById('lblOrder').innerText = t.lblOrder;
-        document.getElementById('lblAuditee').innerText = t.lblAuditee;
-        document.getElementById('lblParticipants').innerText = t.lblParticipants;
-        document.getElementById('btnDraft').innerText = t.btnDraft;
-        document.getElementById('serialDisplay').innerText = t.lblSerial + " " + state.auditSerial;
+        // RTL Logic for Arabic
+        document.documentElement.dir = (lang === 'ar') ? 'rtl' : 'ltr';
         
-        // Initialize data based on English structure to ensure 11 steps
+        document.getElementById('portalTitle').innerText = content.portalTitle;
+        document.getElementById('lblOrder').innerText = content.lblOrder;
+        document.getElementById('lblAuditee').innerText = content.lblAuditee;
+        document.getElementById('lblParticipants').innerText = content.lblParticipants;
+        document.getElementById('btnDraft').innerText = content.btnDraft;
+        document.getElementById('serialDisplay').innerText = content.lblSerial + " " + state.auditSerial;
+        
         if (state.auditData.length === 0) {
-            state.auditData = auditJson.languages['en'].sections.map(s => ({ 
-                status: 'PENDING', 
-                answers: s.qs.map(() => null), 
-                file: false 
-            }));
+            state.auditData = auditJson.languages['en'].sections.map(s => ({ status: 'PENDING', answers: s.qs.map(() => null), file: false }));
         }
         initWizard();
     }
@@ -328,12 +272,9 @@
         container.innerHTML = '';
         renderJumpMenu(enTemplate);
 
-        // Always loop through 11 sections based on English template
         enTemplate.sections.forEach((sectionEn, idx) => {
             const stepDiv = document.createElement('div');
             stepDiv.className = `audit-step ${idx === state.currentStep ? 'active' : ''}`;
-            
-            // Get local section title and questions if available
             const localSection = t.sections[idx] || sectionEn;
 
             const tableRows = sectionEn.qs.map((itemEn, qIdx) => {
@@ -341,9 +282,9 @@
                 return `
                 <tr>
                     <td>
-                        <div style="display:flex; align-items:center;">
+                        <div style="display:flex; align-items:center; ${state.currentLang === 'ar' ? 'flex-direction:row-reverse' : ''}">
                             <strong>${localQ.q}</strong>
-                            <span class="help-icon" onclick="toggleHelp(${idx}, ${qIdx})">?</span>
+                            <span class="help-icon" style="${state.currentLang === 'ar' ? 'margin-right:8px; margin-left:0' : ''}" onclick="toggleHelp(${idx}, ${qIdx})">?</span>
                         </div>
                         <div id="help-${idx}-${qIdx}" class="help-text">${localQ.h}</div>
                     </td>
